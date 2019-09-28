@@ -1,0 +1,159 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Scenes">
+      <UniqueIdentifier>{64840f6e-79b8-47ae-a180-68544d580f69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Components">
+      <UniqueIdentifier>{6c480e6a-82e7-46c6-b446-af379c753d73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Graphics">
+      <UniqueIdentifier>{05e72ea9-e883-4751-ae43-dd2978b9420c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Objects">
+      <UniqueIdentifier>{f49c1f30-2648-4eed-a502-b7cd1d5ffe22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Objects\Player">
+      <UniqueIdentifier>{a4d5c4ad-ffe6-4801-845f-84a10ae4260f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Objects\Weapon">
+      <UniqueIdentifier>{06967af2-9494-4e2a-8939-244f97182a95}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Brick.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="debug.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayScene.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Game Components</Filter>
+    </ClCompile>
+    <ClCompile Include="GameGlobal.cpp">
+      <Filter>Game Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprites.cpp">
+      <Filter>Game Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Textures.cpp">
+      <Filter>Game Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteFactory.cpp">
+      <Filter>Game Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Simon.cpp">
+      <Filter>Game Objects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="SimonStandingState.cpp">
+      <Filter>Game Objects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="SimonWalkingState.cpp">
+      <Filter>Game Objects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="SimonSittingState.cpp">
+      <Filter>Game Objects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="SimonJumpingState.cpp">
+      <Filter>Game Objects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="SimonAttackingState.cpp">
+      <Filter>Game Objects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="SimonFallingState.cpp">
+      <Filter>Game Objects\Player</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Brick.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="debug.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayScene.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="GameGlobal.h">
+      <Filter>Game Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Game Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprites.h">
+      <Filter>Game Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Textures.h">
+      <Filter>Game Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteFactory.h">
+      <Filter>Game Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Simon.h">
+      <Filter>Game Objects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="SimonState.h">
+      <Filter>Game Objects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="SimonStandingState.h">
+      <Filter>Game Objects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="SimonWalkingState.h">
+      <Filter>Game Objects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="SimonSittingState.h">
+      <Filter>Game Objects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="SimonJumpingState.h">
+      <Filter>Game Objects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="SimonAttackingState.h">
+      <Filter>Game Objects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="SimonFallingState.h">
+      <Filter>Game Objects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon.h">
+      <Filter>Game Objects\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="MorningStar.h">
+      <Filter>Game Objects\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="WeaponFactory.h">
+      <Filter>Game Objects\Weapon</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

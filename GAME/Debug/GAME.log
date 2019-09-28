@@ -1,0 +1,9 @@
+﻿  GameGlobal.cpp
+  c:\program files (x86)\microsoft directx sdk (june 2010)\include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+c:\users\user\desktop\game\game\game\gameglobal.h(65): warning C4091: 'extern ': ignored on left of 'Tag' when no variable is declared
+  Simon.cpp
+  c:\program files (x86)\microsoft directx sdk (june 2010)\include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+c:\users\user\desktop\game\game\game\gameglobal.h(65): warning C4091: 'extern ': ignored on left of 'Tag' when no variable is declared
+c:\users\user\desktop\game\game\game\simon.cpp(20): warning C4244: 'argument': conversion from 'DWORD' to 'float', possible loss of data
+  Generating Code...
+  GAME.vcxproj -> C:\Users\USER\Desktop\GAME\GAME\Debug\GAME.exe
