@@ -11,7 +11,7 @@ public:
 		switch (weaponType)
 		{
 		case 0:
-			return new MorningStar();
+			return new MorningStar(SIMON->morningstarlevel);
 
 		default:
 			return NULL;

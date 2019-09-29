@@ -31,6 +31,7 @@ class CSimon : public CGameObject
 {
 	static CSimon * _instance;
 public:
+	int morningstarlevel;
 	CSimon();
 	void Respawn();
 	void UpdateNotAttacking() { this->attacking = false; }

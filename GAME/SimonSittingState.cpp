@@ -22,7 +22,7 @@ void SimonSittingState::HandleKeyboard()
 	{
 		SIMON->sitting = false;
 		SIMON->height += 17;
-		SIMON->y -= 17/2;
+		SIMON->y -= 17 / 2;
 
 		if (keyCode[DIK_LEFT] || keyCode[DIK_RIGHT])
 		{

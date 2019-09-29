@@ -5,8 +5,6 @@
 #include "GameObject.h"
 #include "Sprites.h"
 
-vector<LPANIMATION> CGameObject::animations;
-
 CGameObject::CGameObject()
 {
 	tag = 0;

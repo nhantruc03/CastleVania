@@ -3,8 +3,56 @@
 CSimon*CSimon::_instance = NULL;
 CSimon::CSimon()
 {
-	 width = SIMON_WIDTH; 
-	 height = SIMON_HEIGHT; 
+	CAnimations *animations = CAnimations::GetInstance();
+	LPANIMATION ani;
+	// idle
+	ani = new CAnimation(100);
+	ani->Add(1);
+	animations->Add(1, ani);
+	// walk
+	ani = new CAnimation(100);
+	ani->Add(1);
+	ani->Add(2);
+	ani->Add(3);
+	ani->Add(4);
+	animations->Add(2, ani);
+	// jump
+	ani = new CAnimation(100);
+	ani->Add(5);
+	animations->Add(3, ani);
+	// fall
+	ani = new CAnimation(100);
+	ani->Add(1);
+	animations->Add(4, ani);
+	// attack
+	ani = new CAnimation(100);
+	ani->Add(1);
+	ani->Add(6);
+	ani->Add(7);
+	ani->Add(8);
+	animations->Add(5, ani);
+	// sit
+	ani = new CAnimation(100);
+	ani->Add(5);
+	animations->Add(6, ani);
+	// attack sit
+	ani = new CAnimation(100);
+	ani->Add(5);
+	ani->Add(9);
+	ani->Add(10);
+	ani->Add(11);
+	animations->Add(7, ani);
+
+	AddAnimation(1); // idle
+	AddAnimation(2); // walk
+	AddAnimation(3); // jumo
+	AddAnimation(4); // fall
+	AddAnimation(5); // attacking
+	AddAnimation(6); //sit
+	AddAnimation(7); // sit attack
+	morningstarlevel = 1;
+	width = SIMON_WIDTH;
+	height = SIMON_HEIGHT;
 	// this->ChangeState(new SimonStandingState()); 
 }
 void CSimon::Respawn()
@@ -236,6 +284,13 @@ void CSimon::OnKeyDown(int key)
 		if (!attacking)
 		{
 			ChangeState(new SimonAttackingState());
+		}
+		break;
+	case DIK_M:
+		morningstarlevel += 1;
+		if (morningstarlevel > 3)
+		{
+			morningstarlevel = 1;
 		}
 		break;
 	}

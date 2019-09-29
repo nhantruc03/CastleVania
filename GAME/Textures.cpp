@@ -65,5 +65,11 @@ LPDIRECT3DTEXTURE9 CTextures::Get(unsigned int i)
 	return textures[i];
 }
 
+void CTextures::LoadResources()
+{
+	Add(ID_TEX_SIMON, L"player.png", D3DCOLOR_XRGB(255, 0, 255));
+	Add(ID_TEX_MORNINGSTAR, L"morningstar.png", D3DCOLOR_XRGB(255, 0, 255));
+}
+
 
 

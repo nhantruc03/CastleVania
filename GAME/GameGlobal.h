@@ -20,10 +20,11 @@
 //#define NUMBER_MAP_LEVEL 3
 //#define TILE_SIZE 16
 
-#define ID_TEX_SIMON 0
+
 #define ID_TEX_ENEMY 10
 #define ID_TEX_MISC 20
 
+#define ID_WEAPON_MORNINGSTAR 0
 //// ===== Các thông số cho PLAYER ====
 //#define PLAYER_RUNNING_SPEED 0.095f
 //#define PLAYER_INJURED_SPEED 0.065f

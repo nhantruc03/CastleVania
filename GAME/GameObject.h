@@ -26,7 +26,7 @@ public:
 	float height;
 	int state;
 	int ani;
-	static vector<LPANIMATION> animations;
+	 vector<LPANIMATION> animations;
 
 	int tag;
 	int type;
@@ -40,7 +40,7 @@ public:
 	int GetState() { return this->state; }
 
 
-	static void AddAnimation(int aniId);
+	 void AddAnimation(int aniId);
 
 	CGameObject();
 

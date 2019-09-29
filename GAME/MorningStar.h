@@ -3,29 +3,44 @@
 class MorningStar:public Weapon
 {
 public:
-	MorningStar()
+	int level;
+	MorningStar(int level)
 	{
-		CTextures * textures = CTextures::GetInstance();
-		SpritesManager* sprites = SpritesManager::GetInstance();
-		CAnimations * a = CAnimations::GetInstance();
-		LPDIRECT3DTEXTURE9 texMorningStar = textures->Get(1);
-		sprites->Add(100, 136, 18, 136 + 16, 18 + 48,texMorningStar);
-		sprites->Add(101, 280, 12, 280 + 32, 12+ 38, texMorningStar);
-		sprites->Add(102, 352, 16, 352+ 44, 16 + 18, texMorningStar);
+		this->level = level;
 		LPANIMATION ani;
 		ani = new CAnimation(100);
-		ani->Add(100);
-		ani->Add(101);
-		ani->Add(102);
-		a->Add(600, ani);
-		AddAnimation(600);
-		this->animation = animations[7];
+		if (level == 1)
+		{
+			ani->Add(12);
+			ani->Add(13);
+			ani->Add(14);
+		}
+		else if (level == 2)
+		{
+			ani->Add(15);
+			ani->Add(16);
+			ani->Add(17);
+		}
+		else
+		{
+			ani->Add(18);
+			ani->Add(19);
+			ani->Add(20);
+		}
+		
+		this->animation = ani;
 		vx = vy = 0;
 		tag = 0;
 		type = 0;
 		/*width = 32;
 		height = 32;*/
 	}
+
+	void Update(float dt)
+	{
+		//if(keyCode[DIK_A])
+	}
+
 	void Render(float translateX = 0, float translateY = 0)
 	{
 		auto frameIndex = SIMON->curAni->currentFrame-1;
@@ -57,7 +72,14 @@ public:
 			//this->isDead = true;
 			break;
 		case 2:
-			x += (isReverse ? 49 : -49);
+			if (level != 3)
+			{
+				x += (isReverse ? 49 : -49);
+			}
+			else
+			{
+				x += (isReverse ? 65 : -65);
+			}
 			if (SIMON->State->StateName==SIMON_STATE_ATTACK)
 			{
 				y -= 8;
