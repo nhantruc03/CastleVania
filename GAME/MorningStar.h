@@ -6,7 +6,7 @@ public:
 	MorningStar()
 	{
 		CTextures * textures = CTextures::GetInstance();
-		CSprites* sprites = CSprites::GetInstance();
+		SpritesManager* sprites = SpritesManager::GetInstance();
 		CAnimations * a = CAnimations::GetInstance();
 		LPDIRECT3DTEXTURE9 texMorningStar = textures->Get(1);
 		sprites->Add(100, 136, 18, 136 + 16, 18 + 48,texMorningStar);

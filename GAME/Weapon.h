@@ -1,6 +1,7 @@
 #pragma once
 #include"Simon.h"
-#include"Sprites.h"
+//#include"Sprites.h"
+#include"Animation.h"
 #include"GameObject.h"
 #include"Textures.h"
 #include<unordered_map>

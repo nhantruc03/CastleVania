@@ -57,13 +57,7 @@
     <ClCompile Include="GameGlobal.cpp">
       <Filter>Game Components</Filter>
     </ClCompile>
-    <ClCompile Include="Sprites.cpp">
-      <Filter>Game Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="Textures.cpp">
-      <Filter>Game Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="SpriteFactory.cpp">
       <Filter>Game Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Simon.cpp">
@@ -86,6 +80,15 @@
     </ClCompile>
     <ClCompile Include="SimonFallingState.cpp">
       <Filter>Game Objects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="SpritesManager.cpp">
+      <Filter>Game Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>Game Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprites.cpp">
+      <Filter>Game Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -113,13 +116,7 @@
     <ClInclude Include="Game.h">
       <Filter>Game Components</Filter>
     </ClInclude>
-    <ClInclude Include="Sprites.h">
-      <Filter>Game Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Textures.h">
-      <Filter>Game Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="SpriteFactory.h">
       <Filter>Game Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Simon.h">
@@ -154,6 +151,15 @@
     </ClInclude>
     <ClInclude Include="WeaponFactory.h">
       <Filter>Game Objects\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>Game Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="SpritesManager.h">
+      <Filter>Game Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprites.h">
+      <Filter>Game Graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

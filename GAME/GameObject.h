@@ -3,8 +3,8 @@
 #include <Windows.h>
 #include <d3dx9.h>
 #include <vector>
-
-#include "Sprites.h"
+#include"Animation.h"
+//#include "Sprites.h"
 
 
 using namespace std;

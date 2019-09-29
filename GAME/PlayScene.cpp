@@ -88,7 +88,7 @@ void PlayScene::LoadResources()
 	textures->Add(ID_TEX_SIMON, L"player.png", D3DCOLOR_XRGB(255, 0, 255));
 	textures->Add(1, L"morningstar.png", D3DCOLOR_XRGB(255, 0, 255));
 
-	CSprites * sprites = CSprites::GetInstance();
+	SpritesManager* sprites = SpritesManager::GetInstance();
 	CAnimations * animations = CAnimations::GetInstance();
 
 	LPDIRECT3DTEXTURE9 texSimon = textures->Get(ID_TEX_SIMON);
