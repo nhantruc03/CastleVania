@@ -4,7 +4,7 @@
 
 PlayScene::PlayScene()
 {
-//	simon = CSimon::GetInstance();
+	
 }
 
 
@@ -32,7 +32,7 @@ void PlayScene::UpdatePlayer(float dt)
 		weapon->x = SIMON->x + (SIMON->isReverse ? -22 : 22);
 		weapon->y = SIMON->y + 8;
 		visibleObjects.insert(weapon);
-	//	SIMON->attacking = false;
+		//	SIMON->attacking = false;
 	}
 }
 
@@ -48,8 +48,8 @@ void PlayScene::UpdateObjects(float dt)
 		{
 			auto w = WeaponFactory::ConvertToWeapon(o);
 
-			if (w->isDead || (SIMON->state!= SIMON_STATE_ATTACK
-					&& SIMON->state!= SIMON_STATE_SIT_ATTACKING))
+			if (w->isDead || (SIMON->state != SIMON_STATE_ATTACK
+				&& SIMON->state != SIMON_STATE_SIT_ATTACKING))
 			{
 				it = visibleObjects.erase(it);
 				delete w;
@@ -61,7 +61,7 @@ void PlayScene::UpdateObjects(float dt)
 		}
 		}
 		++it;
-		
+
 	}
 
 	this->UpdateVisibleObjects();
@@ -84,17 +84,18 @@ void PlayScene::LoadResources()
 {
 	CTextures::GetInstance()->LoadResources();
 	SpritesManager::GetInstance()->LoadResources();
-//	CAnimations * animations = CAnimations::GetInstance();
+	map1 = new map();
+	//	CAnimations * animations = CAnimations::GetInstance();
 
 	simon = CSimon::GetInstance();
-	simon->SetPosition(30.0f, 150-SIMON->height/2);
+	simon->SetPosition(30.0f, 150 - SIMON->height / 2);
 
 	simon->Respawn();
 }
 
 void PlayScene::Render()
 {
-
+	map1->Render();
 	simon->Render();
 	for (auto o : visibleObjects)
 	{

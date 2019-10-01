@@ -2,8 +2,9 @@
 #include "Game.h"
 #include "debug.h"
 #include "Simon.h"
-CSprite::CSprite(int id, int l, int t, int r, int b, LPDIRECT3DTEXTURE9 tex)
+CSprite::CSprite(int tag, int l, int t, int r, int b, LPDIRECT3DTEXTURE9 tex)
 {
+	this->tag = tag;
 	rect.left = l;
 	rect.right = r;
 	rect.top = t;

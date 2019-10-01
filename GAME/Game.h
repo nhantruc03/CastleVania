@@ -3,7 +3,6 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 #include"GameGlobal.h"
-#define BACKGROUND_COLOR D3DCOLOR_XRGB(200, 200, 255)
 #define DIRECTINPUT_VERSION 0x0800
 
 #include <dinput.h>

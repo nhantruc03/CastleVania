@@ -1,6 +1,6 @@
 #pragma once
 #include"Weapon.h"
-class MorningStar:public Weapon
+class MorningStar :public Weapon
 {
 public:
 	int level;
@@ -11,23 +11,23 @@ public:
 		ani = new CAnimation(100);
 		if (level == 1)
 		{
-			ani->Add(12);
-			ani->Add(13);
-			ani->Add(14);
+			ani->Add(TAG_WEAPON, 0);
+			ani->Add(TAG_WEAPON, 1);
+			ani->Add(TAG_WEAPON, 2);
 		}
 		else if (level == 2)
 		{
-			ani->Add(15);
-			ani->Add(16);
-			ani->Add(17);
+			ani->Add(TAG_WEAPON, 3);
+			ani->Add(TAG_WEAPON, 4);
+			ani->Add(TAG_WEAPON, 5);
 		}
 		else
 		{
-			ani->Add(18);
-			ani->Add(19);
-			ani->Add(20);
+			ani->Add(TAG_WEAPON, 6);
+			ani->Add(TAG_WEAPON, 7);
+			ani->Add(TAG_WEAPON, 8);
 		}
-		
+
 		this->animation = ani;
 		vx = vy = 0;
 		tag = 0;
@@ -43,8 +43,8 @@ public:
 
 	void Render(float translateX = 0, float translateY = 0)
 	{
-		auto frameIndex = SIMON->curAni->currentFrame-1;
-		if (frameIndex != 0 && frameIndex != 1 && frameIndex!=2) return;
+		auto frameIndex = SIMON->curAni->currentFrame - 1;
+		if (frameIndex != 0 && frameIndex != 1 && frameIndex != 2) return;
 
 		auto sprite = animation->frames[frameIndex]->GetSprite();// animation->GetSprite(frameIndex);
 		auto x = SIMON->x;
@@ -80,7 +80,7 @@ public:
 			{
 				x += (isReverse ? 65 : -65);
 			}
-			if (SIMON->State->StateName==SIMON_STATE_ATTACK)
+			if (SIMON->State->StateName == SIMON_STATE_ATTACK)
 			{
 				y -= 8;
 			}

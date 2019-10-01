@@ -1,15 +1,16 @@
 #pragma once
 #include"Sprites.h"
 #include"Textures.h"
+#include"GameGlobal.h"
 class SpritesManager
 {
 	static SpritesManager * __instance;
 
-	unordered_map<int, LPSPRITE> sprites;
+	unordered_map<int, vector<LPSPRITE>> sprites;
 
 public:
-	void Add(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex);
-	LPSPRITE Get(int id);
+	void Add(int tag, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex);
+	LPSPRITE Get(int tag, int index);
 	void LoadResources();
 	static SpritesManager * GetInstance();
 };

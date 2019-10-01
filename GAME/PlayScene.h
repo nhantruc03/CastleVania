@@ -4,6 +4,7 @@
 #include "Simon.h"
 #include"MorningStar.h"
 #include"WeaponFactory.h"
+#include"map.h"
 using namespace std;
 class PlayScene : public Scene
 {
@@ -14,6 +15,7 @@ private:
 public:
 	PlayScene();
 	~PlayScene();
+	map *map1;
 
 	void Update(float dt);
 	//void UpdateScene();						// Update các thông số các đối tượng trong Scene

@@ -26,6 +26,7 @@
     <ClCompile Include="GameGlobal.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="map.cpp" />
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Simon.cpp" />
@@ -46,6 +47,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameGlobal.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="map.h" />
     <ClInclude Include="MorningStar.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="Scene.h" />

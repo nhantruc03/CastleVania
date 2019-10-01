@@ -7,42 +7,41 @@ CSimon::CSimon()
 	LPANIMATION ani;
 	// idle
 	ani = new CAnimation(100);
-	ani->Add(1);
+	ani->Add(TAG_SIMON, 0);
 	animations->Add(1, ani);
 	// walk
 	ani = new CAnimation(100);
-	ani->Add(1);
-	ani->Add(2);
-	ani->Add(3);
-	ani->Add(4);
+	ani->Add(TAG_SIMON, 0);
+	ani->Add(TAG_SIMON, 1);
+	ani->Add(TAG_SIMON, 2);
+	ani->Add(TAG_SIMON, 3);
 	animations->Add(2, ani);
 	// jump
 	ani = new CAnimation(100);
-	ani->Add(5);
+	ani->Add(TAG_SIMON, 4);
 	animations->Add(3, ani);
 	// fall
 	ani = new CAnimation(100);
-	ani->Add(1);
+	ani->Add(TAG_SIMON, 0);
 	animations->Add(4, ani);
 	// attack
 	ani = new CAnimation(100);
-	ani->Add(1);
-	ani->Add(6);
-	ani->Add(7);
-	ani->Add(8);
+	ani->Add(TAG_SIMON, 0);
+	ani->Add(TAG_SIMON, 5);
+	ani->Add(TAG_SIMON, 6);
+	ani->Add(TAG_SIMON, 7);
 	animations->Add(5, ani);
 	// sit
 	ani = new CAnimation(100);
-	ani->Add(5);
+	ani->Add(TAG_SIMON, 4);
 	animations->Add(6, ani);
 	// attack sit
 	ani = new CAnimation(100);
-	ani->Add(5);
-	ani->Add(9);
-	ani->Add(10);
-	ani->Add(11);
+	ani->Add(TAG_SIMON, 4);
+	ani->Add(TAG_SIMON, 8);
+	ani->Add(TAG_SIMON, 9);
+	ani->Add(TAG_SIMON, 10);
 	animations->Add(7, ani);
-
 	AddAnimation(1); // idle
 	AddAnimation(2); // walk
 	AddAnimation(3); // jumo
@@ -57,8 +56,8 @@ CSimon::CSimon()
 }
 void CSimon::Respawn()
 {
-	this->jumping=false;
-	this->attacking=false;
+	this->jumping = false;
+	this->attacking = false;
 	this->isReverse = true;
 	this->ChangeState(new SimonStandingState());
 }
@@ -68,7 +67,7 @@ void CSimon::Update(DWORD dt)
 	State->Update(dt);
 	// simple fall down
 	vy += SIMON_GRAVITY;
-	
+
 	if (y + height / 2 > 150)
 	{
 		vy = 0; y = 150 - height / 2;
@@ -97,10 +96,10 @@ void CSimon::Update(DWORD dt)
 		isReverse = false;
 	}
 	else
-	{	
-		
+	{
+
 			SetState(SIMON_STATE_IDLE);
-		
+
 	}*/
 }
 
@@ -247,7 +246,7 @@ void CSimon::SetState(int state)
 				vx = 0;
 			}
 		}
-		
+
 		break;
 	}*/
 }
@@ -295,7 +294,7 @@ void CSimon::OnKeyDown(int key)
 		break;
 	}
 
-	
+
 
 
 }
@@ -329,7 +328,7 @@ void CSimon::ChangeState(SimonState * newState)
 
 CSimon * CSimon::GetInstance()
 {
-	if(_instance == NULL)
+	if (_instance == NULL)
 		_instance = new CSimon();
 	return _instance;
 }

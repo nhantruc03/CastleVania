@@ -24,7 +24,7 @@ public:
 	vector<LPANIMATION_FRAME> frames;
 	int currentFrame;
 	CAnimation(int defaultTime) { this->defaultTime = defaultTime; lastFrameTime = -1; currentFrame = -1; endanimation = false; }
-	void Add(int spriteId, DWORD time = 0);
+	void Add(int tag, int index, DWORD time = 0);
 	void Render(float x, float y);
 	bool CheckEndAni() { return endanimation; }
 	void SetEndAniFalse() { endanimation = false; }
