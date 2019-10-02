@@ -15,9 +15,12 @@ PlayScene::~PlayScene()
 
 void PlayScene::Update(float dt)
 {
-
+	
 	UpdatePlayer(dt);
+	camera->SetPosition(simon->x, 0);
+	camera->Update();
 	this->UpdateObjects(dt);
+	
 
 }
 
@@ -89,7 +92,7 @@ void PlayScene::LoadResources()
 
 	simon = CSimon::GetInstance();
 	simon->SetPosition(30.0f, 150 - SIMON->height / 2);
-
+	camera = Camera::GetInstance();
 	simon->Respawn();
 }
 

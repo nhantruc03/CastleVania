@@ -8,7 +8,7 @@
 // Các thông số và biến tổng dùng cho toàn bộ Game
 #define WINDOW_CLASS_NAME L"SampleWindow"
 #define MAIN_WINDOW_TITLE L"02 - Sprite animation"
-#define SCREEN_WIDTH 1536
+#define SCREEN_WIDTH 365//1536
 #define SCREEN_HEIGHT 365 // Chiều dài cửa sổ
 //#define SCREEN_TRANSLATEY 60
 #define MAX_FRAME_RATE 90			// FPS

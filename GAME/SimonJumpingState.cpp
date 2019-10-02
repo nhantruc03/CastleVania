@@ -5,7 +5,7 @@
 SimonJumpingState::SimonJumpingState()
 {
 	
-	if (SIMON->y = 150 - SIMON->height / 2)
+	if (SIMON->y = 292 - SIMON->height / 2)
 	{
 		SIMON->vy = -SIMON_JUMP_SPEED_Y;
 		SIMON->jumping = true;

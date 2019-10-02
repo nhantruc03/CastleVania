@@ -2,10 +2,12 @@
 //#include"Game.h"
 #include"GameGlobal.h"
 #include"Textures.h"
+#include"Camera.h"
 using namespace std;
 class Scene
 {
 public:
+	Camera * camera;
 	Scene() {};
 	virtual ~Scene() {};
 	virtual void LoadResources() {};			// Tải resources trước khi tạo Scene

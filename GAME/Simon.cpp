@@ -68,9 +68,9 @@ void CSimon::Update(DWORD dt)
 	// simple fall down
 	vy += SIMON_GRAVITY;
 
-	if (y + height / 2 > 150)
+	if (y + height / 2 > 292)
 	{
-		vy = 0; y = 150 - height / 2;
+		vy = 0; y = 292- height / 2;
 		//if (jumping)
 		//{
 		//	jumping = false;
@@ -83,7 +83,7 @@ void CSimon::Update(DWORD dt)
 	}*/
 
 	// simple screen edge collision!!!
-	if (vx > 0 && x > 290) x = 290;
+//	if (vx > 0 && x > 290) x = 290;
 	if (vx < 0 && x < 0) x = 0;
 	/*if (keyCode[DIK_RIGHT])
 	{

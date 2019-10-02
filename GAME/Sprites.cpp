@@ -23,10 +23,12 @@ void CSprite::Draw(float x, float y)
 	auto center = D3DXVECTOR3((right - left) / 2, (bottom - top) / 2, 0);
 	CGame * game = CGame::GetInstance();
 	game->Draw(x, y, texture, srect, isreverse, center);*/
-	D3DXVECTOR3 p(x, y, 0);
+	D3DXVECTOR3 CamPosition = Camera::GetInstance()->GetPosition();
+	//D3DXVECTOR3 p(x-CamPosition.x, y-CamPosition.y, 0);
+	D3DXVECTOR3 p(x , y , 0);
 	auto pRotationCenter = D3DXVECTOR2(center.x, center.y);
 	auto pScalingCenter = D3DXVECTOR2(x, y);
-	auto pTranslation = D3DXVECTOR2(0, 0);
+	auto pTranslation = D3DXVECTOR2(SCREEN_WIDTH/2-CamPosition.x, 0);
 	auto pScaling = D3DXVECTOR2(isreverse ? -1 : 1, 1);
 	//spriteHandler->Draw(texture, &rect, NULL, &p, D3DCOLOR_XRGB(255, 255, 255));
 	// su dung matrix de tao ra ma tran moi cho viec ve hinh, doi goc toa do tu top-left sang giua tam cua hinh

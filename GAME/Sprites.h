@@ -2,6 +2,7 @@
 #include <Windows.h>
 #include <d3dx9.h>
 #include <unordered_map>
+#include"Camera.h"
 
 using namespace std;
 
