@@ -21,6 +21,8 @@ map::map()
 		}
 	}
 	iFile.close();
+
+	camera = Camera::GetInstance();
 }
 
 void map::Render()
@@ -29,7 +31,19 @@ void map::Render()
 	{
 		for (int j = 0; j < columns; j++)
 		{
+			RECT tileset;
+			tileset.left = j * 32;
+			tileset.right = tileset.left + 32;
+			tileset.top = i * 32;
+			tileset.bottom = tileset.top + 32;
+			if (camera->IsContain(tileset, camera->GetBound()) == false)
+			{
+				continue;
+			}
 			SpritesManager::GetInstance()->Get(TAG_MAP1, MapMatrix[i][j] - 1)->Draw((j * 32) + 16, (i * 32) + 16);
+			
+
+			
 		}
 	}
 }

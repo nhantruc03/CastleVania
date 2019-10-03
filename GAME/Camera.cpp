@@ -21,7 +21,7 @@ RECT Camera::GetBound()
 {
 	RECT CamBound;
 	CamBound.left = camPosition.x - camWidht / 2;
-	CamBound.top = camPosition.y - camHeight / 2;
+	CamBound.top = 0;
 	CamBound.right = CamBound.left + camWidht;
 	CamBound.bottom = CamBound.top + camHeight;
 	return CamBound;
@@ -30,6 +30,15 @@ RECT Camera::GetBound()
 void Camera::SetPosition(float cx, float cy)
 {
 	camPosition = D3DXVECTOR3(cx, cy, 0);
+}
+
+bool Camera::IsContain(RECT a, RECT b)
+{
+	if (a.left > b.right || a.top > b.bottom || a.bottom < b.top || a.right < b.left)
+	{
+		return false;
+	}
+	return true;
 }
 
 void Camera::Update()

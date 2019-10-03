@@ -47,7 +47,7 @@ public:
 	void Update(DWORD dt);
 	void setreverse(bool check) {this->isReverse = check; };
 	//void Render();
-	virtual void Render(float translateX = 0, float translateY = 0) {}
+	virtual void Render() {}
 	~CGameObject();
 
 };

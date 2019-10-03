@@ -31,6 +31,9 @@
 #define TAG_SIMON 0
 #define TAG_WEAPON 1
 #define TAG_MAP1 2
+
+
+
 //// ===== Các thông số cho PLAYER ====
 //#define PLAYER_RUNNING_SPEED 0.095f
 //#define PLAYER_INJURED_SPEED 0.065f

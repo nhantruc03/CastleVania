@@ -1,6 +1,6 @@
 #pragma once
-#include"Simon.h"
-//#include"Sprites.h"
+//#include"Simon.h"
+#include"GameGlobal.h"
 #include"Animation.h"
 #include"GameObject.h"
 #include"Textures.h"
@@ -11,10 +11,14 @@ protected:
 	CAnimation* animation;
 public:
 	//virtual void Update(float dt) {};
-	virtual void Render(float translateX = 0, float translateY = 0)
+	Weapon()
 	{
-		auto x = this->x + translateX;
-		auto y = this->y + translateY;
+		tag = TAG_WEAPON;
+	}
+	virtual void Render()
+	{
+		auto x = this->x ;
+		auto y = this->y ;
 		animation->Render(x, y);
 	}
 	virtual void Update(float dt)

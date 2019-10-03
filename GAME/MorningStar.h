@@ -30,10 +30,8 @@ public:
 
 		this->animation = ani;
 		vx = vy = 0;
-		tag = 0;
 		type = 0;
-		/*width = 32;
-		height = 32;*/
+
 	}
 
 	void Update(float dt)
@@ -41,14 +39,14 @@ public:
 		//if(keyCode[DIK_A])
 	}
 
-	void Render(float translateX = 0, float translateY = 0)
+	void Render()
 	{
-		auto frameIndex = SIMON->curAni->currentFrame - 1;
+		int frameIndex = SIMON->curAni->currentFrame - 1;
 		if (frameIndex != 0 && frameIndex != 1 && frameIndex != 2) return;
 
-		auto sprite = animation->frames[frameIndex]->GetSprite();// animation->GetSprite(frameIndex);
-		auto x = SIMON->x;
-		auto y = SIMON->y;
+		CSprite* sprite = animation->frames[frameIndex]->GetSprite();
+		int x = SIMON->x;
+		int y = SIMON->y;
 		sprite->isreverse = this->isReverse;
 
 		switch (frameIndex)
@@ -85,7 +83,6 @@ public:
 				y -= 8;
 			}
 			else y -= 3;
-			this->isDead = true;
 			break;
 		}
 		sprite->Draw(x, y);

@@ -23,6 +23,7 @@ void SimonAttackingState::Update(float dt)
 	if (SIMON->curAni->CheckEndAni())
 	{
 		SIMON->attacking = false;
+		SIMON->UsingMorningStar = false;
 		SIMON->curAni->SetEndAniFalse();
 		switch (curstate)
 		{

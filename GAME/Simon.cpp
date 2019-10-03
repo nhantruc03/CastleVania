@@ -52,6 +52,7 @@ CSimon::CSimon()
 	morningstarlevel = 1;
 	width = SIMON_WIDTH;
 	height = SIMON_HEIGHT;
+	UsingMorningStar = false;
 	// this->ChangeState(new SimonStandingState()); 
 }
 void CSimon::Respawn()
@@ -71,113 +72,12 @@ void CSimon::Update(DWORD dt)
 	if (y + height / 2 > 292)
 	{
 		vy = 0; y = 292- height / 2;
-		//if (jumping)
-		//{
-		//	jumping = false;
-		//	ChangeState(new SimonStandingState());
-		//}
 	}
-	/*else
-	{
-		ChangeState(new SimonFallingState());
-	}*/
-
-	// simple screen edge collision!!!
-//	if (vx > 0 && x > 290) x = 290;
 	if (vx < 0 && x < 0) x = 0;
-	/*if (keyCode[DIK_RIGHT])
-	{
-		SetState(SIMON_STATE_WALKING);
-		isReverse = true;
-	}
-	else if (keyCode[DIK_LEFT])
-	{
-		SetState(SIMON_STATE_WALKING);
-		isReverse = false;
-	}
-	else
-	{
-
-			SetState(SIMON_STATE_IDLE);
-
-	}*/
 }
 
 void CSimon::Render()
 {
-	//int ani;
-	/*if (vx == 0)
-	{
-		if (jumping)
-		{
-			if (attacking)
-			{
-				ani = SIMON_ANI_ATTACKING;
-			}
-			else
-			{
-				ani = SIMON_ANI_JUMPING;
-			}
-		}
-		else
-		{
-			if (attacking)
-			{
-				ani = SIMON_ANI_ATTACKING;
-			}
-			else
-			{
-				if (sitting)
-				{
-					ani = SIMON_ANI_SITTING;
-				}
-				else
-				{
-					ani = SIMON_ANI_IDLE;
-				}
-			}
-		}
-	}
-	else if (vx != 0)
-	{
-
-		if (jumping)
-			if (attacking)
-			{
-				ani = SIMON_ANI_ATTACKING;
-			}
-			else
-			{
-				ani = SIMON_ANI_JUMPING;
-			}
-		else
-		{
-			if (attacking)
-			{
-				vx = 0;
-				ani = SIMON_ANI_ATTACKING;
-			}
-			else
-			{
-				if (sitting)
-				{
-					ani = SIMON_ANI_SITTING;
-				}
-				else ani = SIMON_ANI_WALKING;
-			}
-		}
-	}
-
-	if (attacking)
-	{
-		if (animations[ani]->CheckEndAni())
-		{
-			attacking = false;
-			animations[ani]->SetEndAniFalse();
-		}
-	}
-	animations[ani]->isreverse = this->isReverse;
-	animations[ani]->Render(x, y);*/
 	curAni->isreverse = this->isReverse;
 	curAni->Render(x, y);
 
@@ -185,86 +85,10 @@ void CSimon::Render()
 
 void CSimon::SetState(int state)
 {
-	/*CGameObject::SetState(state);
-	switch (state)
-	{
-	case SIMON_STATE_WALKING:
-		if (jumping || attacking) {}
-		else if (sitting)
-		{
-			if (isReverse==true)
-			{
-				nx = 1;
-			}
-			else
-				nx = -1;
-		}
-		else
-		{
-			if (isReverse==true)
-			{
-				vx = SIMON_WALKING_SPEED;
-				nx = 1;
-			}
-			else
-			{
-				vx = -SIMON_WALKING_SPEED;
-				nx = -1;
-			}
-		}
-		break;
-	case SIMON_STATE_JUMP:
-		if (attacking || sitting) {}
-		else
-		{
-			if (y == 150-height/2)
-			{
-				vy = -SIMON_JUMP_SPEED_Y;
-				jumping = true;
-			}
-		}
-		break;
-	case SIMON_STATE_IDLE:
-		if (jumping || attacking) {}
-		else
-		{
-			vx = 0;
-		}
-		break;
-	case SIMON_STATE_ATTACK:
-		attacking = true;
-		break;
-	case SIMON_STATE_SITTING:
-		if (jumping || attacking) {}
-		else
-		{
-			if (!sitting)
-			{
-				sitting = true;
-				height -= 17;
-				y += 17 / 2;
-				vx = 0;
-			}
-		}
-
-		break;
-	}*/
 }
 
 void CSimon::OnKeyDown(int key)
 {
-	//switch (key)
-	//{
-	//case DIK_SPACE:
-	//	SetState(SIMON_STATE_JUMP);
-	//	break;
-	//case DIK_A:
-	//	SetState(SIMON_STATE_ATTACK);
-	//	break;
-	//case DIK_DOWN:
-	//	SetState(SIMON_STATE_SITTING);
-	//	break;
-	//}
 	switch (key)
 	{
 	case DIK_SPACE:
@@ -293,10 +117,6 @@ void CSimon::OnKeyDown(int key)
 		}
 		break;
 	}
-
-
-
-
 }
 
 void CSimon::OnKeyUp(int key)

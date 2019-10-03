@@ -90,11 +90,11 @@
     <ClCompile Include="Sprites.cpp">
       <Filter>Game Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="map.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Camera.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Game Components</Filter>
+    </ClCompile>
+    <ClCompile Include="map.cpp">
+      <Filter>Game Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -167,11 +167,11 @@
     <ClInclude Include="Sprites.h">
       <Filter>Game Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="map.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Camera.h">
-      <Filter>Header Files</Filter>
+      <Filter>Game Components</Filter>
+    </ClInclude>
+    <ClInclude Include="map.h">
+      <Filter>Game Graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

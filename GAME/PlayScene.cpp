@@ -27,15 +27,16 @@ void PlayScene::Update(float dt)
 void PlayScene::UpdatePlayer(float dt)
 {
 	simon->Update(dt);
-	if (SIMON->attacking)
+	if (simon->attacking)
 	{
 
 		Weapon* weapon = WeaponFactory::CreateWeapon(ID_WEAPON_MORNINGSTAR);
-		weapon->isReverse = SIMON->isReverse;
-		weapon->x = SIMON->x + (SIMON->isReverse ? -22 : 22);
-		weapon->y = SIMON->y + 8;
-		visibleObjects.insert(weapon);
-		//	SIMON->attacking = false;
+		if (simon->UsingMorningStar==false)
+		{
+			weapon->isReverse = simon->isReverse;
+			visibleObjects.insert(weapon);
+			simon->UsingMorningStar = true;
+		}
 	}
 }
 
@@ -47,14 +48,13 @@ void PlayScene::UpdateObjects(float dt)
 		auto o = *it;
 		switch (o->tag)
 		{
-		case 0:
+		case TAG_WEAPON:
 		{
 			auto w = WeaponFactory::ConvertToWeapon(o);
 
-			if (w->isDead || (SIMON->state != SIMON_STATE_ATTACK
-				&& SIMON->state != SIMON_STATE_SIT_ATTACKING))
+			if ( simon->state != SIMON_STATE_ATTACK && simon->state != SIMON_STATE_SIT_ATTACKING)
 			{
-				it = visibleObjects.erase(it);
+				it= visibleObjects.erase(it);
 				delete w;
 				continue;
 			}
@@ -75,7 +75,7 @@ void PlayScene::UpdateVisibleObjects()
 	auto it = visibleObjects.begin();
 	while (it != visibleObjects.end())
 	{
-		if ((*it)->tag != 0)
+		if ((*it)->tag != TAG_WEAPON)
 		{
 			it = visibleObjects.erase(it);
 		}
@@ -88,10 +88,8 @@ void PlayScene::LoadResources()
 	CTextures::GetInstance()->LoadResources();
 	SpritesManager::GetInstance()->LoadResources();
 	map1 = new map();
-	//	CAnimations * animations = CAnimations::GetInstance();
-
 	simon = CSimon::GetInstance();
-	simon->SetPosition(30.0f, 150 - SIMON->height / 2);
+	simon->SetPosition(30.0f, 150 - simon->height / 2);
 	camera = Camera::GetInstance();
 	simon->Respawn();
 }

@@ -31,6 +31,7 @@ class CSimon : public CGameObject
 {
 	static CSimon * _instance;
 public:
+	bool UsingMorningStar;
 	int morningstarlevel;
 	CSimon();
 	void Respawn();

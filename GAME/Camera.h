@@ -19,6 +19,7 @@ public:
 	int GetHeight() { return camHeight; };
 	void SetPosition(float cx,float cy);
 	D3DXVECTOR3 GetPosition() { return camPosition; };
+	bool IsContain(RECT a, RECT b);
 	void Update();
 
 

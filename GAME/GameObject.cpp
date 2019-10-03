@@ -7,7 +7,7 @@
 
 CGameObject::CGameObject()
 {
-	tag = 0;
+	//tag = 0;
 	/*sitting = false;
 	attacking = false;
 	jumping = false;*/
