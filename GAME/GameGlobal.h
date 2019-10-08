@@ -32,18 +32,21 @@
 #define TAG_WEAPON 1
 #define TAG_MAP1 2
 
-
-
 //// ===== Các thông số cho PLAYER ====
-//#define PLAYER_RUNNING_SPEED 0.095f
-//#define PLAYER_INJURED_SPEED 0.065f
-//#define PLAYER_JUMPING_SPEED 0.28f
-//#define PLAYER_FALLING_SPEED 0.25f
-//#define PLAYER_CLIMBING_SPEED 0.1f
-//#define PLAYER_WIDTH 20
-//#define PLAYER_STANDING_HEIGHT 26
-//#define PLAYER_SITTING_HEIGHT 18
+#define SIMON_WALKING_SPEED		0.1f
+#define SIMON_JUMP_SPEED_Y		0.45f
+#define SIMON_GRAVITY			0.002f
+#define SIMON_STATE_IDLE			0
+#define SIMON_STATE_WALKING			1
+#define SIMON_STATE_JUMP			2
+#define SIMON_STATE_FALL			3
+#define SIMON_STATE_ATTACK			4
+#define SIMON_STATE_SITTING			5
+#define SIMON_STATE_SIT_ATTACKING	6
 
+
+#define SIMON_WIDTH					60
+#define SIMON_HEIGHT				62
 
 #define SIMON CSimon::GetInstance()
 

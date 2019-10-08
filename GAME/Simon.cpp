@@ -1,59 +1,20 @@
 #include "Simon.h"
-
+#include"WeaponFactory.h"
 CSimon*CSimon::_instance = NULL;
 CSimon::CSimon()
 {
-	CAnimations *animations = CAnimations::GetInstance();
-	LPANIMATION ani;
-	// idle
-	ani = new CAnimation(100);
-	ani->Add(TAG_SIMON, 0);
-	animations->Add(1, ani);
-	// walk
-	ani = new CAnimation(100);
-	ani->Add(TAG_SIMON, 0);
-	ani->Add(TAG_SIMON, 1);
-	ani->Add(TAG_SIMON, 2);
-	ani->Add(TAG_SIMON, 3);
-	animations->Add(2, ani);
-	// jump
-	ani = new CAnimation(100);
-	ani->Add(TAG_SIMON, 4);
-	animations->Add(3, ani);
-	// fall
-	ani = new CAnimation(100);
-	ani->Add(TAG_SIMON, 0);
-	animations->Add(4, ani);
-	// attack
-	ani = new CAnimation(100);
-	ani->Add(TAG_SIMON, 0);
-	ani->Add(TAG_SIMON, 5);
-	ani->Add(TAG_SIMON, 6);
-	ani->Add(TAG_SIMON, 7);
-	animations->Add(5, ani);
-	// sit
-	ani = new CAnimation(100);
-	ani->Add(TAG_SIMON, 4);
-	animations->Add(6, ani);
-	// attack sit
-	ani = new CAnimation(100);
-	ani->Add(TAG_SIMON, 4);
-	ani->Add(TAG_SIMON, 8);
-	ani->Add(TAG_SIMON, 9);
-	ani->Add(TAG_SIMON, 10);
-	animations->Add(7, ani);
-	AddAnimation(1); // idle
-	AddAnimation(2); // walk
-	AddAnimation(3); // jumo
-	AddAnimation(4); // fall
-	AddAnimation(5); // attacking
-	AddAnimation(6); //sit
-	AddAnimation(7); // sit attack
+	tag = TAG_SIMON;
+	AddAnimation(tag, 0); // idle
+	AddAnimation(tag, 1); // walk
+	AddAnimation(tag, 2); // jumo
+	AddAnimation(tag, 3); // fall
+	AddAnimation(tag, 4); // attacking
+	AddAnimation(tag, 5); //sit
+	AddAnimation(tag, 6); // sit attack
 	morningstarlevel = 1;
 	width = SIMON_WIDTH;
 	height = SIMON_HEIGHT;
 	UsingMorningStar = false;
-	// this->ChangeState(new SimonStandingState()); 
 }
 void CSimon::Respawn()
 {
@@ -67,20 +28,49 @@ void CSimon::Update(DWORD dt)
 	CGameObject::Update(dt);
 	State->Update(dt);
 	// simple fall down
-	vy += SIMON_GRAVITY;
+	vy += SIMON_GRAVITY*dt;
 
 	if (y + height / 2 > 292)
 	{
 		vy = 0; y = 292- height / 2;
 	}
 	if (vx < 0 && x < 0) x = 0;
+
+	auto it = Weapons.begin();
+	while (it != Weapons.end())
+	{
+		auto o = *it;
+		switch (o->tag)
+		{
+		case TAG_WEAPON:
+		{
+			auto w = WeaponFactory::ConvertToWeapon(o);
+
+			if (state != SIMON_STATE_ATTACK && state != SIMON_STATE_SIT_ATTACKING)
+			{
+				it = Weapons.erase(it);
+				delete w;
+				continue;
+			}
+
+			w->Update(dt);
+			break;
+		}
+		}
+		++it;
+
+	}
 }
 
 void CSimon::Render()
 {
+	
 	curAni->isreverse = this->isReverse;
 	curAni->Render(x, y);
-
+	for (auto o : Weapons)
+	{
+		o->Render();
+	}
 }
 
 void CSimon::SetState(int state)
@@ -106,6 +96,13 @@ void CSimon::OnKeyDown(int key)
 	case DIK_A:
 		if (!attacking)
 		{
+			Weapon* weapon = WeaponFactory::CreateWeapon(ID_WEAPON_MORNINGSTAR);
+			if (UsingMorningStar == false)
+			{
+				weapon->isReverse = isReverse;
+				Weapons.insert(weapon);
+				UsingMorningStar = true;
+			}
 			ChangeState(new SimonAttackingState());
 		}
 		break;
@@ -121,21 +118,6 @@ void CSimon::OnKeyDown(int key)
 
 void CSimon::OnKeyUp(int key)
 {
-	/*if (key == DIK_DOWN)
-	{
-		if (sitting)
-		{
-			height += 17;
-			y -= 17 / 2;
-			sitting = false;
-		}
-	}*/
-}
-
-int CSimon::iskeydown(int keyCode)
-{
-	BYTE  keyStates[256];
-	return (keyStates[keyCode] & 0x80) > 0;
 }
 
 void CSimon::ChangeState(SimonState * newState)

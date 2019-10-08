@@ -147,6 +147,7 @@ int CGame::IsKeyDown(int KeyCode)
 
 void CGame::ProcessKeyboard()
 {
+	Scene* curScene = SceneManager::GetInstance()->CurScene;
 	HRESULT hr;
 
 	// Collect all key states first
@@ -165,11 +166,10 @@ void CGame::ProcessKeyboard()
 		}
 		else
 		{
-			//DebugOut(L"[ERROR] DINPUT::GetDeviceState failed. Error: %d\n", hr);
+			DebugOut(L"[ERROR] DINPUT::GetDeviceState failed. Error: %d\n", hr);
 			return;
 		}
 	}
-
 
 
 
@@ -178,10 +178,10 @@ void CGame::ProcessKeyboard()
 	hr = didv->GetDeviceData(sizeof(DIDEVICEOBJECTDATA), keyEvents, &dwElements, 0);
 	if (FAILED(hr))
 	{
-		//DebugOut(L"[ERROR] DINPUT::GetDeviceData failed. Error: %d\n", hr);
+		DebugOut(L"[ERROR] DINPUT::GetDeviceData failed. Error: %d\n", hr);
 		return;
 	}
-	auto curScene = SceneManager::GetInstance()->CurScene;
+	
 	// Scan through all buffered events, check if the key is pressed or released
 	for (DWORD i = 0; i < dwElements; i++)
 	{
@@ -206,7 +206,6 @@ CGame::~CGame()
 void CGame::LoadResources()
 {
 	SceneManager::GetInstance()->ReplaceScene(new PlayScene());
-	SceneManager::GetInstance()->CurScene->LoadResources();
 
 }
 

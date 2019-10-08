@@ -1,7 +1,6 @@
 #pragma once
-#include"Sprites.h"
+#include"Sprite.h"
 #include"Textures.h"
-#include"GameGlobal.h"
 class SpritesManager
 {
 	static SpritesManager * __instance;

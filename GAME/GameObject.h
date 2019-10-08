@@ -1,9 +1,8 @@
 #pragma once
-
 #include <Windows.h>
 #include <d3dx9.h>
 #include <vector>
-#include"Animation.h"
+#include"AnimationsManager.h"
 //#include "Sprites.h"
 
 
@@ -26,7 +25,7 @@ public:
 	float height;
 	int state;
 	int ani;
-	 vector<LPANIMATION> animations;
+	vector<LPANIMATION> animations;
 
 	int tag;
 	int type;
@@ -40,12 +39,12 @@ public:
 	int GetState() { return this->state; }
 
 
-	 void AddAnimation(int aniId);
+	void AddAnimation(int tag, int index);
 
 	CGameObject();
 
 	void Update(DWORD dt);
-	void setreverse(bool check) {this->isReverse = check; };
+	void setreverse(bool check) { this->isReverse = check; };
 	//void Render();
 	virtual void Render() {}
 	~CGameObject();

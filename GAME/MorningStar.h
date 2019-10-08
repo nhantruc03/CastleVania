@@ -52,7 +52,7 @@ public:
 		switch (frameIndex)
 		{
 		case 0:
-			x += (isReverse ? -36 : 36);
+			x += isReverse ? -36 : 36 ;
 			if (SIMON->State->StateName == SIMON_STATE_ATTACK)
 			{
 				y += 7;
@@ -89,4 +89,3 @@ public:
 	}
 
 };
-

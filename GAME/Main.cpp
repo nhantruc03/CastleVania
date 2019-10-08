@@ -1,26 +1,9 @@
-/* =============================================================
-	INTRODUCTION TO GAME PROGRAMMING SE102
-
-	SAMPLE 03 - KEYBOARD AND OBJECT STATE
-
-	This sample illustrates how to:
-
-		1/ Process keyboard input
-		2/ Control object state with keyboard events
-================================================================ */
-
 #include <windows.h>
 #include <d3d9.h>
 #include <d3dx9.h>
 
 #include "debug.h"
 #include "Game.h"
-#include "Textures.h"
-
-#include "Simon.h"
-
-CGame *game;
-//CSimon *simon;
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message) {
@@ -33,90 +16,6 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	return 0;
 }
-
-/*
-	Load all game resources
-	In this example: load textures, sprites, animations and SIMON object
-*/
-//void LoadResources()
-//{
-//	CTextures * textures = CTextures::GetInstance();
-//
-//	//textures->Add(ID_TEX_SIMON, L"textures\\SIMON.png",D3DCOLOR_XRGB(176, 224, 248));
-//	textures->Add(ID_TEX_SIMON, L"player.png", D3DCOLOR_XRGB(255, 0, 255));
-//
-//	CSprites * sprites = CSprites::GetInstance();
-//	CAnimations * animations = CAnimations::GetInstance();
-//
-//	LPDIRECT3DTEXTURE9 texSimon = textures->Get(ID_TEX_SIMON);
-//
-//
-//
-//	sprites->Add(10011, 12, 2, 44,64, texSimon); // idle
-//	// walking
-//	sprites->Add(10012, 78, 2, 102, 64, texSimon);
-//	sprites->Add(10013, 136, 2, 166, 64, texSimon);
-//	sprites->Add(10014, 196, 2, 220, 64, texSimon);
-//
-//
-//
-//	sprites->Add(2, 252, 1, 284, 47, texSimon); // jumping
-//
-//	// attacking 
-//	sprites->Add(6, 300, 2, 360, 64, texSimon);
-//	sprites->Add(7, 360, 2, 420, 64, texSimon);
-//	sprites->Add(8, 420, 2, 480, 64, texSimon);
-//	LPANIMATION ani;
-//
-//
-//	ani = new CAnimation(100);
-//	ani->Add(10011);
-//	animations->Add(401, ani);
-//
-//
-//	ani = new CAnimation(100);
-//	ani->Add(10011);
-//	ani->Add(10012);
-//	ani->Add(10013);
-//	ani->Add(10014);
-//	animations->Add(501, ani);
-//
-//
-//	ani = new CAnimation(100);
-//	ani->Add(2);
-//	animations->Add(504, ani);
-//
-//	ani = new CAnimation(100);
-//	ani->Add(10011);
-//	ani->Add(6);
-//	ani->Add(7);
-//	ani->Add(8);
-//	animations->Add(506, ani);
-//
-//	ani = new CAnimation(100);
-//	ani->Add(2);
-//	animations->Add(507, ani);
-//
-//	simon = new CSimon();
-//	CSimon::AddAnimation(401);		// idle left
-//	CSimon::AddAnimation(501);		// walk left
-//	CSimon::AddAnimation(504);		// jump left
-//	CSimon::AddAnimation(506);		// attacking left
-//	CSimon::AddAnimation(507);
-//	simon->SetPosition(30.0f, 100.0f);
-//}
-
-/*
-	Update world status for this frame
-	dt: time period between beginning of last frame and beginning of this frame
-*/
-
-
-/*
-	Render a frame
-*/
-
-
 HWND CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int ScreenWidth, int ScreenHeight)
 {
 	WNDCLASSEX wc;
@@ -170,7 +69,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 {
 	HWND hWnd = CreateGameWindow(hInstance, nCmdShow, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-	game = CGame::GetInstance();
+	CGame*game = CGame::GetInstance();
 	game->Init(hWnd);
 	game->LoadResources();
 

@@ -2,7 +2,6 @@
 #include "Scene.h"
 #include<unordered_set>
 #include "Simon.h"
-#include"MorningStar.h"
 #include"WeaponFactory.h"
 #include"map.h"
 using namespace std;
@@ -10,7 +9,7 @@ class PlayScene : public Scene
 {
 private:
 	CSimon* simon;
-	
+
 	unordered_set<CGameObject*> visibleObjects;
 public:
 	PlayScene();
@@ -19,7 +18,7 @@ public:
 
 	void Update(float dt);
 	//void UpdateScene();						// Update các thông số các đối tượng trong Scene
-	
+
 	void UpdatePlayer(float dt);
 	void UpdateObjects(float dt);
 	void UpdateVisibleObjects();

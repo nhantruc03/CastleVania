@@ -1,9 +1,4 @@
-#include <d3dx9.h>
-
-#include "debug.h"
-#include "Game.h"
 #include "GameObject.h"
-#include "Sprites.h"
 
 CGameObject::CGameObject()
 {
@@ -27,9 +22,9 @@ void CGameObject::Update(DWORD dt)
 //{
 //}
 
-void CGameObject::AddAnimation(int aniId)
+void CGameObject::AddAnimation(int tag,int index)
 {
-	LPANIMATION ani = CAnimations::GetInstance()->Get(aniId);
+	LPANIMATION ani = AnimationsManager::GetInstance()->Get(tag,index);
 	animations.push_back(ani);
 }
 

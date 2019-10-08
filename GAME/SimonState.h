@@ -1,5 +1,4 @@
 #pragma once
-#include "Simon.h"
 #include"GameGlobal.h"
 class SimonState
 {

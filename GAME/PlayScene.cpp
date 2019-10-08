@@ -4,7 +4,7 @@
 
 PlayScene::PlayScene()
 {
-	
+	LoadResources();
 }
 
 
@@ -27,7 +27,7 @@ void PlayScene::Update(float dt)
 void PlayScene::UpdatePlayer(float dt)
 {
 	simon->Update(dt);
-	if (simon->attacking)
+	/*if (simon->attacking)
 	{
 
 		Weapon* weapon = WeaponFactory::CreateWeapon(ID_WEAPON_MORNINGSTAR);
@@ -37,12 +37,12 @@ void PlayScene::UpdatePlayer(float dt)
 			visibleObjects.insert(weapon);
 			simon->UsingMorningStar = true;
 		}
-	}
+	}*/
 }
 
 void PlayScene::UpdateObjects(float dt)
 {
-	auto it = visibleObjects.begin();
+	/*auto it = visibleObjects.begin();
 	while (it != visibleObjects.end())
 	{
 		auto o = *it;
@@ -65,28 +65,29 @@ void PlayScene::UpdateObjects(float dt)
 		}
 		++it;
 
-	}
+	}*/
 
 	this->UpdateVisibleObjects();
 }
 
 void PlayScene::UpdateVisibleObjects()
 {
-	auto it = visibleObjects.begin();
-	while (it != visibleObjects.end())
-	{
-		if ((*it)->tag != TAG_WEAPON)
-		{
-			it = visibleObjects.erase(it);
-		}
-		else ++it;
-	}
+	//auto it = visibleObjects.begin();
+	//while (it != visibleObjects.end())
+	//{
+	//	if ((*it)->tag != TAG_WEAPON)
+	//	{
+	//		it = visibleObjects.erase(it);
+	//	}
+	//	else ++it;
+	//}
 }
 
 void PlayScene::LoadResources()
 {
 	CTextures::GetInstance()->LoadResources();
 	SpritesManager::GetInstance()->LoadResources();
+	AnimationsManager::GetInstance()->LoadResources();
 	map1 = new map();
 	simon = CSimon::GetInstance();
 	simon->SetPosition(30.0f, 150 - simon->height / 2);
@@ -98,23 +99,16 @@ void PlayScene::Render()
 {
 	map1->Render();
 	simon->Render();
-	for (auto o : visibleObjects)
+	/*for (auto o : visibleObjects)
 	{
 		o->Render();
-	}
+	}*/
 }
 
 void PlayScene::OnKeyDown(int key)
 {
 	keyCode[key] = true;
 	simon->OnKeyDown(key);
-	//if (key == DIK_RIGHT)
-	//{
-	//	simon->setreverse(true);
-	//	simon->SetState(SIMON_STATE_WALKING);
-	//}
-	//else
-	//	simon->SetState(SIMON_STATE_IDLE);
 }
 
 void PlayScene::OnKeyUp(int key)
@@ -123,3 +117,4 @@ void PlayScene::OnKeyUp(int key)
 	simon->OnKeyUp(key);
 
 }
+

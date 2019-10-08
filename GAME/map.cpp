@@ -11,6 +11,7 @@ map::map()
 	iFile.open(fileName);
 	iFile >> rows;
 	iFile >> columns;
+	// ma tran 2 chieu de luu vi tri cua tileset
 	MapMatrix = new int*[rows];
 	for (int i = 0; i < rows; i++)
 	{
@@ -36,6 +37,7 @@ void map::Render()
 			tileset.right = tileset.left + 32;
 			tileset.top = i * 32;
 			tileset.bottom = tileset.top + 32;
+			// kiem tra xem vi tri cua tileset co dang nam trong camera khong ?
 			if (camera->IsContain(tileset, camera->GetBound()) == false)
 			{
 				continue;

@@ -87,13 +87,16 @@
     <ClCompile Include="Animation.cpp">
       <Filter>Game Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Sprites.cpp">
-      <Filter>Game Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Game Components</Filter>
     </ClCompile>
     <ClCompile Include="map.cpp">
+      <Filter>Game Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>Game Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationsManager.cpp">
       <Filter>Game Graphics</Filter>
     </ClCompile>
   </ItemGroup>
@@ -149,9 +152,6 @@
     <ClInclude Include="SimonFallingState.h">
       <Filter>Game Objects\Player</Filter>
     </ClInclude>
-    <ClInclude Include="Weapon.h">
-      <Filter>Game Objects\Weapon</Filter>
-    </ClInclude>
     <ClInclude Include="MorningStar.h">
       <Filter>Game Objects\Weapon</Filter>
     </ClInclude>
@@ -164,14 +164,20 @@
     <ClInclude Include="SpritesManager.h">
       <Filter>Game Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Sprites.h">
-      <Filter>Game Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Game Components</Filter>
     </ClInclude>
     <ClInclude Include="map.h">
       <Filter>Game Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>Game Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationsManager.h">
+      <Filter>Game Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon.h">
+      <Filter>Game Objects\Player</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
