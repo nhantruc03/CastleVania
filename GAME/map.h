@@ -5,11 +5,12 @@
 #include"Camera.h"
 class map
 {
-	int columns;
-	int rows;
-	int** MapMatrix;
+	
 	Camera * camera;
 public:
+	int** MapMatrix;
+	int columns;
+	int rows;
 	map();
 	void Render();
 	void Setcam(Camera* cam) { camera = cam; };

@@ -1,8 +1,6 @@
 #pragma once
 #include"MorningStar.h"
 
-
-
 class WeaponFactory
 {
 public:

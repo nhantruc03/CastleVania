@@ -7,7 +7,6 @@
 
 #include <dinput.h>
 #include "SceneManager.h"
-#include"PlayScene.h"
 #define KEYBOARD_BUFFER_SIZE 1024
 /*
 Abstract class to define keyboard event handlers
@@ -36,7 +35,20 @@ public:
 	void Draw(float x, float y, LPDIRECT3DTEXTURE9 texture, RECT rect,bool isreverse,D3DXVECTOR3 center);
 	int IsKeyDown(int KeyCode);
 	void ProcessKeyboard();
-
+	static void SweptAABB(
+		float ml,			// move left 
+		float mt,			// move top
+		float mr,			// move right 
+		float mb,			// move bottom
+		float dx,			// 
+		float dy,			// 
+		float sl,			// static left
+		float st,
+		float sr,
+		float sb,
+		float &t,
+		float &nx,
+		float &ny);
 
 
 //	LPDIRECT3DDEVICE9 GetDirect3DDevice() { return this->d3ddv; }

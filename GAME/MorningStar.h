@@ -72,7 +72,7 @@ public:
 		case 2:
 			if (level != 3)
 			{
-				x += (isReverse ? 49 : -49);
+				x += (isReverse ? 50 : -50);
 			}
 			else
 			{

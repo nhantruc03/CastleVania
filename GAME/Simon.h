@@ -1,9 +1,6 @@
 #pragma once
 #include "GameObject.h"
 #include"GameGlobal.h"
-//#include"Weapon.h"
-//#include"SimonState.h"
-//#include"WeaponFactory.h"
 #include"SimonStandingState.h"
 #include"SimonJumpingState.h"
 #include"SimonAttackingState.h"
@@ -19,7 +16,7 @@ public:
 	int morningstarlevel;
 	CSimon();
 	void Respawn();
-	void Update(DWORD dt);
+	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 	void Render();
 	void SetState(int state);
 	void OnKeyDown(int keyCode);
@@ -28,6 +25,8 @@ public:
 	CAnimation *curAni;
 	void ChangeState(SimonState* newState);
 	static CSimon* GetInstance();
+
+	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 
 };
 

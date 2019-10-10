@@ -10,7 +10,7 @@ SimonFallingState::SimonFallingState()
 void SimonFallingState::Update(float dt)
 {
 	this->HandleKeyboard();
-	if (SIMON->y == 292-SIMON->height / 2 )
+	if (SIMON->vy==0)
 	{
 		
 			SIMON->jumping = false;

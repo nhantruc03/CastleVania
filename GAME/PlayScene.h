@@ -4,12 +4,13 @@
 #include "Simon.h"
 #include"WeaponFactory.h"
 #include"map.h"
+#include"Brick.h"
 using namespace std;
 class PlayScene : public Scene
 {
 private:
 	CSimon* simon;
-
+	vector<LPGAMEOBJECT>objects;
 	unordered_set<CGameObject*> visibleObjects;
 public:
 	PlayScene();

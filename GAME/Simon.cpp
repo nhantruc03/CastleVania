@@ -23,19 +23,47 @@ void CSimon::Respawn()
 	this->isReverse = true;
 	this->ChangeState(new SimonStandingState());
 }
-void CSimon::Update(DWORD dt)
+void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects )
 {
 	CGameObject::Update(dt);
 	State->Update(dt);
 	// simple fall down
 	vy += SIMON_GRAVITY*dt;
 
-	if (y + height / 2 > 292)
-	{
-		vy = 0; y = 292- height / 2;
-	}
-	if (vx < 0 && x < 0) x = 0;
+	//if (y + height / 2 > 292)
+	//{
+	//	vy = 0; y = 292- height / 2;
+	//}
+	if (vx < 0 && x < 16) x = 16;
+	if (vx > 0 && x > 1536)x = 1536;
+	vector<LPCOLLISIONEVENT> coEvents;
+	vector<LPCOLLISIONEVENT> coEventsResult;
 
+	coEvents.clear();
+
+	// turn off collision when die 
+	CalcPotentialCollisions(coObjects, coEvents);
+
+
+	// No collision occured, proceed normally
+	if (coEvents.size() == 0)
+	{
+		x += dx;
+		y += dy;
+	}
+	else
+	{
+		float min_tx, min_ty, nx = 0, ny;
+
+		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
+
+		// block 
+		x += min_tx * dx + nx * 0.1f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
+		y += min_ty * dy + ny * 0.1f;
+
+		if (nx != 0) vx = 0;
+		if (ny != 0) vy = 0;
+	}
 	auto it = Weapons.begin();
 	while (it != Weapons.end())
 	{
@@ -133,4 +161,20 @@ CSimon * CSimon::GetInstance()
 	if (_instance == NULL)
 		_instance = new CSimon();
 	return _instance;
+}
+
+void CSimon::GetBoundingBox(float & left, float & top, float & right, float & bottom)
+{
+	left = x - SIMON_WIDTH / 2;
+	right = left + SIMON_WIDTH;
+	if (state == SIMON_STATE_JUMP || state == SIMON_STATE_SITTING||state==SIMON_STATE_SIT_ATTACKING)
+	{
+		top = y - SIMON_SITTING_HEIGHT / 2;
+		bottom = top + SIMON_SITTING_HEIGHT;
+	}
+	else
+	{
+		top = y - SIMON_HEIGHT / 2;
+		bottom = top + SIMON_HEIGHT;
+	}
 }

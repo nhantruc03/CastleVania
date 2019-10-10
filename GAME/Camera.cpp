@@ -13,7 +13,6 @@ Camera::Camera(int width, int height)
 {
 	camWidht = width;
 	camHeight = height;
-
 	camPosition = D3DXVECTOR3(0, 0, 0);
 }
 
@@ -46,6 +45,10 @@ void Camera::Update()
 	if (camPosition.x - camWidht / 2 < 0)
 	{
 		camPosition = D3DXVECTOR3(camWidht / 2, 0, 0);
+	}
+	if (camPosition.x + camWidht / 2 > 1552)
+	{
+		camPosition = D3DXVECTOR3(1552-camWidht / 2, 0, 0);
 	}
 }
 

@@ -42,7 +42,7 @@ void AnimationsManager::LoadResources()
 	ani->Add(TAG_SIMON, 0);
 	Add(TAG_SIMON, ani);
 	// attack
-	ani = new CAnimation(150);
+	ani = new CAnimation(120);
 	ani->Add(TAG_SIMON, 0);
 	ani->Add(TAG_SIMON, 5);
 	ani->Add(TAG_SIMON, 6);
@@ -53,7 +53,7 @@ void AnimationsManager::LoadResources()
 	ani->Add(TAG_SIMON, 4);
 	Add(TAG_SIMON, ani);
 	// attack sit
-	ani = new CAnimation(150);
+	ani = new CAnimation(120);
 	ani->Add(TAG_SIMON, 4);
 	ani->Add(TAG_SIMON, 8);
 	ani->Add(TAG_SIMON, 9);

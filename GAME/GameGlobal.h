@@ -6,8 +6,8 @@
 #include <unordered_map>
 
 // Các thông số và biến tổng dùng cho toàn bộ Game
-#define WINDOW_CLASS_NAME L"SampleWindow"
-#define MAIN_WINDOW_TITLE L"02 - Sprite animation"
+#define WINDOW_CLASS_NAME L"CastleVania"
+#define MAIN_WINDOW_TITLE L"CastleVania"
 #define SCREEN_WIDTH 365//1536
 #define SCREEN_HEIGHT 365 // Chiều dài cửa sổ
 //#define SCREEN_TRANSLATEY 60
@@ -34,8 +34,8 @@
 
 //// ===== Các thông số cho PLAYER ====
 #define SIMON_WALKING_SPEED		0.1f
-#define SIMON_JUMP_SPEED_Y		0.45f
-#define SIMON_GRAVITY			0.002f
+#define SIMON_JUMP_SPEED_Y		0.35f
+#define SIMON_GRAVITY			0.001f
 #define SIMON_STATE_IDLE			0
 #define SIMON_STATE_WALKING			1
 #define SIMON_STATE_JUMP			2
@@ -45,8 +45,9 @@
 #define SIMON_STATE_SIT_ATTACKING	6
 
 
-#define SIMON_WIDTH					60
+#define SIMON_WIDTH					32
 #define SIMON_HEIGHT				62
+#define SIMON_SITTING_HEIGHT		46
 
 #define SIMON CSimon::GetInstance()
 
@@ -59,22 +60,4 @@ extern LPDIRECT3DSURFACE9 backBuffer;							// BackBuffer
 
 extern std::unordered_map<int, bool> keyCode;
 
-// === ENUM dùng định dạng loại Object và State ====
-//extern enum Tag
-//{
-//	PLAYER,
-//	ITEM,
-//	WEAPON,
-//	GROUND,
-//	MAP1,
-//	MAP2,
-//	MAP3,
-//	FONT,
-//	ENEMY,
-//	HOLDER,
-//	BULLET,
-//	INTROSCENE,
-//	ENDSCENE,
-//};
-//
-//
+
