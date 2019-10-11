@@ -6,10 +6,3 @@ void CBrick::Render()
 	//RenderBoundingBox();
 }
 
-void CBrick::GetBoundingBox(float &l, float &t, float &r, float &b)
-{
-	l = x-16;
-	t = y-16;
-	r = x + 32;
-	b = y + 32;
-}

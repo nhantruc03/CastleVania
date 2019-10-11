@@ -7,7 +7,7 @@ SimonSittingState::SimonSittingState()
 	SIMON->sitting = true;
 	SIMON->vx = 0;
 	SIMON->y += 17 / 2;
-	SIMON->height -= 17;
+	SIMON->height = SIMON_SITTING_HEIGHT;
 	StateName = SIMON_STATE_SITTING;
 }
 
@@ -21,7 +21,7 @@ void SimonSittingState::HandleKeyboard()
 	if (!keyCode[DIK_DOWN])
 	{
 		SIMON->sitting = false;
-		SIMON->height += 17;
+		SIMON->height = SIMON_HEIGHT;
 		SIMON->y -= 17 / 2;
 
 		if (keyCode[DIK_LEFT] || keyCode[DIK_RIGHT])

@@ -11,6 +11,7 @@ class PlayScene : public Scene
 private:
 	CSimon* simon;
 	vector<LPGAMEOBJECT>objects;
+
 	unordered_set<CGameObject*> visibleObjects;
 public:
 	PlayScene();

@@ -31,9 +31,9 @@ void Camera::SetPosition(float cx, float cy)
 	camPosition = D3DXVECTOR3(cx, cy, 0);
 }
 
-bool Camera::IsContain(RECT a, RECT b)
+bool Camera::IsContain(RECT a)
 {
-	if (a.left > b.right || a.top > b.bottom || a.bottom < b.top || a.right < b.left)
+	if (a.left > GetBound().right || a.top > GetBound().bottom || a.bottom < GetBound().top || a.right < GetBound().left)
 	{
 		return false;
 	}

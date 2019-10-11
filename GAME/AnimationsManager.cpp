@@ -59,5 +59,28 @@ void AnimationsManager::LoadResources()
 	ani->Add(TAG_SIMON, 9);
 	ani->Add(TAG_SIMON, 10);
 	Add(TAG_SIMON, ani);
+	/////////			MORNINGSTAR
+	ani = new CAnimation(100);
+	ani->Add(TAG_WEAPON, 0);
+	ani->Add(TAG_WEAPON, 1);
+	ani->Add(TAG_WEAPON, 2);
+	Add(TAG_WEAPON, ani);
 
+	ani = new CAnimation(100);
+	ani->Add(TAG_WEAPON, 3);
+	ani->Add(TAG_WEAPON, 4);
+	ani->Add(TAG_WEAPON, 5);
+	Add(TAG_WEAPON, ani);
+
+	ani = new CAnimation(100);
+	ani->Add(TAG_WEAPON, 6);
+	ani->Add(TAG_WEAPON, 7);
+	ani->Add(TAG_WEAPON, 8);
+	Add(TAG_WEAPON, ani);
+
+	///////			FIRE PILLAR
+	ani = new CAnimation(100);
+	ani->Add(TAG_HOLDER, 0);
+	ani->Add(TAG_HOLDER, 1);
+	Add(TAG_HOLDER, ani);
 }

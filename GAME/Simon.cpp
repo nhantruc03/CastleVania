@@ -1,5 +1,7 @@
 #include "Simon.h"
 #include"WeaponFactory.h"
+#include"FirePillar.h"
+#include"Brick.h"
 CSimon*CSimon::_instance = NULL;
 CSimon::CSimon()
 {
@@ -21,7 +23,7 @@ void CSimon::Respawn()
 	this->jumping = false;
 	this->attacking = false;
 	this->isReverse = true;
-	this->ChangeState(new SimonStandingState());
+	this->ChangeState(new SimonFallingState());
 }
 void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects )
 {
@@ -29,11 +31,6 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects )
 	State->Update(dt);
 	// simple fall down
 	vy += SIMON_GRAVITY*dt;
-
-	//if (y + height / 2 > 292)
-	//{
-	//	vy = 0; y = 292- height / 2;
-	//}
 	if (vx < 0 && x < 16) x = 16;
 	if (vx > 0 && x > 1536)x = 1536;
 	vector<LPCOLLISIONEVENT> coEvents;
@@ -63,11 +60,20 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects )
 
 		if (nx != 0) vx = 0;
 		if (ny != 0) vy = 0;
+		for (UINT i = 0; i < coEventsResult.size(); i++)
+		{
+			LPCOLLISIONEVENT e = coEventsResult[i];
+			
+			//if (dynamic_cast<FirePillar *>(e->obj)) // if e->obj is Goomba 
+			//{
+			//}
+			
+		}
 	}
 	auto it = Weapons.begin();
 	while (it != Weapons.end())
 	{
-		auto o = *it;
+		CGameObject* o = *it;
 		switch (o->tag)
 		{
 		case TAG_WEAPON:
@@ -81,7 +87,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects )
 				continue;
 			}
 
-			w->Update(dt);
+			w->Update(dt,coObjects);
 			break;
 		}
 		}
@@ -165,16 +171,9 @@ CSimon * CSimon::GetInstance()
 
 void CSimon::GetBoundingBox(float & left, float & top, float & right, float & bottom)
 {
-	left = x - SIMON_WIDTH / 2;
-	right = left + SIMON_WIDTH;
-	if (state == SIMON_STATE_JUMP || state == SIMON_STATE_SITTING||state==SIMON_STATE_SIT_ATTACKING)
-	{
-		top = y - SIMON_SITTING_HEIGHT / 2;
-		bottom = top + SIMON_SITTING_HEIGHT;
-	}
-	else
-	{
-		top = y - SIMON_HEIGHT / 2;
-		bottom = top + SIMON_HEIGHT;
-	}
+	left = x - width / 2;
+	right = left + width;
+	top = y - height / 2;
+	bottom = top + height;
+
 }

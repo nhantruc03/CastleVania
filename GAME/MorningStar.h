@@ -4,51 +4,68 @@ class MorningStar :public Weapon
 {
 public:
 	int level;
+	int frameIndex;
+	bool available;
 	MorningStar(int level)
 	{
 		this->level = level;
-		LPANIMATION ani;
-		ani = new CAnimation(100);
 		if (level == 1)
 		{
-			ani->Add(TAG_WEAPON, 0);
-			ani->Add(TAG_WEAPON, 1);
-			ani->Add(TAG_WEAPON, 2);
+			this->animation = AnimationsManager::GetInstance()->Get(TAG_WEAPON, 0);
+			width = 44;
+			height = 16;
 		}
 		else if (level == 2)
 		{
-			ani->Add(TAG_WEAPON, 3);
-			ani->Add(TAG_WEAPON, 4);
-			ani->Add(TAG_WEAPON, 5);
+			this->animation = AnimationsManager::GetInstance()->Get(TAG_WEAPON, 1);
+			width = 44;
+			height = 12;
 		}
 		else
 		{
-			ani->Add(TAG_WEAPON, 6);
-			ani->Add(TAG_WEAPON, 7);
-			ani->Add(TAG_WEAPON, 8);
+			this->animation = AnimationsManager::GetInstance()->Get(TAG_WEAPON, 2);
+			width = 75;
+			height = 12;
 		}
-
-		this->animation = ani;
 		vx = vy = 0;
 		type = 0;
-
+		available = false;
 	}
 
-	void Update(float dt)
+	virtual void Update(float dt, vector<LPGAMEOBJECT> *coObjects)
 	{
-		//if(keyCode[DIK_A])
+		if (SIMON->curAni->currentFrame==3)
+		{
+			for (UINT i = 0; i < coObjects->size(); i++)
+			{
+				float l, t, r, b;
+				coObjects->at(i)->GetBoundingBox(l, t, r, b);
+				if (this->IsContain(l, t, r, b) == true)
+				{
+					switch (coObjects->at(i)->tag)
+					{
+					case TAG_HOLDER:
+						coObjects->at(i)->isDead = true;
+						break;
+					default:
+						break;
+					}
+
+				}
+			}
+		}
 	}
 
 	void Render()
 	{
-		int frameIndex = SIMON->curAni->currentFrame - 1;
+		frameIndex = SIMON->curAni->currentFrame - 1;
 		if (frameIndex != 0 && frameIndex != 1 && frameIndex != 2) return;
 
 		CSprite* sprite = animation->frames[frameIndex]->GetSprite();
-		int x = SIMON->x;
-		int y = SIMON->y;
+		
 		sprite->isreverse = this->isReverse;
-
+		x = SIMON->x;
+		y = SIMON->y;
 		switch (frameIndex)
 		{
 		case 0:
@@ -83,6 +100,7 @@ public:
 				y -= 8;
 			}
 			else y -= 3;
+			available = true;
 			break;
 		}
 		sprite->Draw(x, y);

@@ -31,6 +31,9 @@
     <Filter Include="Game Objects\Weapon">
       <UniqueIdentifier>{06967af2-9494-4e2a-8939-244f97182a95}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game Objects\HoldItemObject">
+      <UniqueIdentifier>{068e7e00-06db-4980-8627-0604832ce3ad}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Brick.cpp">
@@ -98,6 +101,12 @@
     </ClCompile>
     <ClCompile Include="AnimationsManager.cpp">
       <Filter>Game Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="HoldItemObject.cpp">
+      <Filter>Game Objects\HoldItemObject</Filter>
+    </ClCompile>
+    <ClCompile Include="FirePillar.cpp">
+      <Filter>Game Objects\HoldItemObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -177,7 +186,13 @@
       <Filter>Game Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Weapon.h">
-      <Filter>Game Objects\Player</Filter>
+      <Filter>Game Objects\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="HoldItemObject.h">
+      <Filter>Game Objects\HoldItemObject</Filter>
+    </ClInclude>
+    <ClInclude Include="FirePillar.h">
+      <Filter>Game Objects\HoldItemObject</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

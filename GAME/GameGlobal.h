@@ -23,6 +23,8 @@
 #define ID_TEX_SIMON 0
 #define ID_TEX_MORNINGSTAR 1
 #define ID_TEX_MAP1 2
+#define ID_tex_HOLDER 3
+
 #define ID_TEX_ENEMY 10
 #define ID_TEX_MISC 20
 
@@ -31,6 +33,7 @@
 #define TAG_SIMON 0
 #define TAG_WEAPON 1
 #define TAG_MAP1 2
+#define TAG_HOLDER 3
 
 //// ===== Các thông số cho PLAYER ====
 #define SIMON_WALKING_SPEED		0.1f

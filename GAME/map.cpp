@@ -38,7 +38,7 @@ void map::Render()
 			tileset.top = i * 32;
 			tileset.bottom = tileset.top + 32;
 			// kiem tra xem vi tri cua tileset co dang nam trong camera khong ?
-			if (camera->IsContain(tileset, camera->GetBound()) == false)
+			if (camera->IsContain(tileset) == false)
 			{
 				continue;
 			}

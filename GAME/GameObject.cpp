@@ -7,6 +7,7 @@ CGameObject::CGameObject()
 	/*sitting = false;
 	attacking = false;
 	jumping = false;*/
+	tag = NULL;
 	x = y = 0;
 	vx = vy = 0;
 	nx = 1;
@@ -61,7 +62,7 @@ void CGameObject::CalcPotentialCollisions(vector<LPGAMEOBJECT>* coObjects, vecto
 	{
 		LPCOLLISIONEVENT e = SweptAABBEx(coObjects->at(i));
 
-		if (e->t > 0 && e->t <= 1.0f)
+		if (e->t > 0 && e->t <= 1.0f && e->obj->tag!=TAG_HOLDER)
 			coEvents.push_back(e);
 		else
 			delete e;

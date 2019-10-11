@@ -68,6 +68,10 @@ void SpritesManager::LoadResources()
 	{
 		Add(TAG_MAP1, i * 32, 0, (i + 1) * 32, 32, texture);
 	}
-
+	//				HOLD ITEM OBJECT
+	//		FIRE PILLAR
+	texture = CTextures::GetInstance()->Get(ID_tex_HOLDER);
+	Add(TAG_HOLDER, 0, 0, 32, 64,texture);
+	Add(TAG_HOLDER, 32, 0, 64, 64, texture);
 
 }

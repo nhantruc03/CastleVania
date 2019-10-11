@@ -1,21 +1,23 @@
 #pragma once
 #include"GameObject.h"
-class Weapon :public CGameObject
+#include"AnimationsManager.h"
+class HoldItemObject:public CGameObject 
 {
 protected:
 	CAnimation* animation;
 public:
 	//virtual void Update(float dt) {};
-	Weapon()
+	HoldItemObject()
 	{
-		tag = TAG_WEAPON;
+		tag = TAG_HOLDER;
 	}
 	virtual void Render()
 	{
 		animation->Render(x, y);
 	}
-	virtual void Update(float dt, vector<LPGAMEOBJECT> *coObjects)
+	virtual void Update(float dt)
 	{
 		animation->isreverse = this->isReverse;
 	}
 };
+

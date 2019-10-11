@@ -4,6 +4,7 @@
 
 SimonStandingState::SimonStandingState()
 {
+	SIMON->height = SIMON_HEIGHT;
 	SIMON->vx = 0;
 	SIMON->vy = 0;
 	SIMON->jumping = false;

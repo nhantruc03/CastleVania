@@ -74,8 +74,22 @@ public:
 	void AddAnimation(int tag, int index);
 
 	CGameObject();
-
-	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom) {};
+	bool IsContain(float ol, float ot, float or, float ob)
+	{
+		float left, top, right, bottom;
+		GetBoundingBox(left, top, right, bottom);
+		if (ol> right || ot> bottom || ob< top || or< left)
+		{
+			return false;
+		}
+		return true;
+	};
+	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom) {
+		left = x - width / 2;
+		top = y - height / 2;
+		right = left + width;
+		bottom = top+ height;
+	};
 	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 	void setreverse(bool check) { this->isReverse = check; };
 	//void Render();

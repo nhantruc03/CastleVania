@@ -1,5 +1,5 @@
 #include "PlayScene.h"
-
+#include"FirePillar.h"
 
 
 PlayScene::PlayScene()
@@ -26,6 +26,40 @@ void PlayScene::Update(float dt)
 
 void PlayScene::UpdatePlayer(float dt)
 {
+	
+	//objects.clear();
+	//for (int i = 0; i < map1->rows; i++)
+	//{
+	//	for (int j = 0; j < map1->columns; j++)
+	//	{
+	//		if (map1->MapMatrix[i][j] == 49)
+	//		{
+	//			RECT objectrect;
+	//			objectrect.left = j * 32;
+	//			objectrect.right = objectrect.left + 32;
+	//			objectrect.top = i * 32;
+	//			objectrect.bottom = objectrect.top + 32;
+	//			if (camera->IsContain(objectrect))
+	//			{
+	//				CBrick *brick = new CBrick();
+	//				brick->SetPosition((j * 32) + 16, (i * 32) + 16);
+	//				objects.push_back(brick);
+	//			}
+	//		}
+	//	}
+	//}
+	auto it = objects.begin();
+	while (it != objects.end())
+	{
+		auto w = *it;
+		if (w->isDead)
+		{
+			it = objects.erase(it);
+			delete w;
+		}
+		else
+			++it;
+	}
 	simon->Update(dt,&objects);
 	/*if (simon->attacking)
 	{
@@ -99,19 +133,42 @@ void PlayScene::LoadResources()
 		{
 			if (map1->MapMatrix[i][j] == 49)
 			{
+
 				CBrick *brick = new CBrick();
 				brick->SetPosition((j * 32) + 16, (i * 32) + 16);
 				objects.push_back(brick);
-				//visibleObjects.insert(brick);
+
 			}
 		}
 	}
+	FirePillar* test = new FirePillar();
+	test->SetPosition(192, 256);
+	objects.push_back(test);
+	test = new FirePillar();
+	test->SetPosition(448, 256);
+	objects.push_back(test);
+	test = new FirePillar();
+	test->SetPosition(704, 256);
+	objects.push_back(test);
+	test = new FirePillar();
+	test->SetPosition(976, 256);
+	objects.push_back(test);
+	test = new FirePillar();
+	test->SetPosition(1216, 256);
+	objects.push_back(test);
+
 }
 
 void PlayScene::Render()
 {
+	
 	map1->Render();
+
 	simon->Render();
+	for (auto o : objects)
+	{
+		o->Render();
+	}
 	/*for (auto o : visibleObjects)
 	{
 		o->Render();

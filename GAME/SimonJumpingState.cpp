@@ -4,7 +4,7 @@
 
 SimonJumpingState::SimonJumpingState()
 {
-
+	SIMON->height = SIMON_SITTING_HEIGHT;
 	SIMON->vy = -SIMON_JUMP_SPEED_Y;
 	SIMON->jumping = true;
 	StateName = SIMON_STATE_JUMP;

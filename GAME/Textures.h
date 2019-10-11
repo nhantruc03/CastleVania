@@ -1,8 +1,6 @@
 #pragma once
 #include <unordered_map>
 #include <d3dx9.h>
-#define ID_TEX_SIMON 0
-#define ID_TEX_MORNINGSTAR 1
 using namespace std;
 
 /*
