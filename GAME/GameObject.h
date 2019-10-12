@@ -41,7 +41,6 @@ public:
 	int nx;
 	float width;
 	float height;
-	int state;
 	int ani;
 	vector<LPANIMATION> animations;
 
@@ -56,10 +55,6 @@ public:
 public:
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }
 	void GetSpeed(float &vx, float &vy) { vx = this->vx; vy = this->vy; }
-
-	void SetState(int state) { this->state = state; }
-	int GetState() { return this->state; }
-
 	LPCOLLISIONEVENT SweptAABBEx(LPGAMEOBJECT coO);
 	void CalcPotentialCollisions(vector<LPGAMEOBJECT> *coObjects, vector<LPCOLLISIONEVENT> &coEvents);
 	void FilterCollision(

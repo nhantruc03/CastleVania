@@ -6,6 +6,10 @@ SimonAttackingState::SimonAttackingState()
 {
 	
 	curstate = SIMON->State->StateName;
+	if (curstate == SIMON_STATE_JUMP)
+	{
+		SIMON->height = SIMON_HEIGHT;
+	}
 	SIMON->attacking = true;
 	if (SIMON->sitting)
 	{
@@ -28,8 +32,8 @@ void SimonAttackingState::Update(float dt)
 		switch (curstate)
 		{
 		case SIMON_STATE_SITTING:
-			SIMON->height += 17;
-			SIMON->y -= 17 / 2;
+			SIMON->height = SIMON_SITTING_HEIGHT;
+			SIMON->y -= 16 / 2;
 			SIMON->ChangeState(new SimonSittingState());
 			break;
 		case SIMON_STATE_IDLE:case SIMON_STATE_WALKING:case SIMON_STATE_FALL:

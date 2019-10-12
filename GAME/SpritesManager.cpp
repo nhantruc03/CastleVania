@@ -74,4 +74,7 @@ void SpritesManager::LoadResources()
 	Add(TAG_HOLDER, 0, 0, 32, 64,texture);
 	Add(TAG_HOLDER, 32, 0, 64, 64, texture);
 
+	texture = CTextures::GetInstance()->Get(ID_TEX_DAGGER);
+	Add(TAG_WEAPON, 0, 0, 32, 18, texture);
+
 }

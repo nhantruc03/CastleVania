@@ -1,5 +1,6 @@
 #pragma once
 #include"MorningStar.h"
+#include"Dagger.h"
 
 class WeaponFactory
 {
@@ -10,7 +11,8 @@ public:
 		{
 		case 0:
 			return new MorningStar(SIMON->morningstarlevel);
-
+		case 1:
+			return new Dagger();
 		default:
 			return NULL;
 		}
@@ -24,6 +26,9 @@ public:
 		{
 		case 0:
 			w = (MorningStar*)w;
+			break;
+		case 1:
+			w = (Dagger*)w;
 			break;
 		}
 		return w;

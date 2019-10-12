@@ -49,6 +49,7 @@
     <ClInclude Include="AnimationsManager.h" />
     <ClInclude Include="Brick.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Dagger.h" />
     <ClInclude Include="debug.h" />
     <ClInclude Include="FirePillar.h" />
     <ClInclude Include="Game.h" />

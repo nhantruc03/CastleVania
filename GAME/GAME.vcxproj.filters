@@ -194,5 +194,8 @@
     <ClInclude Include="FirePillar.h">
       <Filter>Game Objects\HoldItemObject</Filter>
     </ClInclude>
+    <ClInclude Include="Dagger.h">
+      <Filter>Game Objects\Weapon</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

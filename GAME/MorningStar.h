@@ -30,11 +30,16 @@ public:
 		vx = vy = 0;
 		type = 0;
 		available = false;
+		isDead = false;
 	}
 
 	virtual void Update(float dt, vector<LPGAMEOBJECT> *coObjects)
 	{
-		if (SIMON->curAni->currentFrame==3)
+		if (SIMON->State->StateName != SIMON_STATE_ATTACK && SIMON->State->StateName != SIMON_STATE_SIT_ATTACKING)
+		{
+			this->isDead = true;
+		}
+		if (available)
 		{
 			for (UINT i = 0; i < coObjects->size(); i++)
 			{
@@ -52,6 +57,8 @@ public:
 					}
 
 				}
+				if (isDead)
+					return;
 			}
 		}
 	}
@@ -101,6 +108,7 @@ public:
 			}
 			else y -= 3;
 			available = true;
+			
 			break;
 		}
 		sprite->Draw(x, y);

@@ -42,7 +42,7 @@ void AnimationsManager::LoadResources()
 	ani->Add(TAG_SIMON, 0);
 	Add(TAG_SIMON, ani);
 	// attack
-	ani = new CAnimation(120);
+	ani = new CAnimation(100);
 	ani->Add(TAG_SIMON, 0);
 	ani->Add(TAG_SIMON, 5);
 	ani->Add(TAG_SIMON, 6);
@@ -53,7 +53,7 @@ void AnimationsManager::LoadResources()
 	ani->Add(TAG_SIMON, 4);
 	Add(TAG_SIMON, ani);
 	// attack sit
-	ani = new CAnimation(120);
+	ani = new CAnimation(100);
 	ani->Add(TAG_SIMON, 4);
 	ani->Add(TAG_SIMON, 8);
 	ani->Add(TAG_SIMON, 9);
@@ -83,4 +83,9 @@ void AnimationsManager::LoadResources()
 	ani->Add(TAG_HOLDER, 0);
 	ani->Add(TAG_HOLDER, 1);
 	Add(TAG_HOLDER, ani);
+
+	//////			DAGGER
+	ani = new CAnimation(120);
+	ani->Add(TAG_WEAPON, 9);
+	Add(TAG_WEAPON, ani);
 }

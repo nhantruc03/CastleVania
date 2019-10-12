@@ -17,13 +17,14 @@ CSimon::CSimon()
 	width = SIMON_WIDTH;
 	height = SIMON_HEIGHT;
 	UsingMorningStar = false;
+	throwing = false;
 }
 void CSimon::Respawn()
 {
 	this->jumping = false;
 	this->attacking = false;
 	this->isReverse = true;
-	this->ChangeState(new SimonFallingState());
+	this->ChangeState(new SimonStandingState());
 }
 void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects )
 {
@@ -70,7 +71,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects )
 			
 		}
 	}
-	auto it = Weapons.begin();
+	vector<CGameObject*>::iterator it = Weapons.begin();
 	while (it != Weapons.end())
 	{
 		CGameObject* o = *it;
@@ -78,15 +79,13 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects )
 		{
 		case TAG_WEAPON:
 		{
-			auto w = WeaponFactory::ConvertToWeapon(o);
-
-			if (state != SIMON_STATE_ATTACK && state != SIMON_STATE_SIT_ATTACKING)
+			Weapon* w = WeaponFactory::ConvertToWeapon(o);
+			if (w->isDead)//state != SIMON_STATE_ATTACK && state != SIMON_STATE_SIT_ATTACKING)
 			{
-				it = Weapons.erase(it);
+				it=Weapons.erase(it);
 				delete w;
 				continue;
 			}
-
 			w->Update(dt,coObjects);
 			break;
 		}
@@ -98,17 +97,12 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects )
 
 void CSimon::Render()
 {
-	
 	curAni->isreverse = this->isReverse;
 	curAni->Render(x, y);
 	for (auto o : Weapons)
 	{
 		o->Render();
 	}
-}
-
-void CSimon::SetState(int state)
-{
 }
 
 void CSimon::OnKeyDown(int key)
@@ -130,14 +124,29 @@ void CSimon::OnKeyDown(int key)
 	case DIK_A:
 		if (!attacking)
 		{
-			Weapon* weapon = WeaponFactory::CreateWeapon(ID_WEAPON_MORNINGSTAR);
-			if (UsingMorningStar == false)
+			if (!keyCode[DIK_UP])
 			{
-				weapon->isReverse = isReverse;
-				Weapons.insert(weapon);
-				UsingMorningStar = true;
+				Weapon* weapon = WeaponFactory::CreateWeapon(ID_WEAPON_MORNINGSTAR);
+				if (UsingMorningStar == false)
+				{
+					weapon->isReverse = isReverse;
+					Weapons.push_back(weapon);
+					UsingMorningStar = true;
+				}
+				ChangeState(new SimonAttackingState());
+
 			}
-			ChangeState(new SimonAttackingState());
+			else
+			{
+				if (State->StateName != SIMON_STATE_SITTING && throwing == false)
+				{
+					Weapon* weapon = WeaponFactory::CreateWeapon(ID_WEAPON_DAGGER);
+					weapon->isReverse = isReverse;
+					Weapons.push_back(weapon);
+					throwing = true;
+					ChangeState(new SimonAttackingState());
+				}
+			}
 		}
 		break;
 	case DIK_M:
@@ -158,8 +167,7 @@ void CSimon::ChangeState(SimonState * newState)
 {
 	delete State;
 	State = newState;
-	state = newState->StateName;
-	curAni = animations[state];
+	curAni = animations[State->StateName];
 }
 
 CSimon * CSimon::GetInstance()

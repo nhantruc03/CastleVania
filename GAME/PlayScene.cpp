@@ -48,10 +48,10 @@ void PlayScene::UpdatePlayer(float dt)
 	//		}
 	//	}
 	//}
-	auto it = objects.begin();
+	vector<LPGAMEOBJECT>::iterator it = objects.begin();
 	while (it != objects.end())
 	{
-		auto w = *it;
+		CGameObject* w = *it;
 		if (w->isDead)
 		{
 			it = objects.erase(it);

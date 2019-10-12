@@ -11,14 +11,14 @@ class CSimon : public CGameObject
 {
 	static CSimon * _instance;
 public:
-	unordered_set<CGameObject*>Weapons;
+	bool throwing;
+	vector<CGameObject*>Weapons;
 	bool UsingMorningStar;
 	int morningstarlevel;
 	CSimon();
 	void Respawn();
 	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 	void Render();
-	void SetState(int state);
 	void OnKeyDown(int keyCode);
 	void OnKeyUp(int keyCode);
 	SimonState* State;
