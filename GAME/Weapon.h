@@ -14,7 +14,7 @@ public:
 	{
 		animation->Render(x, y);
 	}
-	virtual void Update(float dt, vector<LPGAMEOBJECT> *coObjects)
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	{
 		animation->isreverse = this->isReverse;
 	}

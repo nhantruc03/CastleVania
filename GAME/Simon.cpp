@@ -2,6 +2,7 @@
 #include"WeaponFactory.h"
 #include"FirePillar.h"
 #include"Brick.h"
+#include"ItemsManager.h"
 CSimon*CSimon::_instance = NULL;
 CSimon::CSimon()
 {
@@ -56,19 +57,36 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects )
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
 
 		// block 
-		x += min_tx * dx + nx * 0.1f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
-		y += min_ty * dy + ny * 0.1f;
-
-		if (nx != 0) vx = 0;
-		if (ny != 0) vy = 0;
+	
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
-			
-			//if (dynamic_cast<FirePillar *>(e->obj)) // if e->obj is Goomba 
-			//{
-			//}
-			
+			if (dynamic_cast<CBrick*>(e->obj))
+			{
+				x += min_tx * dx + nx * 0.1f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
+				y += min_ty * dy + ny * 0.1f;
+
+				if (nx != 0) vx = 0;
+				if (ny != 0) vy = 0;
+			}
+			if (dynamic_cast<Item *>(e->obj)) // if e->obj is Goomba 
+			{
+				e->obj->isDead = true;
+				if (dynamic_cast<BigHeart*>(e->obj))
+				{
+				}
+				if (dynamic_cast<Dagger_Item*>(e->obj))
+				{
+				}
+				if (dynamic_cast<Whip*>(e->obj))
+				{
+					morningstarlevel += 1;
+					if (morningstarlevel > 3)
+					{
+						morningstarlevel = 3;
+					}
+				}
+			}
 		}
 	}
 	vector<CGameObject*>::iterator it = Weapons.begin();

@@ -13,8 +13,9 @@ FirePillar::FirePillar()
 	isDead = false;
 }
 
-void FirePillar::Update(DWORD dt)
+void FirePillar::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
+	
 }
 
 FirePillar::~FirePillar()

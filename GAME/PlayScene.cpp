@@ -1,6 +1,6 @@
 #include "PlayScene.h"
 #include"FirePillar.h"
-
+#include"ItemsManager.h"
 
 PlayScene::PlayScene()
 {
@@ -48,18 +48,6 @@ void PlayScene::UpdatePlayer(float dt)
 	//		}
 	//	}
 	//}
-	vector<LPGAMEOBJECT>::iterator it = objects.begin();
-	while (it != objects.end())
-	{
-		CGameObject* w = *it;
-		if (w->isDead)
-		{
-			it = objects.erase(it);
-			delete w;
-		}
-		else
-			++it;
-	}
 	simon->Update(dt,&objects);
 	/*if (simon->attacking)
 	{
@@ -100,7 +88,42 @@ void PlayScene::UpdateObjects(float dt)
 		++it;
 
 	}*/
+	vector<LPGAMEOBJECT>::iterator it = objects.begin();
+	while (it != objects.end())
+	{
+		CGameObject *o = *it;
+		switch (o->tag)
+		{
+		case TAG_HOLDER:
+		{
+			HoldItemObject*h = (FirePillar*)o;
+			if (h->isDead)
+			{
+				Item * testitem = ItemsManager::CreateItem(h->item);
+				testitem->SetPosition(h->x, h->y);
+				objects.push_back(testitem);
 
+				it = objects.erase(it);
+				delete h;
+				continue;
+			}
+			h->Update(dt, &objects);
+			break; 
+		}
+		case TAG_ITEM:
+			Item*i = (Item*)o;
+			if (i->isDead)
+			{
+				it = objects.erase(it);
+				delete i;
+				continue;
+			}
+			i->Update(dt, &objects);
+			break;
+		}
+		
+		++it;
+	}
 	this->UpdateVisibleObjects();
 }
 
@@ -143,20 +166,26 @@ void PlayScene::LoadResources()
 	}
 	FirePillar* test = new FirePillar();
 	test->SetPosition(192, 256);
+	test->item = 0;
 	objects.push_back(test);
 	test = new FirePillar();
 	test->SetPosition(448, 256);
+	test->item = 1;
 	objects.push_back(test);
 	test = new FirePillar();
 	test->SetPosition(704, 256);
+	test->item = 1;
 	objects.push_back(test);
 	test = new FirePillar();
 	test->SetPosition(976, 256);
+	test->item = 0;
 	objects.push_back(test);
 	test = new FirePillar();
 	test->SetPosition(1216, 256);
+	test->item = 2;
 	objects.push_back(test);
 
+	
 }
 
 void PlayScene::Render()

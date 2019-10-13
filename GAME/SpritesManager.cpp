@@ -77,4 +77,15 @@ void SpritesManager::LoadResources()
 	texture = CTextures::GetInstance()->Get(ID_TEX_DAGGER);
 	Add(TAG_WEAPON, 0, 0, 32, 18, texture);
 
+
+	//				ITEM
+	//		BIG HEART
+	texture = CTextures::GetInstance()->Get(ID_TEX_BIGHEART);
+	Add(TAG_ITEM, 0, 0, 24, 20, texture);
+	texture = CTextures::GetInstance()->Get(ID_TEX_WHIP);
+	Add(TAG_ITEM, 0, 0, 32, 32, texture);
+	texture = CTextures::GetInstance()->Get(ID_TEX_DAGGER);
+	Add(TAG_ITEM, 0, 0, 32, 18, texture);
+	
+
 }

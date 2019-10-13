@@ -85,7 +85,7 @@ public:
 		right = left + width;
 		bottom = top+ height;
 	};
-	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 	void setreverse(bool check) { this->isReverse = check; };
 	//void Render();
 	virtual void Render() {}

@@ -5,7 +5,9 @@ class HoldItemObject:public CGameObject
 {
 protected:
 	CAnimation* animation;
+	
 public:
+	int item;
 	//virtual void Update(float dt) {};
 	HoldItemObject()
 	{
@@ -15,9 +17,9 @@ public:
 	{
 		animation->Render(x, y);
 	}
-	virtual void Update(float dt)
+	virtual void Update(float dt, vector<LPGAMEOBJECT> *coObjects)
 	{
-		animation->isreverse = this->isReverse;
+		//animation->isreverse = this->isReverse;
 	}
 };
 

@@ -34,6 +34,9 @@
     <Filter Include="Game Objects\HoldItemObject">
       <UniqueIdentifier>{068e7e00-06db-4980-8627-0604832ce3ad}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game Objects\Item">
+      <UniqueIdentifier>{075107b7-3731-4cf7-8a81-dce3fd4971fa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Brick.cpp">
@@ -101,9 +104,6 @@
     </ClCompile>
     <ClCompile Include="AnimationsManager.cpp">
       <Filter>Game Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="HoldItemObject.cpp">
-      <Filter>Game Objects\HoldItemObject</Filter>
     </ClCompile>
     <ClCompile Include="FirePillar.cpp">
       <Filter>Game Objects\HoldItemObject</Filter>
@@ -196,6 +196,24 @@
     </ClInclude>
     <ClInclude Include="Dagger.h">
       <Filter>Game Objects\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>Game Objects\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="BigHeart.h">
+      <Filter>Game Objects\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="HoldItemObjectsManager.h">
+      <Filter>Game Objects\HoldItemObject</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemsManager.h">
+      <Filter>Game Objects\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Whip.h">
+      <Filter>Game Objects\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Dagger_Item.h">
+      <Filter>Game Objects\Item</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

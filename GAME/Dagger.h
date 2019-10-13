@@ -24,7 +24,7 @@ public:
 		tag = TAG_WEAPON;
 	}
 
-	virtual void Update(float dt, vector<LPGAMEOBJECT> *coObjects)
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	{
 		RECT dagger;
 		dagger.left = x - width / 2;

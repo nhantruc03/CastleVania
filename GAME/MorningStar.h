@@ -33,7 +33,7 @@ public:
 		isDead = false;
 	}
 
-	virtual void Update(float dt, vector<LPGAMEOBJECT> *coObjects)
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	{
 		if (SIMON->State->StateName != SIMON_STATE_ATTACK && SIMON->State->StateName != SIMON_STATE_SIT_ATTACKING)
 		{

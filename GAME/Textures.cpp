@@ -72,6 +72,8 @@ void CTextures::LoadResources()
 	Add(ID_TEX_MAP1, L"Level1.png", D3DCOLOR_XRGB(245, 245, 245));
 	Add(ID_tex_HOLDER, L"fire_pillar.png", D3DCOLOR_XRGB(255, 0, 255));
 	Add(ID_TEX_DAGGER, L"dagger.png", D3DCOLOR_XRGB(255, 0, 255));
+	Add(ID_TEX_BIGHEART, L"big_heart.png", D3DCOLOR_XRGB(255, 0, 255));
+	Add(ID_TEX_WHIP, L"whip.png", D3DCOLOR_XRGB(255, 0, 255));
 
 }
 

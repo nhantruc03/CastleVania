@@ -25,6 +25,8 @@
 #define ID_TEX_MAP1 2
 #define ID_tex_HOLDER 3
 #define ID_TEX_DAGGER 4
+#define ID_TEX_BIGHEART 5
+#define ID_TEX_WHIP 6
 
 #define ID_TEX_ENEMY 10
 #define ID_TEX_MISC 20
@@ -36,6 +38,10 @@
 #define TAG_WEAPON 1
 #define TAG_MAP1 2
 #define TAG_HOLDER 3
+#define TAG_ITEM 4
+	#define TYPE_ITEM_BIG_HEART 0
+	#define TYPE_ITEM_WHIP 1
+	#define TYPE_ITEM_DAGGER 2
 
 //// ===== Các thông số cho PLAYER ====
 #define SIMON_WALKING_SPEED		0.11f
