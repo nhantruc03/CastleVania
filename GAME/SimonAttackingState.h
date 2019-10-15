@@ -12,7 +12,7 @@ private:
 public:
 
 	SimonAttackingState();
-	void Update(float dt);
+	void Update(DWORD dt);
 	void HandleKeyboard();
 };
 

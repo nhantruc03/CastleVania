@@ -20,18 +20,13 @@ Dagger::Dagger()
 void Dagger::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 
-	RECT dagger;
-	dagger.left = x - width / 2;
-	dagger.right = dagger.left + width;
-	dagger.top = y - height / 2;
-	dagger.bottom = dagger.top + height;
+	RECT dagger = GetBoundingBox();
 	if (Camera::GetInstance()->IsContain(dagger) == false)
 	{
 		SIMON->throwing = false;
 		isDead = true;
 		available = false;
 	}
-
 	if (available)
 	{
 		CGameObject::Update(dt, coObjects);

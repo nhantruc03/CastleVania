@@ -6,7 +6,7 @@ class SimonFallingState:public SimonState
 {
 public:
 	SimonFallingState();
-	void Update(float dt);
+	void Update(DWORD dt);
 	void HandleKeyboard();
 };
 

@@ -12,11 +12,13 @@ class CSimon : public CGameObject
 {
 	static CSimon * _instance;
 public:
+	bool sitting;
+	bool attacking;
+	bool jumping;
 	int heart;
 	int secondweapon;
 	bool throwing;
 	vector<Weapon*>Weapons;
-	bool UsingMorningStar;
 	int morningstarlevel;
 	CSimon();
 	void Respawn();

@@ -2,7 +2,7 @@
 #include"MorningStar.h"
 #include"Dagger.h"
 
-class WeaponFactory
+class WeaponsManager
 {
 public:
 	static Weapon* CreateWeapon(int weaponType)

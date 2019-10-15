@@ -8,7 +8,6 @@ protected:
 	
 public:
 	int item;
-	//virtual void Update(float dt) {};
 	HoldItemObject()
 	{
 		tag = TAG_HOLDER;
@@ -16,10 +15,6 @@ public:
 	void Render()
 	{
 		animation->Render(x, y);
-	}
-	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
-	{
-		//animation->isreverse = this->isReverse;
 	}
 };
 

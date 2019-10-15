@@ -79,7 +79,7 @@
     <ClInclude Include="SpritesManager.h" />
     <ClInclude Include="Textures.h" />
     <ClInclude Include="Weapon.h" />
-    <ClInclude Include="WeaponFactory.h" />
+    <ClInclude Include="WeaponsManager.h" />
     <ClInclude Include="Whip_Item.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

@@ -10,11 +10,10 @@ SimonStandingState::SimonStandingState()
 	SIMON->jumping = false;
 	SIMON->sitting = false;
 	SIMON->attacking = false;
-	//SIMON->onground = true;
-	StateName = SIMON_STATE_IDLE;
+	StateName = SIMON_STATE_STANDING;
 }
 
-void SimonStandingState::Update(float dt)
+void SimonStandingState::Update(DWORD dt)
 {
 	this->HandleKeyboard();
 }

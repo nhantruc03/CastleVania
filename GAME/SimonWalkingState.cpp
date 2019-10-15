@@ -12,7 +12,7 @@ SimonWalkingState::SimonWalkingState()
 	StateName = SIMON_STATE_WALKING;
 }
 
-void SimonWalkingState::Update(float dt)
+void SimonWalkingState::Update(DWORD dt)
 {
 	this->HandleKeyboard();
 }

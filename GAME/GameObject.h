@@ -27,12 +27,8 @@ struct CCollisionEvent
 class CGameObject
 {
 public:
-	bool sitting;
-	bool attacking;
-	bool jumping;
 	float x;
 	float y;
-	bool isReverse;
 	float vx;
 	float vy;
 
@@ -45,6 +41,7 @@ public:
 	int tag;
 	int type;
 	bool isDead;
+	bool isReverse;
 
 	float dx;	// dx = vx*dt
 	float dy;	// dy = vy*dt
@@ -83,8 +80,15 @@ public:
 		right = left + width;
 		bottom = top+ height;
 	};
+	virtual RECT GetBoundingBox() {
+		RECT temp;
+		temp.left = x - width / 2;
+		temp.top = y - height / 2;
+		temp.right = temp.left + width;
+		temp.bottom = temp.top + height;
+		return temp;
+	};
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
-	void setreverse(bool check) { this->isReverse = check; };
 	virtual void Render() {}
 	~CGameObject();
 

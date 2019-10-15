@@ -2,7 +2,6 @@
 #include "Scene.h"
 #include<unordered_set>
 #include "Simon.h"
-#include"WeaponFactory.h"
 #include"map.h"
 #include"Brick.h"
 using namespace std;
@@ -18,7 +17,6 @@ public:
 	Map *map1;
 
 	void Update(DWORD dt);
-	//void UpdateScene();						// Update các thông số các đối tượng trong Scene
 
 	void UpdatePlayer(DWORD dt);
 	void UpdateObjects(DWORD dt);

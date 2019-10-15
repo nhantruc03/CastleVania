@@ -10,7 +10,7 @@ SimonJumpingState::SimonJumpingState()
 	StateName = SIMON_STATE_JUMP;
 }
 
-void SimonJumpingState::Update(float dt)
+void SimonJumpingState::Update(DWORD dt)
 {
 	
 	this->HandleKeyboard();

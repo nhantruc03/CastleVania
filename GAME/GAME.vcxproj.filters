@@ -25,9 +25,6 @@
     <Filter Include="Game Objects">
       <UniqueIdentifier>{f49c1f30-2648-4eed-a502-b7cd1d5ffe22}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game Objects\Player">
-      <UniqueIdentifier>{a4d5c4ad-ffe6-4801-845f-84a10ae4260f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game Objects\Weapon">
       <UniqueIdentifier>{06967af2-9494-4e2a-8939-244f97182a95}</UniqueIdentifier>
     </Filter>
@@ -37,12 +34,15 @@
     <Filter Include="Game Objects\Item">
       <UniqueIdentifier>{075107b7-3731-4cf7-8a81-dce3fd4971fa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game Objects\OthetObject">
+      <UniqueIdentifier>{e49d3c3f-0211-4a71-bf5c-9489b6a9cd52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Objects\Player">
+      <UniqueIdentifier>{a4d5c4ad-ffe6-4801-845f-84a10ae4260f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="debug.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp">
@@ -114,15 +114,12 @@
     <ClCompile Include="Map.cpp">
       <Filter>Game Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Game Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Brick.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="debug.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Scene.h">
@@ -168,9 +165,6 @@
       <Filter>Game Objects\Player</Filter>
     </ClInclude>
     <ClInclude Include="MorningStar.h">
-      <Filter>Game Objects\Weapon</Filter>
-    </ClInclude>
-    <ClInclude Include="WeaponFactory.h">
       <Filter>Game Objects\Weapon</Filter>
     </ClInclude>
     <ClInclude Include="Animation.h">
@@ -220,6 +214,15 @@
     </ClInclude>
     <ClInclude Include="Map.h">
       <Filter>Game Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="WeaponsManager.h">
+      <Filter>Game Objects\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Brick.h">
+      <Filter>Game Objects\OthetObject</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

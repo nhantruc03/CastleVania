@@ -4,10 +4,11 @@
 CGameObject::CGameObject()
 {
 	tag = NULL;
+	type = NULL;
 	x = y = 0;
 	vx = vy = 0;
 	nx = 1;
-	isReverse = true;
+	isReverse = false;
 }
 
 void CGameObject::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
@@ -97,9 +98,6 @@ void CGameObject::AddAnimation(int tag,int index)
 	LPANIMATION ani = AnimationsManager::GetInstance()->Get(tag,index);
 	animations.push_back(ani);
 }
-
-
-
 CGameObject::~CGameObject()
 {
 }

@@ -1,5 +1,5 @@
 #include "Simon.h"
-#include"WeaponFactory.h"
+#include"WeaponsManager.h"
 #include"FirePillar.h"
 #include"Brick.h"
 #include"ItemsManager.h"
@@ -21,7 +21,6 @@ CSimon::CSimon()
 }
 void CSimon::Respawn()
 {
-	UsingMorningStar = false;
 	throwing = false;
 	secondweapon = NULL;
 	heart = 5;
@@ -45,8 +44,6 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects )
 
 	// turn off collision when die 
 	CalcPotentialCollisions(coObjects, coEvents);
-
-
 	// No collision occured, proceed normally
 	if (coEvents.size() == 0)
 	{
@@ -60,7 +57,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects )
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
 
 		// block 
-		x += min_tx * dx + nx * 0.2f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
+		x += min_tx * dx + nx * 0.2f;		// nx*0.2f : need to push out a bit to avoid overlapping next frame
 		y += min_ty * dy + ny * 0.2f;
 
 		
@@ -74,7 +71,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects )
 				if (ny < 0) vy = 0;
 
 			}
-			if (dynamic_cast<Item *>(e->obj)) // if e->obj is Goomba 
+			if (dynamic_cast<Item *>(e->obj))  
 			{
 
 				e->obj->isDead = true;
@@ -98,7 +95,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects )
 			
 		}
 	}
-	vector<Weapon*>::iterator it = Weapons.begin();
+	vector<Weapon*>::iterator it = Weapons.begin(); // iterator: con tro chi den 1 phan tu ben trong container, khong can biet thu tu phan tu ben trong mang
 	while (it != Weapons.end())
 	{
 		Weapon* o = *it;
@@ -106,8 +103,8 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects )
 		{
 		case TAG_WEAPON:
 		{
-			Weapon* w = WeaponFactory::ConvertToWeapon(o);
-			if (w->isDead)//state != SIMON_STATE_ATTACK && state != SIMON_STATE_SIT_ATTACKING)
+			Weapon* w = WeaponsManager::ConvertToWeapon(o);
+			if (w->isDead)
 			{
 				it=Weapons.erase(it);
 				delete w;
@@ -120,6 +117,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects )
 		++it;
 
 	}
+
 }
 
 void CSimon::Render()
@@ -153,7 +151,7 @@ void CSimon::OnKeyDown(int key)
 		{
 			if (!keyCode[DIK_UP])
 			{
-				Weapon* weapon = WeaponFactory::CreateWeapon(ID_WEAPON_MORNINGSTAR);
+				Weapon* weapon = WeaponsManager::CreateWeapon(ID_WEAPON_MORNINGSTAR);
 				weapon->isReverse = isReverse;
 				Weapons.push_back(weapon);
 				ChangeState(new SimonAttackingState());
@@ -164,7 +162,7 @@ void CSimon::OnKeyDown(int key)
 				if (State->StateName != SIMON_STATE_SITTING && throwing == false && secondweapon!=NULL && heart>=1)
 				{
 					heart -= 1;
-					Weapon* weapon = WeaponFactory::CreateWeapon(secondweapon);
+					Weapon* weapon = WeaponsManager::CreateWeapon(secondweapon);
 					weapon->isReverse = isReverse;
 					Weapons.push_back(weapon);
 					throwing = true;

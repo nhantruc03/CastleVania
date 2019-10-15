@@ -13,8 +13,7 @@ void CGame::Init(HWND hWnd)
 {
 	LPDIRECT3D9 d3d = Direct3DCreate9(D3D_SDK_VERSION);
 
-	//this->hWnd = hWnd;
-	hWnd = hWnd;
+	this->hWnd = hWnd;
 	D3DPRESENT_PARAMETERS d3dpp;
 
 	ZeroMemory(&d3dpp, sizeof(d3dpp));
@@ -36,18 +35,18 @@ void CGame::Init(HWND hWnd)
 		hWnd,
 		D3DCREATE_SOFTWARE_VERTEXPROCESSING,
 		&d3dpp,
-		&d3ddev);
+		&d3ddv);
 
-	if (d3ddev == NULL)
+	if (d3ddv == NULL)
 	{
 		OutputDebugString(L"[ERROR] CreateDevice failed\n");
 		return;
 	}
 
-	d3ddev->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &backBuffer);
+	d3ddv->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &backBuffer);
 
 	// Initialize sprite helper from Direct3DX helper library
-	D3DXCreateSprite(d3ddev, &spriteHandler);
+	D3DXCreateSprite(d3ddv, &spriteHandler);
 
 	OutputDebugString(L"[INFO] InitGame done;\n");
 
@@ -121,29 +120,17 @@ void CGame::Init(HWND hWnd)
 /*
 	Utility function to wrap LPD3DXSPRITE::Draw
 */
-void CGame::Draw(float x, float y, LPDIRECT3DTEXTURE9 texture, RECT rect,bool isreverse, D3DXVECTOR3 center)
+void CGame::Draw(D3DXVECTOR3 position, LPDIRECT3DTEXTURE9 texture, RECT srect, D3DXVECTOR3 center, D3DXVECTOR2 pScalingCenter, D3DXVECTOR2 pScaling, D3DXVECTOR2 pTranslation)
 {
-	//D3DXVECTOR3 p(x, y, 0);
-	//auto pRotationCenter = D3DXVECTOR2(center.x, center.y);
-	//auto pScalingCenter = D3DXVECTOR2(x, y);
-	//auto pTranslation = D3DXVECTOR2(0, 0);
-	//auto pScaling = D3DXVECTOR2(isreverse ? -1 : 1, 1);
-	////spriteHandler->Draw(texture, &rect, NULL, &p, D3DCOLOR_XRGB(255, 255, 255));
-	//D3DXMATRIX oldMatrix, curMatrix;
-	//D3DXMatrixTransformation2D(&curMatrix, &pScalingCenter, 0, &pScaling, &pRotationCenter, 0, &pTranslation);
-	//spriteHandler->GetTransform(&oldMatrix);
-	//spriteHandler->SetTransform(&curMatrix);
-	//spriteHandler->Draw(texture, &rect, &center, &p, D3DCOLOR_XRGB(255, 255, 255));
-	//spriteHandler->SetTransform(&oldMatrix);
+
+	// su dung matrix de tao ra ma tran moi cho viec ve hinh, doi goc toa do tu top-left sang giua tam cua hinh
+	D3DXMATRIX oldMatrix, curMatrix;
+	D3DXMatrixTransformation2D(&curMatrix, &pScalingCenter, 0, &pScaling, NULL, 0, &pTranslation);
+	spriteHandler->GetTransform(&oldMatrix);
+	spriteHandler->SetTransform(&curMatrix);
+	spriteHandler->Draw(texture, &srect, &center, &position, D3DCOLOR_XRGB(255, 255, 255));
+	spriteHandler->SetTransform(&oldMatrix); // sau khi ve xong tra lai ma tran cu, vi ham nay dung de ve nhieu doi tuong khac nhau
 }
-
-
-
-int CGame::IsKeyDown(int KeyCode)
-{
-	return (keyStates[KeyCode] & 0x80) > 0;
-}
-
 
 void CGame::ProcessKeyboard()
 {
@@ -170,9 +157,6 @@ void CGame::ProcessKeyboard()
 			return;
 		}
 	}
-
-
-
 	// Collect all buffered events
 	DWORD dwElements = KEYBOARD_BUFFER_SIZE;
 	hr = didv->GetDeviceData(sizeof(DIDEVICEOBJECTDATA), keyEvents, &dwElements, 0);
@@ -185,12 +169,12 @@ void CGame::ProcessKeyboard()
 	// Scan through all buffered events, check if the key is pressed or released
 	for (DWORD i = 0; i < dwElements; i++)
 	{
-		int KeyCode = keyEvents[i].dwOfs;
+		int Key= keyEvents[i].dwOfs;
 		int KeyState = keyEvents[i].dwData;
 		if ((KeyState & 0x80) > 0)
-			curScene->OnKeyDown(KeyCode);
+			curScene->OnKeyDown(Key);
 		else
-			curScene->OnKeyUp(KeyCode);
+			curScene->OnKeyUp(Key);
 	}
 }
 
@@ -288,10 +272,10 @@ void CGame::SweptAABB(float ml, float mt, float mr, float mb, float dx, float dy
 
 CGame::~CGame()
 {
-	/*if (spriteHandler != NULL) spriteHandler->Release();
+	if (spriteHandler != NULL) spriteHandler->Release();
 	if (backBuffer != NULL) backBuffer->Release();
-	if (d3ddev != NULL) d3ddv->Release();
-	if (d3d != NULL) d3d->Release();*/
+	if (d3ddv != NULL) d3ddv->Release();
+	if (d3d != NULL) d3d->Release();
 }
 
 
@@ -339,9 +323,9 @@ void CGame::Run()
 
 void CGame::Render()
 {
-	LPDIRECT3DDEVICE9 d3ddv = d3ddev;//GetDirect3DDevice();
-	LPDIRECT3DSURFACE9 bb = backBuffer;//GetBackBuffer();
-	LPD3DXSPRITE spritehandler = spriteHandler;//GetSpriteHandler();
+	LPDIRECT3DDEVICE9 d3ddv = this->d3ddv;
+	LPDIRECT3DSURFACE9 bb = backBuffer;
+	LPD3DXSPRITE spritehandler = spriteHandler;
 
 	if (d3ddv->BeginScene())
 	{

@@ -42,9 +42,6 @@ void Map::Render()
 				continue;
 			}
 			SpritesManager::GetInstance()->Get(TAG_MAP1, MapMatrix[i][j] -1)->Draw((j * 32) + 16, (i * 32) + 16);
-			
-
-			
 		}
 	}
 }

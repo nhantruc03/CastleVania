@@ -13,7 +13,7 @@ public:
 
 		switch (holderID)
 		{
-		case 1:
+		case TYPE_HOLDER_FIREPILLAR:
 		{
 			h = new FirePillar();
 			break;

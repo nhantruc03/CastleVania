@@ -59,33 +59,39 @@ void SpritesManager::LoadResources()
 	Add(TAG_WEAPON, 136, 154, 152, 202, texture);
 	Add(TAG_WEAPON, 280, 148, 312, 186, texture);
 	Add(TAG_WEAPON, 320, 158, 395, 170, texture);
+	//		DAGGER
+	texture = CTextures::GetInstance()->Get(ID_TEX_DAGGER);
+	Add(TAG_WEAPON, 0, 0, 32, 18, texture);
 
-	//	Add(18, 136, 217, 136+15, 217+50, texMorningStar);
-		//Add(19, 281, 215, 281+30, 215+40, texMorningStar);
-		//Add(20, 320, 225, 320+74, 255+13, texMorningStar);
+
+	//				MAP(TILESET)
+	//		MAP1
 	texture = CTextures::GetInstance()->Get(ID_TEX_MAP1);
 	for (int i = 0; i < 49; i++)
 	{
 		Add(TAG_MAP1, i * 32, 0, (i + 1) * 32, 32, texture);
 	}
+
+
 	//				HOLD ITEM OBJECT
 	//		FIRE PILLAR
 	texture = CTextures::GetInstance()->Get(ID_tex_HOLDER);
-	Add(TAG_HOLDER, 0, 0, 32, 64,texture);
+	Add(TAG_HOLDER, 0, 0, 32, 64, texture);
 	Add(TAG_HOLDER, 32, 0, 64, 64, texture);
 
-	texture = CTextures::GetInstance()->Get(ID_TEX_DAGGER);
-	Add(TAG_WEAPON, 0, 0, 32, 18, texture);
+
 
 
 	//				ITEM
 	//		BIG HEART
 	texture = CTextures::GetInstance()->Get(ID_TEX_BIGHEART);
 	Add(TAG_ITEM, 0, 0, 24, 20, texture);
+	//		WHIP
 	texture = CTextures::GetInstance()->Get(ID_TEX_WHIP);
 	Add(TAG_ITEM, 0, 0, 32, 32, texture);
+	//		DAGGER
 	texture = CTextures::GetInstance()->Get(ID_TEX_DAGGER);
 	Add(TAG_ITEM, 0, 0, 32, 18, texture);
-	
+
 
 }

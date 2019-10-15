@@ -4,8 +4,8 @@
 
 FirePillar::FirePillar()
 {
+	type = TYPE_HOLDER_FIREPILLAR;
 	tag = TAG_HOLDER;
-	isDead = false;
 	width = 32;
 	height = 64;
 	animation = AnimationsManager::GetInstance()->Get(TAG_HOLDER, 0);

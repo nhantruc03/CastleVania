@@ -12,7 +12,7 @@ SimonSittingState::SimonSittingState()
 	StateName = SIMON_STATE_SITTING;
 }
 
-void SimonSittingState::Update(float dt)
+void SimonSittingState::Update(DWORD dt)
 {
 	this->HandleKeyboard();
 }

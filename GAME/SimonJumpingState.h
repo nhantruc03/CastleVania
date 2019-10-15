@@ -7,7 +7,7 @@ class SimonJumpingState:public SimonState
 {
 public:
 	SimonJumpingState();
-	void Update(float dt);
+	void Update(DWORD dt);
 	void HandleKeyboard();
 };
 

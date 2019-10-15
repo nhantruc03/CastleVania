@@ -8,7 +8,7 @@ class SimonStandingState:public SimonState
 {
 public:
 	SimonStandingState();
-	void Update(float dt);
+	void Update(DWORD dt);
 	void HandleKeyboard();
 };
 

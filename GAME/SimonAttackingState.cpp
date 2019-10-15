@@ -22,7 +22,7 @@ SimonAttackingState::SimonAttackingState()
 	}
 }
 
-void SimonAttackingState::Update(float dt)
+void SimonAttackingState::Update(DWORD dt)
 {
 	this->HandleKeyboard();
 	if (SIMON->curAni->CheckEndAni())
@@ -36,7 +36,7 @@ void SimonAttackingState::Update(float dt)
 			SIMON->y -= 16 / 2;
 			SIMON->ChangeState(new SimonSittingState());
 			break;
-		case SIMON_STATE_IDLE:case SIMON_STATE_WALKING:
+		case SIMON_STATE_STANDING:case SIMON_STATE_WALKING:
 			SIMON->ChangeState(new SimonStandingState());
 			break;
 		case SIMON_STATE_FALL:case SIMON_STATE_JUMP:

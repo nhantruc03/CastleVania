@@ -8,7 +8,7 @@ SimonFallingState::SimonFallingState()
 	StateName = SIMON_STATE_FALL;
 }
 
-void SimonFallingState::Update(float dt)
+void SimonFallingState::Update(DWORD dt)
 {
 	this->HandleKeyboard();
 	if (SIMON->vy==0)
