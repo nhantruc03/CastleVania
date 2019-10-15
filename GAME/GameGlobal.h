@@ -10,14 +10,9 @@
 #define MAIN_WINDOW_TITLE L"CastleVania"
 #define SCREEN_WIDTH 365//1536
 #define SCREEN_HEIGHT 365 // Chiều dài cửa sổ
-//#define SCREEN_TRANSLATEY 60
 #define MAX_FRAME_RATE 90			// FPS
 #define BACKGROUND_COLOR D3DCOLOR_XRGB(0, 0, 0)		// Màu nền BackBuffer
-//#define DEFAULT_TPF 120							// Thời gian tồn tại của mỗi Frame (cho Animation)
-//#define GRAVITY_SPEED 0.014f					// Tốc độ trọng lực
 #define KEYBOARD_BUFFER_SIZE 1024
-//#define NUMBER_MAP_LEVEL 3
-//#define TILE_SIZE 16
 
 
 #define ID_TEX_SIMON 0
@@ -27,9 +22,6 @@
 #define ID_TEX_DAGGER 4
 #define ID_TEX_BIGHEART 5
 #define ID_TEX_WHIP 6
-
-#define ID_TEX_ENEMY 10
-#define ID_TEX_MISC 20
 
 #define ID_WEAPON_MORNINGSTAR 0
 #define ID_WEAPON_DAGGER 1
@@ -45,8 +37,8 @@
 
 //// ===== Các thông số cho PLAYER ====
 #define SIMON_WALKING_SPEED		0.11f
-#define SIMON_JUMP_SPEED_Y		0.37f
-#define SIMON_GRAVITY			0.0012f
+#define SIMON_JUMP_SPEED_Y		0.36f
+#define SIMON_GRAVITY			0.001f
 #define SIMON_STATE_IDLE			0
 #define SIMON_STATE_WALKING			1
 #define SIMON_STATE_JUMP			2

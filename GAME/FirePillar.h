@@ -4,7 +4,6 @@ class FirePillar:public HoldItemObject
 {
 public:
 	FirePillar();
-	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects);
 
 	~FirePillar();
 };

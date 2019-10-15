@@ -5,17 +5,12 @@ class Weapon :public CGameObject
 protected:
 	CAnimation* animation;
 public:
-	//virtual void Update(float dt) {};
+	bool available;
 	Weapon()
 	{
 		tag = TAG_WEAPON;
+		available = false;
 	}
-	virtual void Render()
-	{
-		animation->Render(x, y);
-	}
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
-	{
-		animation->isreverse = this->isReverse;
-	}
+	virtual void Render() {};
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects) {};
 };

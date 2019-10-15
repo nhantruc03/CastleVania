@@ -1,10 +1,10 @@
 #pragma once
 #include"Item.h"
 
-class BigHeart:public Item
+class BigHeart_Item:public Item
 {
 public:
-	BigHeart()
+	BigHeart_Item()
 	{
 		type = TYPE_ITEM_BIG_HEART;
 		sprite = SpritesManager::GetInstance()->Get(TAG_ITEM, type);

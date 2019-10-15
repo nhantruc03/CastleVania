@@ -3,10 +3,6 @@
 
 CGameObject::CGameObject()
 {
-	//tag = 0;
-	/*sitting = false;
-	attacking = false;
-	jumping = false;*/
 	tag = NULL;
 	x = y = 0;
 	vx = vy = 0;
@@ -20,10 +16,6 @@ void CGameObject::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	dx = vx * dt;
 	dy = vy * dt;
 }
-
-//void CGameObject::Render()
-//{
-//}
 
 LPCOLLISIONEVENT CGameObject::SweptAABBEx(LPGAMEOBJECT coO)
 {

@@ -39,9 +39,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Brick.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="debug.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -96,9 +93,6 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Game Components</Filter>
     </ClCompile>
-    <ClCompile Include="map.cpp">
-      <Filter>Game Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="Sprite.cpp">
       <Filter>Game Graphics</Filter>
     </ClCompile>
@@ -107,6 +101,18 @@
     </ClCompile>
     <ClCompile Include="FirePillar.cpp">
       <Filter>Game Objects\HoldItemObject</Filter>
+    </ClCompile>
+    <ClCompile Include="MorningStar.cpp">
+      <Filter>Game Objects\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="Dagger.cpp">
+      <Filter>Game Objects\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>Game Objects\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>Game Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -176,9 +182,6 @@
     <ClInclude Include="Camera.h">
       <Filter>Game Components</Filter>
     </ClInclude>
-    <ClInclude Include="map.h">
-      <Filter>Game Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Sprite.h">
       <Filter>Game Graphics</Filter>
     </ClInclude>
@@ -200,20 +203,23 @@
     <ClInclude Include="Item.h">
       <Filter>Game Objects\Item</Filter>
     </ClInclude>
-    <ClInclude Include="BigHeart.h">
-      <Filter>Game Objects\Item</Filter>
-    </ClInclude>
     <ClInclude Include="HoldItemObjectsManager.h">
       <Filter>Game Objects\HoldItemObject</Filter>
     </ClInclude>
     <ClInclude Include="ItemsManager.h">
       <Filter>Game Objects\Item</Filter>
     </ClInclude>
-    <ClInclude Include="Whip.h">
-      <Filter>Game Objects\Item</Filter>
-    </ClInclude>
     <ClInclude Include="Dagger_Item.h">
       <Filter>Game Objects\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="BigHeart_Item.h">
+      <Filter>Game Objects\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Whip_Item.h">
+      <Filter>Game Objects\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>Game Graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

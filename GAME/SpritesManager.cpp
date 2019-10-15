@@ -27,11 +27,11 @@ void SpritesManager::LoadResources()
 {
 	LPDIRECT3DTEXTURE9 texture = CTextures::GetInstance()->Get(ID_TEX_SIMON);
 	//				SIMON
-	Add(TAG_SIMON, 12, 2, 44, 64, texture); // idle
+	Add(TAG_SIMON, 0, 2, 60, 64, texture); // idle
 	// walking
-	Add(TAG_SIMON, 78, 2, 102, 64, texture);
-	Add(TAG_SIMON, 136, 2, 166, 64, texture);
-	Add(TAG_SIMON, 196, 2, 220, 64, texture);
+	Add(TAG_SIMON, 60, 2, 120, 64, texture);
+	Add(TAG_SIMON, 120, 2, 180, 64, texture);
+	Add(TAG_SIMON, 180, 2, 240, 64, texture);
 
 	Add(TAG_SIMON, 240, 1, 300, 47, texture); // jumping
 

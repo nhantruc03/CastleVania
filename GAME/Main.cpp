@@ -72,9 +72,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	CGame*game = CGame::GetInstance();
 	game->Init(hWnd);
 	game->LoadResources();
-
-
-	//LoadResources();
 	game->Run();
 
 	return 0;

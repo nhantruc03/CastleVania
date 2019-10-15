@@ -14,7 +14,7 @@ void SimonJumpingState::Update(float dt)
 {
 	
 	this->HandleKeyboard();
-	if (SIMON->vy >= 0)
+	if (SIMON->vy > 0)
 	{
 		SIMON->ChangeState(new SimonFallingState());
 	}

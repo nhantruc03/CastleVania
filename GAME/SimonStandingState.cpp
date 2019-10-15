@@ -10,6 +10,7 @@ SimonStandingState::SimonStandingState()
 	SIMON->jumping = false;
 	SIMON->sitting = false;
 	SIMON->attacking = false;
+	//SIMON->onground = true;
 	StateName = SIMON_STATE_IDLE;
 }
 

@@ -13,11 +13,11 @@ public:
 	{
 		tag = TAG_HOLDER;
 	}
-	virtual void Render()
+	void Render()
 	{
 		animation->Render(x, y);
 	}
-	virtual void Update(float dt, vector<LPGAMEOBJECT> *coObjects)
+	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	{
 		//animation->isreverse = this->isReverse;
 	}

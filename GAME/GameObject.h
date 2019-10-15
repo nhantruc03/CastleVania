@@ -4,8 +4,6 @@
 #include <vector>
 #include"AnimationsManager.h"
 #include"Game.h"
-//#include "Sprites.h"
-
 
 using namespace std;
 class CGameObject;
@@ -87,7 +85,6 @@ public:
 	};
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 	void setreverse(bool check) { this->isReverse = check; };
-	//void Render();
 	virtual void Render() {}
 	~CGameObject();
 

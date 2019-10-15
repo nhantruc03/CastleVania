@@ -13,81 +13,24 @@ PlayScene::~PlayScene()
 
 }
 
-void PlayScene::Update(float dt)
+void PlayScene::Update(DWORD dt)
 {
 	
 	UpdatePlayer(dt);
 	camera->SetPosition(simon->x, 0);
 	camera->Update();
-	this->UpdateObjects(dt);
+	UpdateObjects(dt);
 	
 
 }
 
-void PlayScene::UpdatePlayer(float dt)
+void PlayScene::UpdatePlayer(DWORD dt)
 {
-	
-	//objects.clear();
-	//for (int i = 0; i < map1->rows; i++)
-	//{
-	//	for (int j = 0; j < map1->columns; j++)
-	//	{
-	//		if (map1->MapMatrix[i][j] == 49)
-	//		{
-	//			RECT objectrect;
-	//			objectrect.left = j * 32;
-	//			objectrect.right = objectrect.left + 32;
-	//			objectrect.top = i * 32;
-	//			objectrect.bottom = objectrect.top + 32;
-	//			if (camera->IsContain(objectrect))
-	//			{
-	//				CBrick *brick = new CBrick();
-	//				brick->SetPosition((j * 32) + 16, (i * 32) + 16);
-	//				objects.push_back(brick);
-	//			}
-	//		}
-	//	}
-	//}
 	simon->Update(dt,&objects);
-	/*if (simon->attacking)
-	{
-
-		Weapon* weapon = WeaponFactory::CreateWeapon(ID_WEAPON_MORNINGSTAR);
-		if (simon->UsingMorningStar==false)
-		{
-			weapon->isReverse = simon->isReverse;
-			visibleObjects.insert(weapon);
-			simon->UsingMorningStar = true;
-		}
-	}*/
 }
 
-void PlayScene::UpdateObjects(float dt)
+void PlayScene::UpdateObjects(DWORD dt)
 {
-	/*auto it = visibleObjects.begin();
-	while (it != visibleObjects.end())
-	{
-		auto o = *it;
-		switch (o->tag)
-		{
-		case TAG_WEAPON:
-		{
-			auto w = WeaponFactory::ConvertToWeapon(o);
-
-			if ( simon->state != SIMON_STATE_ATTACK && simon->state != SIMON_STATE_SIT_ATTACKING)
-			{
-				it= visibleObjects.erase(it);
-				delete w;
-				continue;
-			}
-
-			w->Update(dt);
-			break;
-		}
-		}
-		++it;
-
-	}*/
 	vector<LPGAMEOBJECT>::iterator it = objects.begin();
 	while (it != objects.end())
 	{
@@ -124,20 +67,6 @@ void PlayScene::UpdateObjects(float dt)
 		
 		++it;
 	}
-	this->UpdateVisibleObjects();
-}
-
-void PlayScene::UpdateVisibleObjects()
-{
-	//auto it = visibleObjects.begin();
-	//while (it != visibleObjects.end())
-	//{
-	//	if ((*it)->tag != TAG_WEAPON)
-	//	{
-	//		it = visibleObjects.erase(it);
-	//	}
-	//	else ++it;
-	//}
 }
 
 void PlayScene::LoadResources()
@@ -145,9 +74,9 @@ void PlayScene::LoadResources()
 	CTextures::GetInstance()->LoadResources();
 	SpritesManager::GetInstance()->LoadResources();
 	AnimationsManager::GetInstance()->LoadResources();
-	map1 = new map();
+	map1 = new Map();
 	simon = CSimon::GetInstance();
-	simon->SetPosition(30.0f, 256.0f);
+	simon->SetPosition(30.0f, 255.0f);
 	camera = Camera::GetInstance();
 	simon->Respawn();
 	for (int i = 0; i < map1->rows; i++)
@@ -198,10 +127,6 @@ void PlayScene::Render()
 	{
 		o->Render();
 	}
-	/*for (auto o : visibleObjects)
-	{
-		o->Render();
-	}*/
 }
 
 void PlayScene::OnKeyDown(int key)

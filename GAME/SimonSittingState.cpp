@@ -6,6 +6,7 @@ SimonSittingState::SimonSittingState()
 {
 	SIMON->sitting = true;
 	SIMON->vx = 0;
+	SIMON->vy = 0;
 	SIMON->y += 16 / 2;
 	SIMON->height = SIMON_SITTING_HEIGHT;
 	StateName = SIMON_STATE_SITTING;

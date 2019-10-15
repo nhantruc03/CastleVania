@@ -9,18 +9,18 @@ public:
 	{
 		switch (weaponType)
 		{
-		case 0:
+		case ID_WEAPON_MORNINGSTAR:
 			return new MorningStar(SIMON->morningstarlevel);
-		case 1:
+		case ID_WEAPON_DAGGER:
 			return new Dagger();
 		default:
 			return NULL;
 		}
 	}
 
-	static Weapon* ConvertToWeapon(CGameObject* o)
+	static Weapon* ConvertToWeapon(Weapon* o)
 	{
-		Weapon* w = (Weapon*)o;
+		Weapon* w = o;
 
 		switch (o->type)
 		{

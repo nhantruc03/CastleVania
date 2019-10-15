@@ -67,13 +67,13 @@ LPDIRECT3DTEXTURE9 CTextures::Get(unsigned int i)
 
 void CTextures::LoadResources()
 {
-	Add(ID_TEX_SIMON, L"player.png", D3DCOLOR_XRGB(255, 0, 255));
-	Add(ID_TEX_MORNINGSTAR, L"morningstar.png", D3DCOLOR_XRGB(255, 0, 255));
-	Add(ID_TEX_MAP1, L"Level1.png", D3DCOLOR_XRGB(245, 245, 245));
-	Add(ID_tex_HOLDER, L"fire_pillar.png", D3DCOLOR_XRGB(255, 0, 255));
-	Add(ID_TEX_DAGGER, L"dagger.png", D3DCOLOR_XRGB(255, 0, 255));
-	Add(ID_TEX_BIGHEART, L"big_heart.png", D3DCOLOR_XRGB(255, 0, 255));
-	Add(ID_TEX_WHIP, L"whip.png", D3DCOLOR_XRGB(255, 0, 255));
+	Add(ID_TEX_SIMON, L"Res\\Image\\player.png", D3DCOLOR_XRGB(255, 0, 255));
+	Add(ID_TEX_MORNINGSTAR, L"Res\\Image\\morningstar.png", D3DCOLOR_XRGB(255, 0, 255));
+	Add(ID_TEX_MAP1, L"Res\\Image\\Level1.png", D3DCOLOR_XRGB(245, 245, 245));
+	Add(ID_tex_HOLDER, L"Res\\Image\\fire_pillar.png", D3DCOLOR_XRGB(255, 0, 255));
+	Add(ID_TEX_DAGGER, L"Res\\Image\\dagger.png", D3DCOLOR_XRGB(255, 0, 255));
+	Add(ID_TEX_BIGHEART, L"Res\\Image\\big_heart.png", D3DCOLOR_XRGB(255, 0, 255));
+	Add(ID_TEX_WHIP, L"Res\\Image\\whip.png", D3DCOLOR_XRGB(255, 0, 255));
 
 }
 

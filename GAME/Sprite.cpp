@@ -28,7 +28,7 @@ void CSprite::Draw(float x, float y)
 	D3DXVECTOR3 p(x , y , 0);
 	//D3DXVECTOR2 pRotationCenter = D3DXVECTOR2(center.x, center.y);				// vi tri de xoay hinh	
 	D3DXVECTOR2 pScalingCenter = D3DXVECTOR2(x, y);							// vi tri thu phong hinh anh
-	D3DXVECTOR2 pTranslation = D3DXVECTOR2(SCREEN_WIDTH/2-CamPosition.x, 0);	// tinh tien hinh anh
+	D3DXVECTOR2 pTranslation = D3DXVECTOR2(floor(SCREEN_WIDTH/2-CamPosition.x), 0);	// tinh tien hinh anh
 	D3DXVECTOR2 pScaling = D3DXVECTOR2(isreverse ? -1 : 1, 1);					// lat hinh va thu phong hinh anh
 	//spriteHandler->Draw(texture, &rect, NULL, &p, D3DCOLOR_XRGB(255, 255, 255));
 	// su dung matrix de tao ra ma tran moi cho viec ve hinh, doi goc toa do tu top-left sang giua tam cua hinh

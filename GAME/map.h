@@ -3,7 +3,7 @@
 #include"SpritesManager.h"
 #include<fstream>	
 #include"Camera.h"
-class map
+class Map
 {
 	
 	Camera * camera;
@@ -11,11 +11,11 @@ public:
 	int** MapMatrix;
 	int columns;
 	int rows;
-	map();
+	Map();
 	void Render();
 	void Setcam(Camera* cam) { camera = cam; };
 
 
-	~map();
+	~Map();
 };
 

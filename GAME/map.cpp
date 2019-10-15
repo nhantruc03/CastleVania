@@ -1,13 +1,12 @@
-#include "map.h"
+#include "Map.h"
 
 
-
-map::map()
+Map::Map()
 {
 	rows = columns = 0;
 	std::ifstream iFile;
 	char fileName[30];
-	sprintf_s(fileName, "map1.txt");
+	sprintf_s(fileName, "Res\\Text\\map1.txt");
 	iFile.open(fileName);
 	iFile >> rows;
 	iFile >> columns;
@@ -26,7 +25,7 @@ map::map()
 	camera = Camera::GetInstance();
 }
 
-void map::Render()
+void Map::Render()
 {
 	for (int i = 0; i < rows; i++)
 	{
@@ -51,7 +50,7 @@ void map::Render()
 }
 
 
-map::~map()
+Map::~Map()
 {
 
 }

@@ -6,13 +6,16 @@
 #include"SimonAttackingState.h"
 #include"SimonFallingState.h"
 #include<unordered_set>
+#include"Weapon.h"
 
 class CSimon : public CGameObject
 {
 	static CSimon * _instance;
 public:
+	int heart;
+	int secondweapon;
 	bool throwing;
-	vector<CGameObject*>Weapons;
+	vector<Weapon*>Weapons;
 	bool UsingMorningStar;
 	int morningstarlevel;
 	CSimon();

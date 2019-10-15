@@ -8,6 +8,7 @@ SimonWalkingState::SimonWalkingState()
 	SIMON->sitting = false;
 	SIMON->jumping = false;
 	SIMON->vy = 0;
+	SIMON->height = SIMON_HEIGHT;
 	StateName = SIMON_STATE_WALKING;
 }
 

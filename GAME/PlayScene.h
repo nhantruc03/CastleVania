@@ -12,18 +12,16 @@ private:
 	CSimon* simon;
 	vector<LPGAMEOBJECT>objects;
 
-	unordered_set<CGameObject*> visibleObjects;
 public:
 	PlayScene();
 	~PlayScene();
-	map *map1;
+	Map *map1;
 
-	void Update(float dt);
+	void Update(DWORD dt);
 	//void UpdateScene();						// Update các thông số các đối tượng trong Scene
 
-	void UpdatePlayer(float dt);
-	void UpdateObjects(float dt);
-	void UpdateVisibleObjects();
+	void UpdatePlayer(DWORD dt);
+	void UpdateObjects(DWORD dt);
 	void LoadResources();
 	void Render();									// Tải Scene lên màn hình
 	void OnKeyDown(int key);						// Xử lí Scene khi nhấn phím

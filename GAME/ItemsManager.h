@@ -1,7 +1,7 @@
 #pragma once
-#include "BigHeart.h"
+#include "BigHeart_Item.h"
 #include"Dagger_Item.h"	
-#include"Whip.h"
+#include"Whip_Item.h"
 class ItemsManager
 {
 public:
@@ -13,9 +13,9 @@ public:
 		switch (type)
 		{
 		case 0:
-			return new BigHeart();
+			return new BigHeart_Item();
 		case 1:
-			return new Whip();
+			return new Whip_Item();
 		case 2:
 			return new Dagger_Item();
 		default:

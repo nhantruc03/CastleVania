@@ -17,15 +17,18 @@ CSimon::CSimon()
 	morningstarlevel = 1;
 	width = SIMON_WIDTH;
 	height = SIMON_HEIGHT;
-	UsingMorningStar = false;
-	throwing = false;
+	
 }
 void CSimon::Respawn()
 {
-	this->jumping = false;
-	this->attacking = false;
-	this->isReverse = true;
-	this->ChangeState(new SimonStandingState());
+	UsingMorningStar = false;
+	throwing = false;
+	secondweapon = NULL;
+	heart = 5;
+	jumping = false;
+	attacking = false;
+	isReverse = true;
+	ChangeState(new SimonStandingState());
 }
 void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects )
 {
@@ -57,28 +60,33 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects )
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
 
 		// block 
-	
+		x += min_tx * dx + nx * 0.2f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
+		y += min_ty * dy + ny * 0.2f;
+
+		
+		
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
 			if (dynamic_cast<CBrick*>(e->obj))
 			{
-				x += min_tx * dx + nx * 0.1f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
-				y += min_ty * dy + ny * 0.1f;
+				if (nx < 0) vx = 0;
+				if (ny < 0) vy = 0;
 
-				if (nx != 0) vx = 0;
-				if (ny != 0) vy = 0;
 			}
 			if (dynamic_cast<Item *>(e->obj)) // if e->obj is Goomba 
 			{
+
 				e->obj->isDead = true;
-				if (dynamic_cast<BigHeart*>(e->obj))
+				if (dynamic_cast<BigHeart_Item*>(e->obj))
 				{
+					heart += 5;
 				}
 				if (dynamic_cast<Dagger_Item*>(e->obj))
 				{
+					secondweapon = ID_WEAPON_DAGGER;
 				}
-				if (dynamic_cast<Whip*>(e->obj))
+				if (dynamic_cast<Whip_Item*>(e->obj))
 				{
 					morningstarlevel += 1;
 					if (morningstarlevel > 3)
@@ -87,12 +95,13 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects )
 					}
 				}
 			}
+			
 		}
 	}
-	vector<CGameObject*>::iterator it = Weapons.begin();
+	vector<Weapon*>::iterator it = Weapons.begin();
 	while (it != Weapons.end())
 	{
-		CGameObject* o = *it;
+		Weapon* o = *it;
 		switch (o->tag)
 		{
 		case TAG_WEAPON:
@@ -134,7 +143,7 @@ void CSimon::OnKeyDown(int key)
 		}
 		break;
 	case DIK_DOWN:
-		if (!jumping && !attacking)
+		if (!jumping && !attacking && !sitting)
 		{
 			ChangeState(new SimonSittingState());
 		}
@@ -145,20 +154,17 @@ void CSimon::OnKeyDown(int key)
 			if (!keyCode[DIK_UP])
 			{
 				Weapon* weapon = WeaponFactory::CreateWeapon(ID_WEAPON_MORNINGSTAR);
-				if (UsingMorningStar == false)
-				{
-					weapon->isReverse = isReverse;
-					Weapons.push_back(weapon);
-					UsingMorningStar = true;
-				}
+				weapon->isReverse = isReverse;
+				Weapons.push_back(weapon);
 				ChangeState(new SimonAttackingState());
 
 			}
 			else
 			{
-				if (State->StateName != SIMON_STATE_SITTING && throwing == false)
+				if (State->StateName != SIMON_STATE_SITTING && throwing == false && secondweapon!=NULL && heart>=1)
 				{
-					Weapon* weapon = WeaponFactory::CreateWeapon(ID_WEAPON_DAGGER);
+					heart -= 1;
+					Weapon* weapon = WeaponFactory::CreateWeapon(secondweapon);
 					weapon->isReverse = isReverse;
 					Weapons.push_back(weapon);
 					throwing = true;

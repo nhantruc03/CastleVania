@@ -10,6 +10,7 @@ SimonAttackingState::SimonAttackingState()
 	{
 		SIMON->height = SIMON_HEIGHT;
 	}
+	
 	SIMON->attacking = true;
 	if (SIMON->sitting)
 	{
@@ -27,7 +28,6 @@ void SimonAttackingState::Update(float dt)
 	if (SIMON->curAni->CheckEndAni())
 	{
 		SIMON->attacking = false;
-		SIMON->UsingMorningStar = false;
 		SIMON->curAni->SetEndAniFalse();
 		switch (curstate)
 		{
@@ -36,11 +36,19 @@ void SimonAttackingState::Update(float dt)
 			SIMON->y -= 16 / 2;
 			SIMON->ChangeState(new SimonSittingState());
 			break;
-		case SIMON_STATE_IDLE:case SIMON_STATE_WALKING:case SIMON_STATE_FALL:
+		case SIMON_STATE_IDLE:case SIMON_STATE_WALKING:
 			SIMON->ChangeState(new SimonStandingState());
 			break;
-		case SIMON_STATE_JUMP:
-			SIMON->ChangeState(new SimonFallingState());
+		case SIMON_STATE_FALL:case SIMON_STATE_JUMP:
+			if (SIMON->vy>0)
+			{
+				SIMON->ChangeState(new SimonFallingState());
+			}
+			else if(SIMON->vy==0)
+			{
+				SIMON->ChangeState(new SimonStandingState());
+			}
+			
 			break;
 		}
 	}
