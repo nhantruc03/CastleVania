@@ -29,7 +29,6 @@ void CAnimation::Render(float x, float y)
 			if (currentFrame == frames.size())
 			{
 				currentFrame = 0;
-
 				endanimation = true;
 
 			}

@@ -1,5 +1,5 @@
 #include "SpritesManager.h"
-
+#include<fstream>
 
 
 SpritesManager *SpritesManager::__instance = NULL;
@@ -25,44 +25,27 @@ LPSPRITE SpritesManager::Get(int tag, int index)
 
 void SpritesManager::LoadResources()
 {
-	LPDIRECT3DTEXTURE9 texture = CTextures::GetInstance()->Get(ID_TEX_SIMON);
-	//				SIMON
-	Add(TAG_SIMON, 0, 2, 60, 64, texture); // idle
-	// walking
-	Add(TAG_SIMON, 60, 2, 120, 64, texture);
-	Add(TAG_SIMON, 120, 2, 180, 64, texture);
-	Add(TAG_SIMON, 180, 2, 240, 64, texture);
+	LPDIRECT3DTEXTURE9 texture;
+	std::ifstream iFile;
+	char fileName[30];
+	sprintf_s(fileName, "Res\\Text\\sprites.txt");
+	iFile.open(fileName);
+	int idtex, numsprites, tag;
+	while (!iFile.eof())
+	{
+		iFile >> tag;
+		iFile >> idtex;
+		iFile >> numsprites;
+		texture = CTextures::GetInstance()->Get(idtex);
+		for (int i = 0; i < numsprites; i++)
+		{
+			int l, t, r, b;
+			iFile >> l >> t >> r >> b;
+			Add(tag, l, t, r, b, texture);
 
-	Add(TAG_SIMON, 240, 1, 300, 47, texture); // jumping
-
-	// attacking 
-	Add(TAG_SIMON, 300, 2, 360, 64, texture);
-	Add(TAG_SIMON, 360, 2, 420, 64, texture);
-	Add(TAG_SIMON, 420, 2, 480, 64, texture);
-
-	// sit attacking
-	Add(TAG_SIMON, 420, 67, 480, 113, texture);
-	Add(TAG_SIMON, 0, 133, 60, 179, texture);
-	Add(TAG_SIMON, 60, 133, 120, 179, texture);
-	//				WEAPON
-	//		MORNINGSTAR
-	texture = CTextures::GetInstance()->Get(ID_TEX_MORNINGSTAR);
-	//	level 1
-	Add(TAG_WEAPON, 136, 18, 152, 64, texture);
-	Add(TAG_WEAPON, 280, 12, 312, 50, texture);
-	Add(TAG_WEAPON, 352, 16, 396, 32, texture);
-	//	level 2
-	Add(TAG_WEAPON, 136, 86, 152, 134, texture);
-	Add(TAG_WEAPON, 280, 80, 312, 118, texture);
-	Add(TAG_WEAPON, 352, 90, 396, 102, texture);
-	//	level 3
-	Add(TAG_WEAPON, 136, 154, 152, 202, texture);
-	Add(TAG_WEAPON, 280, 148, 312, 186, texture);
-	Add(TAG_WEAPON, 320, 158, 395, 170, texture);
-	//		DAGGER
-	texture = CTextures::GetInstance()->Get(ID_TEX_DAGGER);
-	Add(TAG_WEAPON, 0, 0, 32, 18, texture);
-
+		}
+	}
+	iFile.close();
 
 	//				MAP(TILESET)
 	//		MAP1
@@ -71,27 +54,4 @@ void SpritesManager::LoadResources()
 	{
 		Add(TAG_MAP1, i * 32, 0, (i + 1) * 32, 32, texture);
 	}
-
-
-	//				HOLD ITEM OBJECT
-	//		FIRE PILLAR
-	texture = CTextures::GetInstance()->Get(ID_tex_HOLDER);
-	Add(TAG_HOLDER, 0, 0, 32, 64, texture);
-	Add(TAG_HOLDER, 32, 0, 64, 64, texture);
-
-
-
-
-	//				ITEM
-	//		BIG HEART
-	texture = CTextures::GetInstance()->Get(ID_TEX_BIGHEART);
-	Add(TAG_ITEM, 0, 0, 24, 20, texture);
-	//		WHIP
-	texture = CTextures::GetInstance()->Get(ID_TEX_WHIP);
-	Add(TAG_ITEM, 0, 0, 32, 32, texture);
-	//		DAGGER
-	texture = CTextures::GetInstance()->Get(ID_TEX_DAGGER);
-	Add(TAG_ITEM, 0, 0, 32, 18, texture);
-
-
 }

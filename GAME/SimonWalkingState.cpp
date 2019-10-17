@@ -9,7 +9,7 @@ SimonWalkingState::SimonWalkingState()
 	SIMON->jumping = false;
 	SIMON->vy = 0;
 	SIMON->height = SIMON_HEIGHT;
-	StateName = SIMON_STATE_WALKING;
+	StateName = STATE_WALKING;
 }
 
 void SimonWalkingState::Update(DWORD dt)

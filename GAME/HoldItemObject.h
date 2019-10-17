@@ -11,10 +11,29 @@ public:
 	HoldItemObject()
 	{
 		tag = TAG_HOLDER;
+		isBurn = false;
 	}
 	void Render()
 	{
 		animation->Render(x, y);
+	}
+	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
+	{
+		if (isBurn)
+		{
+			if (animation->CheckEndAni())
+			{
+				isDead = true;
+				animation->SetEndAniFalse();
+				animation->currentFrame = -1;
+				
+			}
+		}
+	}
+	void Burn()
+	{
+		animation = AnimationsManager::GetInstance()->Get(TAG_EFFECT, TYPE_EFFECT_BURN);
+		isBurn = true;
 	}
 };
 

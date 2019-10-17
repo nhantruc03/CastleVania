@@ -7,7 +7,7 @@ public:
 	BigHeart_Item()
 	{
 		type = TYPE_ITEM_BIG_HEART;
-		sprite = SpritesManager::GetInstance()->Get(TAG_ITEM, type);
+		animation = AnimationsManager::GetInstance()->Get(TAG_ITEM, 0);
 		width = 24;
 		height = 20;
 		vx = 0;

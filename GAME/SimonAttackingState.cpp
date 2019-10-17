@@ -6,7 +6,7 @@ SimonAttackingState::SimonAttackingState()
 {
 	
 	curstate = SIMON->State->StateName;
-	if (curstate == SIMON_STATE_JUMP)
+	if (curstate == STATE_JUMP)
 	{
 		SIMON->height = SIMON_HEIGHT;
 	}
@@ -14,11 +14,11 @@ SimonAttackingState::SimonAttackingState()
 	SIMON->attacking = true;
 	if (SIMON->sitting)
 	{
-		StateName = SIMON_STATE_SIT_ATTACKING;
+		StateName = STATE_SIT_ATTACKING;
 	}
 	else
 	{
-		StateName = SIMON_STATE_ATTACK;
+		StateName = STATE_ATTACK;
 	}
 }
 
@@ -31,15 +31,15 @@ void SimonAttackingState::Update(DWORD dt)
 		SIMON->curAni->SetEndAniFalse();
 		switch (curstate)
 		{
-		case SIMON_STATE_SITTING:
+		case STATE_SITTING:
 			SIMON->height = SIMON_SITTING_HEIGHT;
 			SIMON->y -= 16 / 2;
 			SIMON->ChangeState(new SimonSittingState());
 			break;
-		case SIMON_STATE_STANDING:case SIMON_STATE_WALKING:
+		case STATE_STANDING:case STATE_WALKING:
 			SIMON->ChangeState(new SimonStandingState());
 			break;
-		case SIMON_STATE_FALL:case SIMON_STATE_JUMP:
+		case STATE_FALL:case STATE_JUMP:
 			if (SIMON->vy>0)
 			{
 				SIMON->ChangeState(new SimonFallingState());
@@ -56,10 +56,10 @@ void SimonAttackingState::Update(DWORD dt)
 	{
 		switch (curstate)
 		{
-		case SIMON_STATE_WALKING:
+		case STATE_WALKING:
 			SIMON->vx = 0;
 			break;
-		case SIMON_STATE_FALL:
+		case STATE_FALL:
 			SIMON->vx = 0;
 			break;
 		}

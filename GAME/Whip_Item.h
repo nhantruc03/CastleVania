@@ -7,7 +7,7 @@ public:
 	Whip_Item()
 	{
 		type = TYPE_ITEM_WHIP;
-		sprite = SpritesManager::GetInstance()->Get(TAG_ITEM, type);
+		animation = AnimationsManager::GetInstance()->Get(TAG_ITEM, 1);
 		width = 32;
 		height = 32;
 		vx = 0;

@@ -17,16 +17,17 @@
 #define ID_TEX_SIMON 0
 #define ID_TEX_MORNINGSTAR 1
 #define ID_TEX_MAP1 2
-#define ID_tex_HOLDER 3
+#define ID_TEX_HOLDER 3
 #define ID_TEX_DAGGER 4
 #define ID_TEX_BIGHEART 5
 #define ID_TEX_WHIP 6
+#define ID_TEX_BURN_EFFECT 7
 
-#define ID_WEAPON_MORNINGSTAR 0
-#define ID_WEAPON_DAGGER 1
 
 #define TAG_SIMON 0
 #define TAG_WEAPON 1
+#define TYPE_WEAPON_MORNINGSTAR 0
+#define TYPE_WEAPON_DAGGER 1
 #define TAG_MAP1 2
 #define TAG_HOLDER 3
 	#define TYPE_HOLDER_FIREPILLAR 0
@@ -34,18 +35,21 @@
 	#define TYPE_ITEM_BIG_HEART 0
 	#define TYPE_ITEM_WHIP 1
 	#define TYPE_ITEM_DAGGER 2
+#define TAG_EFFECT 5
+	#define TYPE_EFFECT_BURN 0
 
 //// ===== Các thông số cho PLAYER ====
-#define SIMON_WALKING_SPEED		0.11f
+#define SIMON_WALKING_SPEED		0.12f
 #define SIMON_JUMP_SPEED_Y		0.36f
 #define SIMON_GRAVITY			0.001f
-#define SIMON_STATE_STANDING		0
-#define SIMON_STATE_WALKING			1
-#define SIMON_STATE_JUMP			2
-#define SIMON_STATE_FALL			3
-#define SIMON_STATE_ATTACK			4
-#define SIMON_STATE_SITTING			5
-#define SIMON_STATE_SIT_ATTACKING	6
+
+#define STATE_STANDING		0
+#define STATE_WALKING			1
+#define STATE_JUMP			2
+#define STATE_FALL			3
+#define STATE_ATTACK			4
+#define STATE_SITTING			5
+#define STATE_SIT_ATTACKING	6
 
 
 #define SIMON_WIDTH					32

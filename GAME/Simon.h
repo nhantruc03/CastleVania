@@ -31,7 +31,7 @@ public:
 	void ChangeState(SimonState* newState);
 	static CSimon* GetInstance();
 
-	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
+	//virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 
 };
 

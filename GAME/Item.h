@@ -4,7 +4,7 @@
 class Item:public CGameObject
 {
 protected:
-	CSprite* sprite;
+	CAnimation* animation;
 public:
 	float ExistTime;
 	Item();

@@ -9,7 +9,7 @@ SimonSittingState::SimonSittingState()
 	SIMON->vy = 0;
 	SIMON->y += 16 / 2;
 	SIMON->height = SIMON_SITTING_HEIGHT;
-	StateName = SIMON_STATE_SITTING;
+	StateName = STATE_SITTING;
 }
 
 void SimonSittingState::Update(DWORD dt)

@@ -10,7 +10,7 @@ SimonStandingState::SimonStandingState()
 	SIMON->jumping = false;
 	SIMON->sitting = false;
 	SIMON->attacking = false;
-	StateName = SIMON_STATE_STANDING;
+	StateName = STATE_STANDING;
 }
 
 void SimonStandingState::Update(DWORD dt)

@@ -6,6 +6,8 @@
 #include "debug.h"
 #include "Game.h"
 #include "textures.h"
+#include<fstream>
+#include<string>
 
 CTextures * CTextures::__instance = NULL;
 
@@ -67,13 +69,41 @@ LPDIRECT3DTEXTURE9 CTextures::Get(unsigned int i)
 
 void CTextures::LoadResources()
 {
-	Add(ID_TEX_SIMON, L"Res\\Image\\player.png", D3DCOLOR_XRGB(255, 0, 255));
+	std::ifstream iFile;
+	int numfile;
+	int numcolumn;
+	char fileName[30];
+	sprintf_s(fileName, "Res\\Text\\textures.txt");
+	iFile.open(fileName);
+	string line;
+	while (!iFile.eof())
+	{
+		
+		int id,r, g, b;
+		string SourceTexture;
+		iFile >> id >> SourceTexture >> r >> g >> b;
+
+		// convert string to LPCWSTR
+		int len;
+		int slength = (int)SourceTexture.length() + 1;
+		len = MultiByteToWideChar(CP_ACP, 0, SourceTexture.c_str(), slength, 0, 0);
+		wchar_t* buf = new wchar_t[len];
+		MultiByteToWideChar(CP_ACP, 0, SourceTexture.c_str(), slength, buf, len);
+		wstring temp(buf);
+		delete[] buf;
+		LPCWSTR result =temp.c_str();
+
+		Add(id, result, D3DCOLOR_XRGB(r, g, b));
+	}
+	
+	iFile.close();
+	/*Add(ID_TEX_SIMON, L"Res\\Image\\player.png", D3DCOLOR_XRGB(255, 0, 255));
 	Add(ID_TEX_MORNINGSTAR, L"Res\\Image\\morningstar.png", D3DCOLOR_XRGB(255, 0, 255));
 	Add(ID_TEX_MAP1, L"Res\\Image\\Level1.png", D3DCOLOR_XRGB(245, 245, 245));
 	Add(ID_tex_HOLDER, L"Res\\Image\\fire_pillar.png", D3DCOLOR_XRGB(255, 0, 255));
 	Add(ID_TEX_DAGGER, L"Res\\Image\\dagger.png", D3DCOLOR_XRGB(255, 0, 255));
 	Add(ID_TEX_BIGHEART, L"Res\\Image\\big_heart.png", D3DCOLOR_XRGB(255, 0, 255));
-	Add(ID_TEX_WHIP, L"Res\\Image\\whip.png", D3DCOLOR_XRGB(255, 0, 255));
+	Add(ID_TEX_WHIP, L"Res\\Image\\whip.png", D3DCOLOR_XRGB(255, 0, 255));*/
 
 }
 

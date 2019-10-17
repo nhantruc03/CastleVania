@@ -7,12 +7,12 @@ CSimon*CSimon::_instance = NULL;
 CSimon::CSimon()
 {
 	tag = TAG_SIMON;
-	AddAnimation(tag, 0); // idle
+	AddAnimation(tag, 0); // stand
 	AddAnimation(tag, 1); // walk
 	AddAnimation(tag, 2); // jumo
 	AddAnimation(tag, 3); // fall
 	AddAnimation(tag, 4); // attacking
-	AddAnimation(tag, 5); //sit
+	AddAnimation(tag, 5); // sit
 	AddAnimation(tag, 6); // sit attack
 	morningstarlevel = 1;
 	width = SIMON_WIDTH;
@@ -45,6 +45,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects )
 	// turn off collision when die 
 	CalcPotentialCollisions(coObjects, coEvents);
 	// No collision occured, proceed normally
+	
 	if (coEvents.size() == 0)
 	{
 		x += dx;
@@ -58,10 +59,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects )
 
 		// block 
 		x += min_tx * dx + nx * 0.2f;		// nx*0.2f : need to push out a bit to avoid overlapping next frame
-		y += min_ty * dy + ny * 0.2f;
-
-		
-		
+		y += min_ty * dy + ny * 0.2f;		
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
@@ -71,7 +69,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects )
 				if (ny < 0) vy = 0;
 
 			}
-			if (dynamic_cast<Item *>(e->obj))  
+			if (dynamic_cast<Item *>(e->obj))
 			{
 
 				e->obj->isDead = true;
@@ -81,7 +79,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects )
 				}
 				if (dynamic_cast<Dagger_Item*>(e->obj))
 				{
-					secondweapon = ID_WEAPON_DAGGER;
+					secondweapon = TYPE_WEAPON_DAGGER;
 				}
 				if (dynamic_cast<Whip_Item*>(e->obj))
 				{
@@ -93,6 +91,36 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects )
 				}
 			}
 			
+		}
+	}
+	// xu ly va nhan vat va cham voi item khi item vua duoc sinh ra
+	for (UINT i = 0; i < coObjects->size(); i++)
+	{
+		float l, t, r, b;
+		coObjects->at(i)->GetBoundingBox(l, t, r, b);
+		if (this->IsContain(l, t, r, b) == true)
+		{
+			switch (coObjects->at(i)->tag)
+			{
+			case TAG_ITEM:
+				switch (coObjects->at(i)->type)
+				{
+				case TYPE_ITEM_BIG_HEART:
+					heart += 5;
+					break;
+				case TYPE_ITEM_DAGGER:
+					secondweapon = TYPE_WEAPON_DAGGER;
+					break;
+				case TYPE_ITEM_WHIP:
+					morningstarlevel += 1;
+					if (morningstarlevel > 3)
+					{
+						morningstarlevel = 3;
+					}
+				}
+				coObjects->at(i)->isDead = true;
+				break;
+			}
 		}
 	}
 	vector<Weapon*>::iterator it = Weapons.begin(); // iterator: con tro chi den 1 phan tu ben trong container, khong can biet thu tu phan tu ben trong mang
@@ -115,7 +143,6 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects )
 		}
 		}
 		++it;
-
 	}
 
 }
@@ -124,7 +151,7 @@ void CSimon::Render()
 {
 	curAni->isreverse = this->isReverse;
 	curAni->Render(x, y);
-	for (auto o : Weapons)
+	for (Weapon* o : Weapons)
 	{
 		o->Render();
 	}
@@ -151,7 +178,7 @@ void CSimon::OnKeyDown(int key)
 		{
 			if (!keyCode[DIK_UP])
 			{
-				Weapon* weapon = WeaponsManager::CreateWeapon(ID_WEAPON_MORNINGSTAR);
+				Weapon* weapon = WeaponsManager::CreateWeapon(TYPE_WEAPON_MORNINGSTAR);
 				weapon->isReverse = isReverse;
 				Weapons.push_back(weapon);
 				ChangeState(new SimonAttackingState());
@@ -159,7 +186,7 @@ void CSimon::OnKeyDown(int key)
 			}
 			else
 			{
-				if (State->StateName != SIMON_STATE_SITTING && throwing == false && secondweapon!=NULL && heart>=1)
+				if (State->StateName != STATE_SITTING && throwing == false && secondweapon!=NULL && heart>=1)
 				{
 					heart -= 1;
 					Weapon* weapon = WeaponsManager::CreateWeapon(secondweapon);
@@ -197,13 +224,4 @@ CSimon * CSimon::GetInstance()
 	if (_instance == NULL)
 		_instance = new CSimon();
 	return _instance;
-}
-
-void CSimon::GetBoundingBox(float & left, float & top, float & right, float & bottom)
-{
-	left = x - width / 2;
-	right = left + width;
-	top = y - height / 2;
-	bottom = top + height;
-
 }

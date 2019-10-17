@@ -5,7 +5,7 @@
 SimonFallingState::SimonFallingState()
 {
 	SIMON->height = SIMON_HEIGHT;
-	StateName = SIMON_STATE_FALL;
+	StateName = STATE_FALL;
 }
 
 void SimonFallingState::Update(DWORD dt)

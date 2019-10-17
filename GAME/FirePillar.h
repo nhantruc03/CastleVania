@@ -4,6 +4,7 @@ class FirePillar:public HoldItemObject
 {
 public:
 	FirePillar();
+
 	~FirePillar();
 };
 

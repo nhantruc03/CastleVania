@@ -10,7 +10,7 @@ Item::Item()
 
 void Item::Render()
 {
-	sprite->Draw(x, y);
+	animation->Render(x, y);
 }
 void Item::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {

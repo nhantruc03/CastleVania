@@ -9,9 +9,9 @@ public:
 	{
 		switch (weaponType)
 		{
-		case ID_WEAPON_MORNINGSTAR:
+		case TYPE_WEAPON_MORNINGSTAR:
 			return new MorningStar(SIMON->morningstarlevel);
-		case ID_WEAPON_DAGGER:
+		case TYPE_WEAPON_DAGGER:
 			return new Dagger();
 		default:
 			return NULL;
@@ -24,10 +24,10 @@ public:
 
 		switch (o->type)
 		{
-		case 0:
+		case TYPE_WEAPON_MORNINGSTAR:
 			w = (MorningStar*)w;
 			break;
-		case 1:
+		case TYPE_WEAPON_DAGGER:
 			w = (Dagger*)w;
 			break;
 		}
