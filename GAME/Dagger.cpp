@@ -2,7 +2,7 @@
 #include"Simon.h"
 Dagger::Dagger()
 {
-	this->animation = AnimationsManager::GetInstance()->Get(TAG_WEAPON, 3);
+	this->animation = Animations::GetInstance()->Get(TAG_WEAPON, 3);
 	width = 32;
 	height = 18;
 

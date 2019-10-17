@@ -7,7 +7,7 @@ public:
 	Dagger_Item()
 	{
 		type = TYPE_ITEM_DAGGER;
-		animation = AnimationsManager::GetInstance()->Get(TAG_ITEM, 2);
+		animation = Animations::GetInstance()->Get(TAG_ITEM, 2);
 		width = 32;
 		height = 18;
 		vx = 0;

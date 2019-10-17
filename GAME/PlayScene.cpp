@@ -76,8 +76,8 @@ void PlayScene::UpdateObjects(DWORD dt)
 void PlayScene::LoadResources()
 {
 	CTextures::GetInstance()->LoadResources();
-	SpritesManager::GetInstance()->LoadResources();
-	AnimationsManager::GetInstance()->LoadResources();
+	Sprites::GetInstance()->LoadResources();
+	Animations::GetInstance()->LoadResources();
 	map1 = new Map();
 	simon = CSimon::GetInstance();
 	simon->SetPosition(30.0f, 255.0f);

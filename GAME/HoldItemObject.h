@@ -1,6 +1,6 @@
 #pragma once
 #include"GameObject.h"
-#include"AnimationsManager.h"
+#include"Animations.h"
 class HoldItemObject:public CGameObject 
 {
 protected:
@@ -32,7 +32,7 @@ public:
 	}
 	void Burn()
 	{
-		animation = AnimationsManager::GetInstance()->Get(TAG_EFFECT, TYPE_EFFECT_BURN);
+		animation = Animations::GetInstance()->Get(TAG_EFFECT, TYPE_EFFECT_BURN);
 		isBurn = true;
 	}
 };

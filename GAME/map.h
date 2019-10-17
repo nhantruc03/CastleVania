@@ -1,6 +1,6 @@
 #pragma once
 #include"GameGlobal.h"
-#include"SpritesManager.h"
+#include"Sprites.h"
 #include<fstream>	
 #include"Camera.h"
 class Map

@@ -20,7 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
-    <ClCompile Include="AnimationsManager.cpp" />
+    <ClCompile Include="Animations.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Dagger.cpp" />
     <ClCompile Include="debug.cpp" />
@@ -42,12 +42,12 @@
     <ClCompile Include="SimonStandingState.cpp" />
     <ClCompile Include="SimonWalkingState.cpp" />
     <ClCompile Include="Sprite.cpp" />
-    <ClCompile Include="SpritesManager.cpp" />
+    <ClCompile Include="Sprites.cpp" />
     <ClCompile Include="Textures.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
-    <ClInclude Include="AnimationsManager.h" />
+    <ClInclude Include="Animations.h" />
     <ClInclude Include="BigHeart_Item.h" />
     <ClInclude Include="Brick.h" />
     <ClInclude Include="Camera.h" />
@@ -76,7 +76,7 @@
     <ClInclude Include="SimonState.h" />
     <ClInclude Include="SimonWalkingState.h" />
     <ClInclude Include="Sprite.h" />
-    <ClInclude Include="SpritesManager.h" />
+    <ClInclude Include="Sprites.h" />
     <ClInclude Include="Textures.h" />
     <ClInclude Include="Weapon.h" />
     <ClInclude Include="WeaponsManager.h" />

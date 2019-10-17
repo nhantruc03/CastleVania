@@ -1,25 +1,25 @@
-#include "AnimationsManager.h"
+#include "Animations.h"
 #include<fstream>
 
-AnimationsManager * AnimationsManager::__instance = NULL;
+Animations* Animations::__instance = NULL;
 
-AnimationsManager * AnimationsManager::GetInstance()
+Animations* Animations::GetInstance()
 {
-	if (__instance == NULL) __instance = new AnimationsManager();
+	if (__instance == NULL) __instance = new Animations();
 	return __instance;
 }
 
-void AnimationsManager::Add(int tag, LPANIMATION ani)
+void Animations::Add(int tag, LPANIMATION ani)
 {
 	animations[tag].push_back(ani);
 }
 
-LPANIMATION AnimationsManager::Get(int tag, int index)
+LPANIMATION Animations::Get(int tag, int index)
 {
 	return animations[tag][index];
 }
 
-void AnimationsManager::LoadResources()
+void Animations::LoadResources()
 {
 	LPANIMATION ani;
 	std::ifstream iFile;

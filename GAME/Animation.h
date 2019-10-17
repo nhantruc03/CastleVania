@@ -1,6 +1,6 @@
 #pragma once
 //#include"Sprites.h"
-#include"SpritesManager.h"
+#include"Sprites.h"
 class CAnimationFrame
 {
 	LPSPRITE sprite;

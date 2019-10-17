@@ -1,29 +1,29 @@
-#include "SpritesManager.h"
+#include "Sprites.h"
 #include<fstream>
 
 
-SpritesManager *SpritesManager::__instance = NULL;
+Sprites*Sprites::__instance = NULL;
 
-SpritesManager *SpritesManager::GetInstance()
+Sprites*Sprites::GetInstance()
 {
-	if (__instance == NULL) __instance = new SpritesManager();
+	if (__instance == NULL) __instance = new Sprites();
 	return __instance;
 }
 
 
 
-void SpritesManager::Add(int tag, int l, int t, int r, int b, LPDIRECT3DTEXTURE9 tex)
+void Sprites::Add(int tag, int l, int t, int r, int b, LPDIRECT3DTEXTURE9 tex)
 {
 	LPSPRITE s = new CSprite(tag, l, t, r, b, tex);
 	sprites[s->tag].push_back(s);
 }
 
-LPSPRITE SpritesManager::Get(int tag, int index)
+LPSPRITE Sprites::Get(int tag, int index)
 {
 	return sprites[tag][index];
 }
 
-void SpritesManager::LoadResources()
+void Sprites::LoadResources()
 {
 	LPDIRECT3DTEXTURE9 texture;
 	std::ifstream iFile;

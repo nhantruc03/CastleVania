@@ -6,7 +6,7 @@ void CAnimation::Add(int tag, int index, DWORD time)
 	int t = time;
 	if (time == 0) t = this->defaultTime;
 
-	LPSPRITE sprite = SpritesManager::GetInstance()->Get(tag, index);
+	LPSPRITE sprite = Sprites::GetInstance()->Get(tag, index);
 	LPANIMATION_FRAME frame = new CAnimationFrame(sprite, t);
 	frames.push_back(frame);
 }

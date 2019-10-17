@@ -2,7 +2,7 @@
 #include <Windows.h>
 #include <d3dx9.h>
 #include <vector>
-#include"AnimationsManager.h"
+#include"Animations.h"
 #include"Game.h"
 
 using namespace std;

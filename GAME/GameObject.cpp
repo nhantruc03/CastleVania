@@ -97,7 +97,7 @@ void CGameObject::FilterCollision(vector<LPCOLLISIONEVENT>& coEvents, vector<LPC
 
 void CGameObject::AddAnimation(int tag,int index)
 {
-	LPANIMATION ani = AnimationsManager::GetInstance()->Get(tag,index);
+	LPANIMATION ani = Animations::GetInstance()->Get(tag,index);
 	animations.push_back(ani);
 }
 CGameObject::~CGameObject()

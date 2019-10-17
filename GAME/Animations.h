@@ -1,8 +1,8 @@
 #pragma once
 #include"Animation.h"
-class AnimationsManager
+class Animations
 {
-	static AnimationsManager * __instance;
+	static Animations* __instance;
 
 	//unordered_map<int, LPANIMATION> animations;
 	unordered_map<int, vector<LPANIMATION>> animations;
@@ -11,6 +11,6 @@ public:
 	void Add(int tag, LPANIMATION ani);
 	LPANIMATION Get(int tag, int index);
 	void LoadResources();
-	static AnimationsManager * GetInstance();
+	static Animations* GetInstance();
 };
 
