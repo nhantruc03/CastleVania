@@ -1,7 +1,7 @@
 #include "PlayScene.h"
-#include"HoldItemObjectsManager.h"
-#include"ItemsManager.h"
-
+#include"HoldItemObject.h"
+#include"Item.h"
+#include<fstream>
 PlayScene::PlayScene()
 {
 	LoadResources();
@@ -46,10 +46,9 @@ void PlayScene::UpdateObjects(DWORD dt)
 				HoldItemObject*h = (HoldItemObject*)o;
 				if (h->isDead)
 				{
-					Item * testitem = ItemsManager::CreateItem(h->item);
+					Item * testitem = new Item(h->item);
 					testitem->SetPosition(h->x, h->y);
 					objects.push_back(testitem);
-
 					it = objects.erase(it);
 					delete h;
 					continue;
@@ -99,27 +98,21 @@ void PlayScene::LoadResources()
 			}
 		}
 	}
-	HoldItemObject * HoldObject = HoldItemObjectsManager::CreateHolder(TYPE_HOLDER_FIREPILLAR, TYPE_ITEM_BIG_HEART);
-	HoldObject->SetPosition(192, 256);
-	objects.push_back(HoldObject);
+	std::ifstream iFile;
+	char fileName[30];
+	sprintf_s(fileName, "Res\\Text\\objects.txt");
+	iFile.open(fileName);
+	while (!iFile.eof())
+	{
 
-	HoldObject = HoldItemObjectsManager::CreateHolder(TYPE_HOLDER_FIREPILLAR, TYPE_ITEM_WHIP);
-	HoldObject->SetPosition(448, 256);
-	objects.push_back(HoldObject);
-
-	HoldObject = HoldItemObjectsManager::CreateHolder(TYPE_HOLDER_FIREPILLAR, TYPE_ITEM_WHIP);
-	HoldObject->SetPosition(704, 256);
-	objects.push_back(HoldObject);
-
-	HoldObject = HoldItemObjectsManager::CreateHolder(TYPE_HOLDER_FIREPILLAR, TYPE_ITEM_BIG_HEART);
-	HoldObject->SetPosition(976, 256);
-	objects.push_back(HoldObject);
-
-	HoldObject = HoldItemObjectsManager::CreateHolder(TYPE_HOLDER_FIREPILLAR, TYPE_ITEM_DAGGER);
-	HoldObject->SetPosition(1216, 256);
-	objects.push_back(HoldObject);
-
-	
+		int holder_id, item_id, x, y;
+		iFile >> holder_id >> item_id >> x >> y;
+		HoldItemObject * HoldObject = new HoldItemObject(holder_id, item_id);
+		HoldObject->SetPosition(x, y);
+		objects.push_back(HoldObject);
+		
+	}
+	iFile.close();
 }
 
 void PlayScene::Render()

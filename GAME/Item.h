@@ -7,7 +7,7 @@ protected:
 	CAnimation* animation;
 public:
 	float ExistTime;
-	Item();
+	Item(int type_id);
 	virtual void Render();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects);
 };

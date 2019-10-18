@@ -1,8 +1,7 @@
 #include "Simon.h"
 #include"WeaponsManager.h"
-#include"FirePillar.h"
 #include"Brick.h"
-#include"ItemsManager.h"
+#include"Item.h"
 CSimon*CSimon::_instance = NULL;
 CSimon::CSimon()
 {
@@ -73,21 +72,24 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects )
 			{
 
 				e->obj->isDead = true;
-				if (dynamic_cast<BigHeart_Item*>(e->obj))
+				switch (e->obj->type)
 				{
+				case TYPE_ITEM_BIG_HEART:
 					heart += 5;
-				}
-				if (dynamic_cast<Dagger_Item*>(e->obj))
-				{
-					secondweapon = TYPE_WEAPON_DAGGER;
-				}
-				if (dynamic_cast<Whip_Item*>(e->obj))
-				{
+					break;
+				case TYPE_ITEM_WHIP:
 					morningstarlevel += 1;
 					if (morningstarlevel > 3)
 					{
 						morningstarlevel = 3;
 					}
+					break;
+				case TYPE_ITEM_DAGGER:
+					secondweapon = TYPE_WEAPON_DAGGER;
+					break;
+
+				default:
+					break;
 				}
 			}
 			

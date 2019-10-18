@@ -1,11 +1,37 @@
 #include"Item.h"
 
-Item::Item()
+Item::Item(int type_id)
 {
 	tag = TAG_ITEM;
 	vx = 0;
 	vy = 0.2f;
 	ExistTime = 2000;
+	isDead = false;
+	type = type_id;
+	if (type == TYPE_ITEM_BIG_HEART)
+	{
+		animation = Animations::GetInstance()->Get(TAG_ITEM, 0);
+		width = 24;
+		height = 20;
+		vx = 0;
+		vy = 0.2f;
+	}
+	else if (type == TYPE_ITEM_WHIP)
+	{
+		animation = Animations::GetInstance()->Get(TAG_ITEM, 1);
+		width = 32;
+		height = 32;
+		vx = 0;
+		vy = 0.2f;
+	}
+	else if (type == TYPE_ITEM_DAGGER)
+	{
+		animation = Animations::GetInstance()->Get(TAG_ITEM, 2);
+		width = 32;
+		height = 18;
+		vx = 0;
+		vy = 0.2f;
+	}
 }
 
 void Item::Render()

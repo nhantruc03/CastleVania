@@ -93,9 +93,6 @@
     <ClCompile Include="Sprite.cpp">
       <Filter>Game Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="FirePillar.cpp">
-      <Filter>Game Objects\HoldItemObject</Filter>
-    </ClCompile>
     <ClCompile Include="MorningStar.cpp">
       <Filter>Game Objects\Weapon</Filter>
     </ClCompile>
@@ -116,6 +113,9 @@
     </ClCompile>
     <ClCompile Include="Sprites.cpp">
       <Filter>Game Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="HoldItemObject.cpp">
+      <Filter>Game Objects\HoldItemObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -182,28 +182,10 @@
     <ClInclude Include="HoldItemObject.h">
       <Filter>Game Objects\HoldItemObject</Filter>
     </ClInclude>
-    <ClInclude Include="FirePillar.h">
-      <Filter>Game Objects\HoldItemObject</Filter>
-    </ClInclude>
     <ClInclude Include="Dagger.h">
       <Filter>Game Objects\Weapon</Filter>
     </ClInclude>
     <ClInclude Include="Item.h">
-      <Filter>Game Objects\Item</Filter>
-    </ClInclude>
-    <ClInclude Include="HoldItemObjectsManager.h">
-      <Filter>Game Objects\HoldItemObject</Filter>
-    </ClInclude>
-    <ClInclude Include="ItemsManager.h">
-      <Filter>Game Objects\Item</Filter>
-    </ClInclude>
-    <ClInclude Include="Dagger_Item.h">
-      <Filter>Game Objects\Item</Filter>
-    </ClInclude>
-    <ClInclude Include="BigHeart_Item.h">
-      <Filter>Game Objects\Item</Filter>
-    </ClInclude>
-    <ClInclude Include="Whip_Item.h">
       <Filter>Game Objects\Item</Filter>
     </ClInclude>
     <ClInclude Include="Map.h">

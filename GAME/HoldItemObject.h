@@ -8,32 +8,9 @@ protected:
 	
 public:
 	int item;
-	HoldItemObject()
-	{
-		tag = TAG_HOLDER;
-		isBurn = false;
-	}
-	void Render()
-	{
-		animation->Render(x, y);
-	}
-	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
-	{
-		if (isBurn)
-		{
-			if (animation->CheckEndAni())
-			{
-				isDead = true;
-				animation->SetEndAniFalse();
-				animation->currentFrame = -1;
-				
-			}
-		}
-	}
-	void Burn()
-	{
-		animation = Animations::GetInstance()->Get(TAG_EFFECT, TYPE_EFFECT_BURN);
-		isBurn = true;
-	}
+	HoldItemObject(int type_id, int itemid);
+	void Render();
+	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects);
+	void Burn();
 };
 
