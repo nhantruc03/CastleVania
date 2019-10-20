@@ -92,6 +92,7 @@ public:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 	virtual void Render() {}
 	virtual void Burn() {};
+	virtual void isHit() {};
 	~CGameObject();
 
 };

@@ -46,12 +46,4 @@ void Sprites::LoadResources()
 		}
 	}
 	iFile.close();
-
-	//				MAP(TILESET)
-	//		MAP1
-	texture = CTextures::GetInstance()->Get(ID_TEX_MAP1);
-	for (int i = 0; i < 49; i++)
-	{
-		Add(TAG_MAP1, i * 32, 0, (i + 1) * 32, 32, texture);
-	}
 }

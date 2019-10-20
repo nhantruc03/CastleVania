@@ -40,7 +40,7 @@ void Dagger::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				switch (coObjects->at(i)->tag)
 				{
 				case TAG_HOLDER:
-					coObjects->at(i)->Burn();
+					coObjects->at(i)->isHit();
 					this->isDead = true;
 					SIMON->throwing = false;
 					break;
@@ -62,7 +62,7 @@ void Dagger::Render()
 	switch (frameIndex)
 	{
 	case 1:
-		if (SIMON->State->StateName == STATE_ATTACK)
+		if (SIMON->State== STATE_ATTACK)
 		{
 			x = SIMON->x;
 			y = SIMON->y - 20;

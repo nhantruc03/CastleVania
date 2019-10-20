@@ -47,6 +47,31 @@ void Map::Render()
 }
 
 
+vector<LPGAMEOBJECT> Map::get_BricksList()
+{
+	for (int i = 0; i < rows; i++)
+	{
+		for (int j = 0; j < columns; j++)
+		{
+			if (MapMatrix[i][j] == 49)
+			{
+
+				CBrick *brick = new CBrick();
+				brick->SetPosition((j * 32) + 16, (i * 32) + 16);
+				bricks.push_back(brick);
+
+			}
+		}
+	}
+	//CBrick* ground = new CBrick();
+	//ground->width = columns * 32;
+	//ground->height = 32;
+	//ground->SetPosition(columns*32/2, rows* 32 - 16);
+	//bricks.push_back(ground);
+
+	return bricks;
+}
+
 Map::~Map()
 {
 

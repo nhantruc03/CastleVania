@@ -19,9 +19,8 @@
 #define ID_TEX_MAP1 2
 #define ID_TEX_HOLDER 3
 #define ID_TEX_DAGGER 4
-#define ID_TEX_BIGHEART 5
-#define ID_TEX_WHIP 6
-#define ID_TEX_BURN_EFFECT 7
+#define ID_TEX_ITEM 5
+#define ID_TEX_BURN_EFFECT 6
 
 
 #define TAG_SIMON 0

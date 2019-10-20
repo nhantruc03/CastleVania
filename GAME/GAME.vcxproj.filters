@@ -66,24 +66,6 @@
     <ClCompile Include="Simon.cpp">
       <Filter>Game Objects\Player</Filter>
     </ClCompile>
-    <ClCompile Include="SimonStandingState.cpp">
-      <Filter>Game Objects\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="SimonWalkingState.cpp">
-      <Filter>Game Objects\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="SimonSittingState.cpp">
-      <Filter>Game Objects\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="SimonJumpingState.cpp">
-      <Filter>Game Objects\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="SimonAttackingState.cpp">
-      <Filter>Game Objects\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="SimonFallingState.cpp">
-      <Filter>Game Objects\Player</Filter>
-    </ClCompile>
     <ClCompile Include="Animation.cpp">
       <Filter>Game Graphics</Filter>
     </ClCompile>
@@ -141,27 +123,6 @@
       <Filter>Game Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Simon.h">
-      <Filter>Game Objects\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="SimonState.h">
-      <Filter>Game Objects\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="SimonStandingState.h">
-      <Filter>Game Objects\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="SimonWalkingState.h">
-      <Filter>Game Objects\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="SimonSittingState.h">
-      <Filter>Game Objects\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="SimonJumpingState.h">
-      <Filter>Game Objects\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="SimonAttackingState.h">
-      <Filter>Game Objects\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="SimonFallingState.h">
       <Filter>Game Objects\Player</Filter>
     </ClInclude>
     <ClInclude Include="MorningStar.h">

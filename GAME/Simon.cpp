@@ -1,7 +1,6 @@
-#include "Simon.h"
+﻿#include "Simon.h"
 #include"WeaponsManager.h"
 #include"Brick.h"
-#include"Item.h"
 CSimon*CSimon::_instance = NULL;
 CSimon::CSimon()
 {
@@ -16,7 +15,7 @@ CSimon::CSimon()
 	morningstarlevel = 1;
 	width = SIMON_WIDTH;
 	height = SIMON_HEIGHT;
-	
+
 }
 void CSimon::Respawn()
 {
@@ -26,14 +25,14 @@ void CSimon::Respawn()
 	jumping = false;
 	attacking = false;
 	isReverse = true;
-	ChangeState(new SimonStandingState());
+	ChangeState(STATE_STANDING);
 }
-void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects )
+void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	CGameObject::Update(dt);
-	State->Update(dt);
+	Update_State();
 	// simple fall down
-	vy += SIMON_GRAVITY*dt;
+	vy += SIMON_GRAVITY * dt;
 	if (vx < 0 && x < 16) x = 16;
 	if (vx > 0 && x > 1536)x = 1536;
 	vector<LPCOLLISIONEVENT> coEvents;
@@ -44,7 +43,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects )
 	// turn off collision when die 
 	CalcPotentialCollisions(coObjects, coEvents);
 	// No collision occured, proceed normally
-	
+
 	if (coEvents.size() == 0)
 	{
 		x += dx;
@@ -58,7 +57,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects )
 
 		// block 
 		x += min_tx * dx + nx * 0.2f;		// nx*0.2f : need to push out a bit to avoid overlapping next frame
-		y += min_ty * dy + ny * 0.2f;		
+		y += min_ty * dy + ny * 0.2f;
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
@@ -68,31 +67,28 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects )
 				if (ny < 0) vy = 0;
 
 			}
-			if (dynamic_cast<Item *>(e->obj))
+			/*if (dynamic_cast<Item *>(e->obj))
 			{
 
 				e->obj->isDead = true;
-				switch (e->obj->type)
+				if (dynamic_cast<BigHeart_Item*>(e->obj))
 				{
-				case TYPE_ITEM_BIG_HEART:
 					heart += 5;
-					break;
-				case TYPE_ITEM_WHIP:
+				}
+				if (dynamic_cast<Dagger_Item*>(e->obj))
+				{
+					secondweapon = TYPE_WEAPON_DAGGER;
+				}
+				if (dynamic_cast<Whip_Item*>(e->obj))
+				{
 					morningstarlevel += 1;
 					if (morningstarlevel > 3)
 					{
 						morningstarlevel = 3;
 					}
-					break;
-				case TYPE_ITEM_DAGGER:
-					secondweapon = TYPE_WEAPON_DAGGER;
-					break;
-
-				default:
-					break;
 				}
-			}
-			
+			}*/
+
 		}
 	}
 	// xu ly va nhan vat va cham voi item khi item vua duoc sinh ra
@@ -136,17 +132,17 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects )
 			Weapon* w = WeaponsManager::ConvertToWeapon(o);
 			if (w->isDead)
 			{
-				it=Weapons.erase(it);
+				it = Weapons.erase(it);
 				delete w;
 				continue;
 			}
-			w->Update(dt,coObjects);
+			w->Update(dt, coObjects);
 			break;
 		}
 		}
 		++it;
 	}
-
+	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 }
 
 void CSimon::Render()
@@ -166,13 +162,13 @@ void CSimon::OnKeyDown(int key)
 	case DIK_SPACE:
 		if (!jumping && !sitting && !attacking)
 		{
-			ChangeState(new SimonJumpingState());
+			ChangeState(STATE_JUMP);
 		}
 		break;
 	case DIK_DOWN:
 		if (!jumping && !attacking && !sitting)
 		{
-			ChangeState(new SimonSittingState());
+			ChangeState(STATE_SITTING);
 		}
 		break;
 	case DIK_A:
@@ -183,19 +179,19 @@ void CSimon::OnKeyDown(int key)
 				Weapon* weapon = WeaponsManager::CreateWeapon(TYPE_WEAPON_MORNINGSTAR);
 				weapon->isReverse = isReverse;
 				Weapons.push_back(weapon);
-				ChangeState(new SimonAttackingState());
+				ChangeState(STATE_ATTACK);
 
 			}
 			else
 			{
-				if (State->StateName != STATE_SITTING && throwing == false && secondweapon!=NULL && heart>=1)
+				if (State != STATE_SITTING && throwing == false && secondweapon != NULL && heart >= 1)
 				{
 					heart -= 1;
 					Weapon* weapon = WeaponsManager::CreateWeapon(secondweapon);
 					weapon->isReverse = isReverse;
 					Weapons.push_back(weapon);
 					throwing = true;
-					ChangeState(new SimonAttackingState());
+					ChangeState(STATE_ATTACK);
 				}
 			}
 		}
@@ -214,11 +210,60 @@ void CSimon::OnKeyUp(int key)
 {
 }
 
-void CSimon::ChangeState(SimonState * newState)
+void CSimon::ChangeState(int newState)
 {
-	delete State;
+	prevState = State;
 	State = newState;
-	curAni = animations[State->StateName];
+	switch (State)
+	{
+	case STATE_STANDING:
+		height = SIMON_HEIGHT;
+		vx = 0;
+		vy = 0;
+		jumping = false;
+		sitting = false;
+		attacking = false;
+		break;
+	case STATE_WALKING:
+		attacking = false;
+		sitting = false;
+		jumping = false;
+		vy = 0;
+		height = SIMON_HEIGHT;
+		break;
+	case STATE_SITTING:
+		sitting = true;
+		vx = 0;
+		vy = 0;
+		y += 16 / 2;
+		height = SIMON_SITTING_HEIGHT;
+		break;
+	case STATE_JUMP:
+		height = SIMON_SITTING_HEIGHT;
+		vy = -SIMON_JUMP_SPEED_Y;
+		jumping = true;
+		STATE_JUMP;
+		break;
+	case STATE_FALL:
+		height = SIMON_HEIGHT;
+		break;
+	case STATE_ATTACK:
+		if (prevState == STATE_JUMP)
+		{
+			height = SIMON_HEIGHT;
+		}
+		attacking = true;
+		if (sitting)
+		{
+			State = STATE_SIT_ATTACKING;
+		}
+		else
+		{
+			State = STATE_ATTACK;
+		}
+		break;
+	}
+	curAni = animations[State];
 }
 
 CSimon * CSimon::GetInstance()
@@ -226,4 +271,125 @@ CSimon * CSimon::GetInstance()
 	if (_instance == NULL)
 		_instance = new CSimon();
 	return _instance;
+}
+
+void CSimon::Update_State()
+{
+	switch (State)
+	{
+	case STATE_STANDING:
+
+		// Nhấn phím di chuyển -> WALKING
+		if (keyCode[DIK_LEFT] || keyCode[DIK_RIGHT])
+		{
+			ChangeState(STATE_WALKING);
+		}
+		// Nhấn phím DOWN -> SITTING
+		else if (keyCode[DIK_DOWN])
+		{
+			ChangeState(STATE_SITTING);
+		}
+
+		break;
+	case STATE_WALKING:
+
+		if (keyCode[DIK_RIGHT])
+		{
+			isReverse = true;
+			vx = SIMON_WALKING_SPEED;
+		}
+		else if (keyCode[DIK_LEFT])
+		{
+			isReverse = false;
+			vx = -SIMON_WALKING_SPEED;
+		}
+		else
+		{
+			ChangeState(STATE_STANDING);
+		}
+		break;
+	case STATE_SITTING:
+
+		if (!keyCode[DIK_DOWN])
+		{
+			sitting = false;
+			height = SIMON_HEIGHT;
+			y -= 16 / 2;
+
+			if (keyCode[DIK_LEFT] || keyCode[DIK_RIGHT])
+			{
+				ChangeState(STATE_WALKING);
+			}
+			else
+			{
+				ChangeState(STATE_STANDING);
+			}
+		}
+		else if (keyCode[DIK_RIGHT])
+		{
+			isReverse = true;
+		}
+		else if (keyCode[DIK_LEFT])
+		{
+			isReverse = false;
+		}
+		break;
+	case STATE_JUMP:
+
+		if (vy > 0)
+		{
+			ChangeState(STATE_FALL);
+		}
+		break;
+	case STATE_FALL:
+		if (vy == 0)
+		{
+			ChangeState(STATE_STANDING);
+		}
+		break;
+	case STATE_ATTACK:case STATE_SIT_ATTACKING:
+
+		if (curAni->CheckEndAni())
+		{
+			attacking = false;
+			curAni->SetEndAniFalse();
+			switch (prevState)
+			{
+			case STATE_SITTING:
+				height = SIMON_SITTING_HEIGHT;
+				y -= 16 / 2;
+				ChangeState(STATE_SITTING);
+				break;
+			case STATE_STANDING:case STATE_WALKING:
+				ChangeState(STATE_STANDING);
+				break;
+			case STATE_FALL:case STATE_JUMP:
+				if (vy > 0)
+				{
+					ChangeState(STATE_FALL);
+				}
+				else if (vy == 0)
+				{
+					ChangeState(STATE_STANDING);
+				}
+
+				break;
+			}
+		}
+		else
+		{
+			switch (prevState)
+			{
+			case STATE_WALKING:
+				vx = 0;
+				break;
+			case STATE_FALL:
+				vx = 0;
+				break;
+			}
+
+		}
+		break;
+	}
+
 }

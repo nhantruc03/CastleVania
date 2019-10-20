@@ -74,30 +74,13 @@ void PlayScene::UpdateObjects(DWORD dt)
 
 void PlayScene::LoadResources()
 {
-	CTextures::GetInstance()->LoadResources();
-	Sprites::GetInstance()->LoadResources();
-	Animations::GetInstance()->LoadResources();
 	map1 = new Map();
 	simon = CSimon::GetInstance();
 	simon->SetPosition(30.0f, 255.0f);
 	simon->Respawn();
-
 	camera = Camera::GetInstance();
-	
-	for (int i = 0; i < map1->rows; i++)
-	{
-		for (int j = 0; j < map1->columns; j++)
-		{
-			if (map1->MapMatrix[i][j] == 49)
-			{
 
-				CBrick *brick = new CBrick();
-				brick->SetPosition((j * 32) + 16, (i * 32) + 16);
-				objects.push_back(brick);
-
-			}
-		}
-	}
+	objects = map1->get_BricksList();
 	std::ifstream iFile;
 	char fileName[30];
 	sprintf_s(fileName, "Res\\Text\\objects.txt");

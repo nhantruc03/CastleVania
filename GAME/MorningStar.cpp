@@ -33,7 +33,7 @@ MorningStar::MorningStar(int level)
 
 void MorningStar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	if (SIMON->State->StateName != STATE_ATTACK && SIMON->State->StateName != STATE_SIT_ATTACKING)
+	if (SIMON->State!= STATE_ATTACK && SIMON->State!= STATE_SIT_ATTACKING)
 	{
 		this->isDead = true;
 		available = false;
@@ -49,7 +49,7 @@ void MorningStar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				switch (coObjects->at(i)->tag)
 				{
 				case TAG_HOLDER:
-					coObjects->at(i)->Burn();
+					coObjects->at(i)->isHit();
 					break;
 				default:
 					break;
@@ -74,7 +74,7 @@ void MorningStar::Render()
 	{
 	case 0:
 		x += isReverse ? -36 : 36;
-		if (SIMON->State->StateName == STATE_ATTACK)
+		if (SIMON->State== STATE_ATTACK)
 		{
 			y += 7;
 		}
@@ -83,7 +83,7 @@ void MorningStar::Render()
 
 	case 1:
 		x += (isReverse ? -24 : 24);
-		if (SIMON->State->StateName == STATE_ATTACK)
+		if (SIMON->State== STATE_ATTACK)
 		{
 			y -= 4;
 		}
@@ -99,7 +99,7 @@ void MorningStar::Render()
 		{
 			x += (isReverse ? 63 : -63);
 		}
-		if (SIMON->State->StateName == STATE_ATTACK)
+		if (SIMON->State== STATE_ATTACK)
 		{
 			y -= 8;
 		}
@@ -109,4 +109,5 @@ void MorningStar::Render()
 		break;
 	}
 	sprite->Draw(x, y);
+
 }

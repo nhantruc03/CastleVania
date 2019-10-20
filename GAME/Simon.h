@@ -12,6 +12,7 @@ class CSimon : public CGameObject
 {
 	static CSimon * _instance;
 public:
+	int prevState;
 	bool sitting;
 	bool attacking;
 	bool jumping;
@@ -26,10 +27,11 @@ public:
 	void Render();
 	void OnKeyDown(int keyCode);
 	void OnKeyUp(int keyCode);
-	SimonState* State;
+	int State;
 	CAnimation *curAni;
-	void ChangeState(SimonState* newState);
+	void ChangeState(int newState);
 	static CSimon* GetInstance();
+	void Update_State();
 
 	//virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 

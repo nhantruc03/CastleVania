@@ -3,33 +3,29 @@
 Item::Item(int type_id)
 {
 	tag = TAG_ITEM;
-	vx = 0;
-	vy = 0.2f;
+	vx = vy = 0;
 	ExistTime = 2000;
 	isDead = false;
 	type = type_id;
 	if (type == TYPE_ITEM_BIG_HEART)
 	{
-		animation = Animations::GetInstance()->Get(TAG_ITEM, 0);
+		animation = Animations::GetInstance()->Get(tag, 0);
 		width = 24;
 		height = 20;
-		vx = 0;
 		vy = 0.2f;
 	}
 	else if (type == TYPE_ITEM_WHIP)
 	{
-		animation = Animations::GetInstance()->Get(TAG_ITEM, 1);
+		animation = Animations::GetInstance()->Get(tag, 1);
 		width = 32;
 		height = 32;
-		vx = 0;
 		vy = 0.2f;
 	}
 	else if (type == TYPE_ITEM_DAGGER)
 	{
-		animation = Animations::GetInstance()->Get(TAG_ITEM, 2);
+		animation = Animations::GetInstance()->Get(tag, 2);
 		width = 32;
 		height = 18;
-		vx = 0;
 		vy = 0.2f;
 	}
 }

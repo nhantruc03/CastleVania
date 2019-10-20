@@ -35,12 +35,6 @@
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Simon.cpp" />
-    <ClCompile Include="SimonAttackingState.cpp" />
-    <ClCompile Include="SimonFallingState.cpp" />
-    <ClCompile Include="SimonJumpingState.cpp" />
-    <ClCompile Include="SimonSittingState.cpp" />
-    <ClCompile Include="SimonStandingState.cpp" />
-    <ClCompile Include="SimonWalkingState.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Sprites.cpp" />
     <ClCompile Include="Textures.cpp" />
@@ -63,13 +57,6 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Simon.h" />
-    <ClInclude Include="SimonAttackingState.h" />
-    <ClInclude Include="SimonFallingState.h" />
-    <ClInclude Include="SimonJumpingState.h" />
-    <ClInclude Include="SimonSittingState.h" />
-    <ClInclude Include="SimonStandingState.h" />
-    <ClInclude Include="SimonState.h" />
-    <ClInclude Include="SimonWalkingState.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Sprites.h" />
     <ClInclude Include="Textures.h" />
