@@ -4,5 +4,6 @@
 3 Res\Image\holder.png 255 0 255
 4 Res\Image\dagger.png 255 0 255
 5 Res\Image\item.png 255 0 255
-7 Res\Image\burn.png 255 0 255
-8 Res\Image\hit_effect.png 255 0 255
+6 Res\Image\burn.png 255 0 255
+7 Res\Image\hit_effect.png 255 0 255
+8 Res\Image\Level2.png 245 245 245

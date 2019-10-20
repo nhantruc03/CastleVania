@@ -20,7 +20,7 @@ public:
 	void SetPosition(float cx,float cy);
 	D3DXVECTOR3 GetPosition() { return camPosition; };
 	bool IsContain(RECT a);
-	void Update();
+	void Update(int maplevel);
 
 
 	~Camera();

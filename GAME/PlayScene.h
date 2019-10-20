@@ -12,9 +12,10 @@ private:
 	vector<LPGAMEOBJECT>objects;
 
 public:
-	PlayScene();
+	PlayScene(int level);
 	~PlayScene();
-	Map *map1;
+	int level;
+	Map *map;
 
 	void Update(DWORD dt);
 

@@ -31,6 +31,7 @@ void HoldItemObject::Render()
 
 void HoldItemObject::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	animation->Update();
 	if (isBurn)
 	{
 		if (animation->CheckEndAni())
@@ -46,6 +47,7 @@ void HoldItemObject::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void HoldItemObject::Burn()
 {
 	animation = Animations::GetInstance()->Get(TAG_EFFECT, TYPE_EFFECT_BURN);
+	animation->isreverse = false;
 	isBurn = true;
 }
 

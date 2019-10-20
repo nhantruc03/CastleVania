@@ -2,9 +2,17 @@
 #include"HoldItemObject.h"
 #include"Item.h"
 #include<fstream>
-PlayScene::PlayScene()
+#include"Maps.h"
+PlayScene::PlayScene(int level)
 {
-	LoadResources();
+	this->level = level;
+	map = Maps::GetInstance()->GetMap(this->level);
+	simon = CSimon::GetInstance();
+	simon->SetPosition(30.0f, 255.0f);
+	simon->Respawn();
+	camera = Camera::GetInstance();
+	objects.clear();
+	objects = map->get_BricksList();
 }
 
 
@@ -15,12 +23,29 @@ PlayScene::~PlayScene()
 
 void PlayScene::Update(DWORD dt)
 {
-	
-	UpdatePlayer(dt);
-	camera->SetPosition(simon->x, 0);
-	camera->Update();
-	UpdateObjects(dt);
-	
+	if (simon->upgrade_time)
+	{
+		simon->upgrade_time -= dt;
+	}
+	else
+	{
+		UpdatePlayer(dt);
+		camera->SetPosition(simon->x, 0);
+		camera->Update(level);
+		UpdateObjects(dt);
+		if (simon->x > 1300 && simon->x <= 1410 && level == 1)
+		{
+			simon->ChangeState(STATE_WALKING);
+			keyCode[DIK_RIGHT] = true;
+			simon->vx = 0.05f;
+			if (simon->x > 1400)
+			{
+				keyCode[DIK_RIGHT] = false;
+				level += 1;
+				SceneManager::GetInstance()->ReplaceScene(new PlayScene(level));
+			}
+		}
+	}
 
 }
 
@@ -48,8 +73,9 @@ void PlayScene::UpdateObjects(DWORD dt)
 				{
 					Item * testitem = new Item(h->item);
 					testitem->SetPosition(h->x, h->y);
-					objects.push_back(testitem);
 					it = objects.erase(it);
+
+					objects.push_back(testitem);
 					delete h;
 					continue;
 				}
@@ -74,35 +100,13 @@ void PlayScene::UpdateObjects(DWORD dt)
 
 void PlayScene::LoadResources()
 {
-	map1 = new Map();
-	simon = CSimon::GetInstance();
-	simon->SetPosition(30.0f, 255.0f);
-	simon->Respawn();
-	camera = Camera::GetInstance();
-
-	objects = map1->get_BricksList();
-	std::ifstream iFile;
-	char fileName[30];
-	sprintf_s(fileName, "Res\\Text\\objects.txt");
-	iFile.open(fileName);
-	while (!iFile.eof())
-	{
-
-		int holder_id, item_id, x, y;
-		iFile >> holder_id >> item_id >> x >> y;
-		HoldItemObject * HoldObject = new HoldItemObject(holder_id, item_id);
-		HoldObject->SetPosition(x, y);
-		objects.push_back(HoldObject);
-		
-	}
-	iFile.close();
+	
+	
 }
 
 void PlayScene::Render()
 {
-	
-	map1->Render();
-	simon->Render();
+	map->Render();
 	for (CGameObject* o : objects)
 	{
 		RECT temp = o->GetBoundingBox();
@@ -111,6 +115,7 @@ void PlayScene::Render()
 			o->Render();
 		}
 	}
+	simon->Render();
 }
 
 void PlayScene::OnKeyDown(int key)

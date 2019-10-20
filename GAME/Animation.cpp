@@ -11,7 +11,17 @@ void CAnimation::Add(int tag, int index, DWORD time)
 	frames.push_back(frame);
 }
 
-void CAnimation::Render(float x, float y)
+void CAnimation::Render(float x, float y,int alpha,int r,int g,int b)
+{
+	if (currentFrame!=-1)
+	{
+
+		frames[currentFrame]->GetSprite()->isreverse = this->isreverse;
+		frames[currentFrame]->GetSprite()->Draw(x, y,alpha,r,g,b);
+	}
+}
+
+void CAnimation::Update()
 {
 	DWORD now = GetTickCount();
 	if (currentFrame == -1)
@@ -36,7 +46,5 @@ void CAnimation::Render(float x, float y)
 		}
 
 	}
-	frames[currentFrame]->GetSprite()->isreverse = this->isreverse;
-	frames[currentFrame]->GetSprite()->Draw(x, y);
 }
 

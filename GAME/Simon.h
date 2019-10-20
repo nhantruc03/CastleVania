@@ -1,17 +1,14 @@
 #pragma once
 #include "GameObject.h"
 #include"GameGlobal.h"
-#include"SimonStandingState.h"
-#include"SimonJumpingState.h"
-#include"SimonAttackingState.h"
-#include"SimonFallingState.h"
 #include<unordered_set>
 #include"Weapon.h"
-
+#include<time.h>
 class CSimon : public CGameObject
 {
 	static CSimon * _instance;
 public:
+	float upgrade_time;
 	int prevState;
 	bool sitting;
 	bool attacking;

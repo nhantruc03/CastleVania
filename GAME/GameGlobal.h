@@ -10,7 +10,7 @@
 #define MAIN_WINDOW_TITLE L"CastleVania-17520122"
 #define SCREEN_WIDTH 365//1536
 #define SCREEN_HEIGHT 365 // Chiều dài cửa sổ
-#define MAX_FRAME_RATE 90			// FPS
+#define MAX_FRAME_RATE 120		// FPS
 #define BACKGROUND_COLOR D3DCOLOR_XRGB(0, 0, 0)		// Màu nền BackBuffer
 #define KEYBOARD_BUFFER_SIZE 1024
 
@@ -21,6 +21,7 @@
 #define ID_TEX_DAGGER 4
 #define ID_TEX_ITEM 5
 #define ID_TEX_BURN_EFFECT 6
+#define ID_TEX_MAP2 7
 
 
 #define TAG_SIMON 0
@@ -36,6 +37,7 @@
 	#define TYPE_ITEM_DAGGER 2
 #define TAG_EFFECT 5
 	#define TYPE_EFFECT_BURN 0
+#define TAG_MAP2 6
 
 //// ===== Các thông số cho PLAYER ====
 #define SIMON_WALKING_SPEED		0.12f

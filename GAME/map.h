@@ -8,13 +8,14 @@
 class Map
 {
 
-	vector<LPGAMEOBJECT>bricks;
+	vector<LPGAMEOBJECT>objects;
 	Camera * camera;
 public:
+	int maplevel;
 	int** MapMatrix;
 	int columns;
 	int rows;
-	Map();
+	Map(int level);
 	void Render();
 	void Setcam(Camera* cam) { camera = cam; };
 

@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "debug.h"
 #include"PlayScene.h"
+#include"Maps.h"
 CGame * CGame::__instance = NULL;
 
 /*
@@ -120,7 +121,7 @@ void CGame::Init(HWND hWnd)
 /*
 	Utility function to wrap LPD3DXSPRITE::Draw
 */
-void CGame::Draw(D3DXVECTOR3 position, LPDIRECT3DTEXTURE9 texture, RECT srect, D3DXVECTOR3 center, D3DXVECTOR2 pScalingCenter, D3DXVECTOR2 pScaling, D3DXVECTOR2 pTranslation)
+void CGame::Draw(D3DXVECTOR3 position, LPDIRECT3DTEXTURE9 texture, RECT srect, D3DXVECTOR3 center, D3DXVECTOR2 pScalingCenter, D3DXVECTOR2 pScaling, D3DXVECTOR2 pTranslation,int alpha,int r,int g,int b)
 {
 
 	// su dung matrix de tao ra ma tran moi cho viec ve hinh, doi goc toa do tu top-left sang giua tam cua hinh
@@ -128,7 +129,7 @@ void CGame::Draw(D3DXVECTOR3 position, LPDIRECT3DTEXTURE9 texture, RECT srect, D
 	D3DXMatrixTransformation2D(&curMatrix, &pScalingCenter, 0, &pScaling, NULL, 0, &pTranslation);
 	spriteHandler->GetTransform(&oldMatrix);
 	spriteHandler->SetTransform(&curMatrix);
-	spriteHandler->Draw(texture, &srect, &center, &position, D3DCOLOR_XRGB(255, 255, 255));
+	spriteHandler->Draw(texture, &srect, &center, &position, D3DCOLOR_ARGB(alpha, r, g, b));
 	spriteHandler->SetTransform(&oldMatrix); // sau khi ve xong tra lai ma tran cu, vi ham nay dung de ve nhieu doi tuong khac nhau
 }
 
@@ -284,7 +285,9 @@ void CGame::LoadResources()
 	CTextures::GetInstance()->LoadResources();
 	Sprites::GetInstance()->LoadResources();
 	Animations::GetInstance()->LoadResources();
-	SceneManager::GetInstance()->ReplaceScene(new PlayScene());
+	Maps::GetInstance()->LoadResources();
+	SceneManager::GetInstance()->ReplaceScene(new PlayScene(1));
+	
 }
 
 void CGame::Run()

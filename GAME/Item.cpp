@@ -36,6 +36,7 @@ void Item::Render()
 }
 void Item::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	animation->Update();
 	CGameObject::Update(dt, coObjects);
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;

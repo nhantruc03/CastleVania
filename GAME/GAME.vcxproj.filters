@@ -99,6 +99,9 @@
     <ClCompile Include="HoldItemObject.cpp">
       <Filter>Game Objects\HoldItemObject</Filter>
     </ClCompile>
+    <ClCompile Include="Maps.cpp">
+      <Filter>Game Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="debug.h">
@@ -165,6 +168,9 @@
       <Filter>Game Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Sprites.h">
+      <Filter>Game Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Maps.h">
       <Filter>Game Graphics</Filter>
     </ClInclude>
   </ItemGroup>

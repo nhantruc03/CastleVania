@@ -4,6 +4,7 @@
 CSimon*CSimon::_instance = NULL;
 CSimon::CSimon()
 {
+	upgrade_time = 0;
 	tag = TAG_SIMON;
 	AddAnimation(tag, 0); // stand
 	AddAnimation(tag, 1); // walk
@@ -15,7 +16,7 @@ CSimon::CSimon()
 	morningstarlevel = 1;
 	width = SIMON_WIDTH;
 	height = SIMON_HEIGHT;
-
+	srand(time(NULL));
 }
 void CSimon::Respawn()
 {
@@ -31,10 +32,10 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	CGameObject::Update(dt);
 	Update_State();
+	curAni->Update();
 	// simple fall down
 	vy += SIMON_GRAVITY * dt;
 	if (vx < 0 && x < 16) x = 16;
-	if (vx > 0 && x > 1536)x = 1536;
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
@@ -64,7 +65,8 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			if (dynamic_cast<CBrick*>(e->obj))
 			{
 				if (nx < 0) vx = 0;
-				if (ny < 0) vy = 0;
+				if (ny < 0)vy = 0;
+				//if (ny > 0) y -= min_ty * dy + ny * 0.2f;;
 
 			}
 			/*if (dynamic_cast<Item *>(e->obj))
@@ -108,8 +110,10 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					break;
 				case TYPE_ITEM_DAGGER:
 					secondweapon = TYPE_WEAPON_DAGGER;
+					
 					break;
 				case TYPE_ITEM_WHIP:
+					upgrade_time = 1000;
 					morningstarlevel += 1;
 					if (morningstarlevel > 3)
 					{
@@ -148,7 +152,17 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 void CSimon::Render()
 {
 	curAni->isreverse = this->isReverse;
-	curAni->Render(x, y);
+	if (upgrade_time)
+	{
+		int r = rand() % 255;
+		int g = rand() % 255;
+		int b = rand() % 255;
+		curAni->Render(x, y, 255, r, g, b);
+	}
+	else
+	{
+		curAni->Render(x, y);
+	}
 	for (Weapon* o : Weapons)
 	{
 		o->Render();
@@ -157,52 +171,55 @@ void CSimon::Render()
 
 void CSimon::OnKeyDown(int key)
 {
-	switch (key)
+	if (!upgrade_time)
 	{
-	case DIK_SPACE:
-		if (!jumping && !sitting && !attacking)
+		switch (key)
 		{
-			ChangeState(STATE_JUMP);
-		}
-		break;
-	case DIK_DOWN:
-		if (!jumping && !attacking && !sitting)
-		{
-			ChangeState(STATE_SITTING);
-		}
-		break;
-	case DIK_A:
-		if (!attacking)
-		{
-			if (!keyCode[DIK_UP])
+		case DIK_SPACE:
+			if (!jumping && !sitting && !attacking)
 			{
-				Weapon* weapon = WeaponsManager::CreateWeapon(TYPE_WEAPON_MORNINGSTAR);
-				weapon->isReverse = isReverse;
-				Weapons.push_back(weapon);
-				ChangeState(STATE_ATTACK);
-
+				ChangeState(STATE_JUMP);
 			}
-			else
+			break;
+		case DIK_DOWN:
+			if (!jumping && !attacking && !sitting)
 			{
-				if (State != STATE_SITTING && throwing == false && secondweapon != NULL && heart >= 1)
+				ChangeState(STATE_SITTING);
+			}
+			break;
+		case DIK_A:
+			if (!attacking)
+			{
+				if (!keyCode[DIK_UP])
 				{
-					heart -= 1;
-					Weapon* weapon = WeaponsManager::CreateWeapon(secondweapon);
+					Weapon* weapon = WeaponsManager::CreateWeapon(TYPE_WEAPON_MORNINGSTAR);
 					weapon->isReverse = isReverse;
 					Weapons.push_back(weapon);
-					throwing = true;
 					ChangeState(STATE_ATTACK);
+
+				}
+				else
+				{
+					if (State != STATE_SITTING && throwing == false && secondweapon != NULL && heart >= 1)
+					{
+						heart -= 1;
+						Weapon* weapon = WeaponsManager::CreateWeapon(secondweapon);
+						weapon->isReverse = isReverse;
+						Weapons.push_back(weapon);
+						throwing = true;
+						ChangeState(STATE_ATTACK);
+					}
 				}
 			}
+			break;
+		case DIK_M:
+			morningstarlevel += 1;
+			if (morningstarlevel > 3)
+			{
+				morningstarlevel = 1;
+			}
+			break;
 		}
-		break;
-	case DIK_M:
-		morningstarlevel += 1;
-		if (morningstarlevel > 3)
-		{
-			morningstarlevel = 1;
-		}
-		break;
 	}
 }
 

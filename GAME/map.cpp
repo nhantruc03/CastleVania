@@ -1,12 +1,13 @@
 #include "Map.h"
+#include"HoldItemObject.h"
+#include<fstream>
 
-
-Map::Map()
+Map::Map(int level)
 {
 	rows = columns = 0;
 	std::ifstream iFile;
 	char fileName[30];
-	sprintf_s(fileName, "Res\\Text\\map1.txt");
+	sprintf_s(fileName, "Res\\Text\\map%d.txt",level);
 	iFile.open(fileName);
 	iFile >> rows;
 	iFile >> columns;
@@ -21,6 +22,15 @@ Map::Map()
 		}
 	}
 	iFile.close();
+	switch (level)
+	{
+	case 1:
+		maplevel = TAG_MAP1;
+		break;
+	case 2:
+		maplevel = TAG_MAP2;
+		break;
+	}
 
 	camera = Camera::GetInstance();
 }
@@ -41,7 +51,7 @@ void Map::Render()
 			{
 				continue;
 			}
-			Sprites::GetInstance()->Get(TAG_MAP1, MapMatrix[i][j] -1)->Draw((j * 32) + 16, (i * 32) + 16);
+			Sprites::GetInstance()->Get(maplevel, MapMatrix[i][j] -1)->Draw((j * 32) + 16, (i * 32) + 16);
 		}
 	}
 }
@@ -49,27 +59,59 @@ void Map::Render()
 
 vector<LPGAMEOBJECT> Map::get_BricksList()
 {
-	for (int i = 0; i < rows; i++)
+	objects.clear();
+	if (maplevel == TAG_MAP1)
 	{
-		for (int j = 0; j < columns; j++)
+		std::ifstream iFile;
+		char fileName[30];
+		sprintf_s(fileName, "Res\\Text\\objects.txt");
+		iFile.open(fileName);
+		while (!iFile.eof())
 		{
-			if (MapMatrix[i][j] == 49)
+
+			int holder_id, item_id, x, y;
+			iFile >> holder_id >> item_id >> x >> y;
+			HoldItemObject * HoldObject = new HoldItemObject(holder_id, item_id);
+			HoldObject->SetPosition(x, y);
+			objects.push_back(HoldObject);
+
+		}
+		iFile.close();
+		for (int i = 0; i < rows; i++)
+		{
+			for (int j = 0; j < columns; j++)
 			{
+				if (MapMatrix[i][j] == 49)
+				{
 
-				CBrick *brick = new CBrick();
-				brick->SetPosition((j * 32) + 16, (i * 32) + 16);
-				bricks.push_back(brick);
+					CBrick *brick = new CBrick();
+					brick->SetPosition((j * 32) + 16, (i * 32) + 16);
+					objects.push_back(brick);
 
+				}
+			}
+		}
+		
+	}
+	else
+	{
+		for (int i = 0; i < rows; i++)
+		{
+			for (int j = 0; j < columns; j++)
+			{
+				if (MapMatrix[i][j] == 15)
+				{
+
+					CBrick *brick = new CBrick();
+					brick->SetPosition((j * 32) + 16, (i * 32) + 16);
+					objects.push_back(brick);
+
+				}
 			}
 		}
 	}
-	//CBrick* ground = new CBrick();
-	//ground->width = columns * 32;
-	//ground->height = 32;
-	//ground->SetPosition(columns*32/2, rows* 32 - 16);
-	//bricks.push_back(ground);
 
-	return bricks;
+	return objects;
 }
 
 Map::~Map()

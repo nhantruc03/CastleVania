@@ -40,16 +40,23 @@ bool Camera::IsContain(RECT a)
 	return true;
 }
 
-void Camera::Update()
+void Camera::Update(int maplevel)
 {
 	if (camPosition.x - camWidht / 2 < 0)
 	{
 		camPosition = D3DXVECTOR3(camWidht / 2, 0, 0);
 	}
-	if (camPosition.x + camWidht / 2 > 1552)
-	{
-		camPosition = D3DXVECTOR3(1552-camWidht / 2, 0, 0);
-	}
+	//if (maplevel == 1)
+	//{
+	//	if (camPosition.x + camWidht / 2 > 1552)
+	//	{
+	//		camPosition = D3DXVECTOR3(1552 - camWidht / 2, 0, 0);
+	//	}
+	//}
+	//else
+	//{
+
+	//}
 }
 
 Camera::~Camera()

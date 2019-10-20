@@ -33,7 +33,7 @@ class CGame
 
 public:
 	void Init(HWND hWnd);
-	void Draw(D3DXVECTOR3 position, LPDIRECT3DTEXTURE9 texture, RECT srect, D3DXVECTOR3 center, D3DXVECTOR2 pScalingCenter, D3DXVECTOR2 pScaling, D3DXVECTOR2 pTranslation);
+	void Draw(D3DXVECTOR3 position, LPDIRECT3DTEXTURE9 texture, RECT srect, D3DXVECTOR3 center, D3DXVECTOR2 pScalingCenter, D3DXVECTOR2 pScaling, D3DXVECTOR2 pTranslation,int alpha,int r,int g,int b);
 	void ProcessKeyboard();
 	static void SweptAABB(
 		float ml,			// move left 
