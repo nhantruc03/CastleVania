@@ -8,6 +8,19 @@ class CSimon : public CGameObject
 {
 	static CSimon * _instance;
 public:
+	bool gotoleft;
+	bool goup;
+	bool gotoright;
+	RECT stair_collide;
+	void onstair_handle(DWORD dt);
+	bool isCollidewith_UPLTR;
+	bool isCollidewith_UPRTL;
+	bool isCollidewith_DWNLTR;
+	bool isCollidewith_DWNRTL;
+	float isWalkingOnStair;
+	float prevY;
+	bool isOnStair;
+	bool check_auto_move;
 	float upgrade_time;
 	int prevState;
 	bool sitting;

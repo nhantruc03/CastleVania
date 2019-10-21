@@ -46,17 +46,17 @@ void Camera::Update(int maplevel)
 	{
 		camPosition = D3DXVECTOR3(camWidht / 2, 0, 0);
 	}
-	//if (maplevel == 1)
-	//{
-	//	if (camPosition.x + camWidht / 2 > 1552)
-	//	{
-	//		camPosition = D3DXVECTOR3(1552 - camWidht / 2, 0, 0);
-	//	}
-	//}
-	//else
-	//{
+	if (maplevel == 1)
+	{
+		if (camPosition.x + camWidht / 2 > 1552)
+		{
+			camPosition = D3DXVECTOR3(1552 - camWidht / 2, 0, 0);
+		}
+	}
+	else
+	{
 
-	//}
+	}
 }
 
 Camera::~Camera()

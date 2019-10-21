@@ -102,6 +102,9 @@
     <ClCompile Include="Maps.cpp">
       <Filter>Game Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="invisibleObject.cpp">
+      <Filter>Game Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="debug.h">
@@ -172,6 +175,9 @@
     </ClInclude>
     <ClInclude Include="Maps.h">
       <Filter>Game Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="invisibleObject.h">
+      <Filter>Game Objects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

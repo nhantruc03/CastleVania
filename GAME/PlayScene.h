@@ -12,10 +12,13 @@ private:
 	vector<LPGAMEOBJECT>objects;
 
 public:
+	RECT endrect;
 	PlayScene(int level);
 	~PlayScene();
 	int level;
 	Map *map;
+	bool gotoleft;
+	bool gotoright;
 
 	void Update(DWORD dt);
 

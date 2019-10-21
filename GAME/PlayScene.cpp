@@ -3,16 +3,41 @@
 #include"Item.h"
 #include<fstream>
 #include"Maps.h"
+#include"invisibleObject.h"
 PlayScene::PlayScene(int level)
 {
+	keyCode.clear();
 	this->level = level;
 	map = Maps::GetInstance()->GetMap(this->level);
 	simon = CSimon::GetInstance();
-	simon->SetPosition(30.0f, 255.0f);
+	simon->SetPosition(1200.0f, 255.0f);
 	simon->Respawn();
 	camera = Camera::GetInstance();
 	objects.clear();
 	objects = map->get_BricksList();
+	if (level == 2)
+	{
+		invisibleObject* lencauthang_LTR = new invisibleObject();
+		lencauthang_LTR->type = 1;
+		lencauthang_LTR->SetPosition(1248, 310);
+		objects.push_back(lencauthang_LTR);
+
+		invisibleObject* xuongcauthang_RTL = new invisibleObject();
+		xuongcauthang_RTL->type = 2;
+		xuongcauthang_RTL->SetPosition(1312+32*2, 121);
+		objects.push_back(xuongcauthang_RTL);
+	}
+	switch (level)
+	{
+	case 1:
+		endrect.left = 1376;
+		endrect.right = 1408;
+		endrect.top = 286;
+		endrect.bottom = 288;
+		break;
+	}
+	gotoleft = false;
+	gotoright = false;
 }
 
 
@@ -33,15 +58,36 @@ void PlayScene::Update(DWORD dt)
 		camera->SetPosition(simon->x, 0);
 		camera->Update(level);
 		UpdateObjects(dt);
-		if (simon->x > 1300 && simon->x <= 1410 && level == 1)
+		if (simon->IsContain(endrect.left, endrect.top, endrect.right, endrect.bottom) && level == 1)
+		{
+			simon->check_auto_move = true;
+			if (simon->x >= endrect.right)
+			{
+
+				gotoleft = true;
+			}
+			if (simon->x <= endrect.left)
+			{
+				gotoright = true;
+				gotoleft = false;
+			}
+		}
+		if (gotoleft)
 		{
 			simon->ChangeState(STATE_WALKING);
-			keyCode[DIK_RIGHT] = true;
+			simon->isReverse = false;
+			simon->vx = -0.05f;
+		}
+		if (gotoright)
+		{
+			simon->ChangeState(STATE_WALKING);
+			simon->isReverse = true;
 			simon->vx = 0.05f;
-			if (simon->x > 1400)
+			if (simon->x >= endrect.right)
 			{
-				keyCode[DIK_RIGHT] = false;
+				simon->check_auto_move = false;
 				level += 1;
+				gotoleft = gotoright = false;
 				SceneManager::GetInstance()->ReplaceScene(new PlayScene(level));
 			}
 		}
@@ -101,7 +147,6 @@ void PlayScene::UpdateObjects(DWORD dt)
 void PlayScene::LoadResources()
 {
 	
-	
 }
 
 void PlayScene::Render()
@@ -120,14 +165,20 @@ void PlayScene::Render()
 
 void PlayScene::OnKeyDown(int key)
 {
-	keyCode[key] = true;
-	simon->OnKeyDown(key);
+	if (!simon->check_auto_move)
+	{
+		keyCode[key] = true;
+		simon->OnKeyDown(key);
+	}
 }
 
 void PlayScene::OnKeyUp(int key)
 {
-	keyCode[key] = false;
-	simon->OnKeyUp(key);
+	if (!simon->check_auto_move)
+	{
+		keyCode[key] = false;
+		simon->OnKeyUp(key);
+	}
 
 }
 

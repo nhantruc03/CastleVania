@@ -57,7 +57,7 @@ void CGameObject::CalcPotentialCollisions(vector<LPGAMEOBJECT>* coObjects, vecto
 	{
 		LPCOLLISIONEVENT e = SweptAABBEx(coObjects->at(i));
 
-		if (e->t > 0 && e->t <= 1.0f && e->obj->tag!=TAG_HOLDER && !e->obj->isBurn &&e->obj->tag!=TAG_ITEM)
+		if (e->t > 0 && e->t <= 1.0f && e->obj->tag!=TAG_HOLDER && !e->obj->isBurn &&e->obj->tag!=TAG_ITEM&&e->obj->tag!=999)
 			coEvents.push_back(e);
 		else
 			delete e;

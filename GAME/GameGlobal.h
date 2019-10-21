@@ -40,9 +40,9 @@
 #define TAG_MAP2 6
 
 //// ===== Các thông số cho PLAYER ====
-#define SIMON_WALKING_SPEED		0.12f
-#define SIMON_JUMP_SPEED_Y		0.36f
-#define SIMON_GRAVITY			0.001f
+#define SIMON_WALKING_SPEED		0.13f
+#define SIMON_JUMP_SPEED_Y		0.5f
+#define SIMON_GRAVITY			0.002f
 
 #define STATE_STANDING		0
 #define STATE_WALKING			1
@@ -51,6 +51,11 @@
 #define STATE_ATTACK			4
 #define STATE_SITTING			5
 #define STATE_SIT_ATTACKING	6
+#define STATE_STAND_ONSTAIR_UP 7
+
+#define STATE_WALK_ONSTAIR_UP	8
+#define STATE_WALK_ONSTIAR_DOWN 9
+#define STATE_STAND_ONSTAIR_DOWN 10
 
 
 #define SIMON_WIDTH					32

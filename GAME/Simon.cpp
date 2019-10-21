@@ -13,13 +13,18 @@ CSimon::CSimon()
 	AddAnimation(tag, 4); // attacking
 	AddAnimation(tag, 5); // sit
 	AddAnimation(tag, 6); // sit attack
+	AddAnimation(tag, 7);// stand on stair
+	AddAnimation(tag, 8); // walk up stair
 	morningstarlevel = 1;
 	width = SIMON_WIDTH;
 	height = SIMON_HEIGHT;
 	srand(time(NULL));
+	check_auto_move = false;
+	isWalkingOnStair = false;
 }
 void CSimon::Respawn()
 {
+	check_auto_move = false;
 	throwing = false;
 	secondweapon = NULL;
 	heart = 5;
@@ -30,11 +35,19 @@ void CSimon::Respawn()
 }
 void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
+	isCollidewith_DWNLTR = false;
+	isCollidewith_DWNRTL = false;
+	isCollidewith_UPLTR = false;
+	isCollidewith_UPRTL = false;
 	CGameObject::Update(dt);
+
 	Update_State();
 	curAni->Update();
 	// simple fall down
-	vy += SIMON_GRAVITY * dt;
+	if (!isOnStair)
+	{
+		vy += SIMON_GRAVITY * dt;
+	}
 	if (vx < 0 && x < 16) x = 16;
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -58,14 +71,29 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 		// block 
 		x += min_tx * dx + nx * 0.2f;		// nx*0.2f : need to push out a bit to avoid overlapping next frame
-		y += min_ty * dy + ny * 0.2f;
+		//y += min_ty * dy + ny * 0.2f;
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
 			if (dynamic_cast<CBrick*>(e->obj))
 			{
-				if (nx < 0) vx = 0;
-				if (ny < 0)vy = 0;
+				if (isOnStair)
+				{
+					x += dx;
+				}
+				if (ny == -1)
+				{
+					y += min_ty * dy + ny * 0.4f;
+				}
+				else
+				{
+					y += dy;
+				}
+				if (ny == -1)
+				{
+					vy = 0;
+				}
+
 				//if (ny > 0) y -= min_ty * dy + ny * 0.2f;;
 
 			}
@@ -122,9 +150,29 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				}
 				coObjects->at(i)->isDead = true;
 				break;
+			case 999:
+				switch (coObjects->at(i)->type)
+				{
+				case 1:
+					isCollidewith_UPLTR = true;
+					
+					break;
+				case -1:
+					isCollidewith_UPRTL = true;
+					break;
+				case 2:
+					isCollidewith_DWNRTL = true;
+					break;
+				case -2:
+					isCollidewith_DWNLTR = true;
+					break;
+				}
+				stair_collide = coObjects->at(i)->GetBoundingBox();
+				break;
 			}
 		}
 	}
+	onstair_handle(dt);
 	vector<Weapon*>::iterator it = Weapons.begin(); // iterator: con tro chi den 1 phan tu ben trong container, khong can biet thu tu phan tu ben trong mang
 	while (it != Weapons.end())
 	{
@@ -147,8 +195,72 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		++it;
 	}
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
+
 }
 
+void CSimon::onstair_handle(DWORD dt)
+{
+	if (isCollidewith_UPLTR && keyCode[DIK_UP]&& !isOnStair)
+	{
+		check_auto_move = true;
+		if (x > stair_collide.left + (stair_collide.right - stair_collide.left) / 2)
+		{
+			gotoleft = true;
+		}
+		else if (x < stair_collide.left+(stair_collide.right-stair_collide.left)/2)
+		{
+			gotoright = true;
+		}
+	}
+
+	if (gotoright)
+	{
+		ChangeState(STATE_WALKING);
+		isReverse = true;
+		vx = SIMON_WALKING_SPEED;
+		if (x >= stair_collide.left + (stair_collide.right - stair_collide.left) / 2)
+		{
+			if (!isOnStair)
+			{
+				x = stair_collide.left + (stair_collide.right - stair_collide.left) / 2;
+				gotoright = false;
+				gotoleft = false;
+				goup = true;
+			}
+		}
+
+	}
+	if (gotoleft)
+	{
+		ChangeState(STATE_WALKING);
+		isReverse = false;
+		vx = -SIMON_WALKING_SPEED;
+		if (x <= stair_collide.left + (stair_collide.right - stair_collide.left) / 2)
+		{
+			if (!isOnStair) {
+				x = stair_collide.left + (stair_collide.right - stair_collide.left) / 2;
+				gotoright = false;
+				gotoleft = false;
+				goup = true;
+			}
+		}
+	}
+	if(goup&&!gotoleft&&!gotoright&&!isOnStair)
+	{
+		//isOnStair = true;
+		prevY = y;
+		isReverse = true;
+		check_auto_move = false;
+		keyCode.clear();
+		goup = false;
+		ChangeState(STATE_WALK_ONSTAIR_UP);
+	}
+
+	if (State == STATE_WALK_ONSTAIR_UP && isCollidewith_DWNRTL)
+	{
+		ChangeState(STATE_STANDING);
+	}
+}
 void CSimon::Render()
 {
 	curAni->isreverse = this->isReverse;
@@ -176,13 +288,13 @@ void CSimon::OnKeyDown(int key)
 		switch (key)
 		{
 		case DIK_SPACE:
-			if (!jumping && !sitting && !attacking)
+			if (!jumping && !sitting && !attacking&&!isOnStair)
 			{
 				ChangeState(STATE_JUMP);
 			}
 			break;
 		case DIK_DOWN:
-			if (!jumping && !attacking && !sitting)
+			if (!jumping && !attacking && !sitting&&!isOnStair)
 			{
 				ChangeState(STATE_SITTING);
 			}
@@ -190,7 +302,7 @@ void CSimon::OnKeyDown(int key)
 		case DIK_A:
 			if (!attacking)
 			{
-				if (!keyCode[DIK_UP])
+				if (!keyCode[DIK_UP] &&State!=STATE_WALK_ONSTAIR_UP&&State!=STATE_WALK_ONSTIAR_DOWN)
 				{
 					Weapon* weapon = WeaponsManager::CreateWeapon(TYPE_WEAPON_MORNINGSTAR);
 					weapon->isReverse = isReverse;
@@ -225,6 +337,15 @@ void CSimon::OnKeyDown(int key)
 
 void CSimon::OnKeyUp(int key)
 {
+	if (State == STATE_WALKING)
+	{
+		if (key == DIK_LEFT || key == DIK_RIGHT)
+		{
+			ChangeState(STATE_STANDING);
+		}
+	}
+
+
 }
 
 void CSimon::ChangeState(int newState)
@@ -240,6 +361,8 @@ void CSimon::ChangeState(int newState)
 		jumping = false;
 		sitting = false;
 		attacking = false;
+		isOnStair = false;
+		isWalkingOnStair = false;
 		break;
 	case STATE_WALKING:
 		attacking = false;
@@ -278,6 +401,24 @@ void CSimon::ChangeState(int newState)
 		{
 			State = STATE_ATTACK;
 		}
+		break;
+	case STATE_STAND_ONSTAIR_UP:
+		isWalkingOnStair = false;
+		isOnStair = true;
+		height = SIMON_HEIGHT;
+		vx = 0;
+		vy = 0;
+		jumping = false;
+		sitting = false;
+		attacking = false;
+		break;
+	case STATE_WALK_ONSTAIR_UP:
+		isWalkingOnStair = true;
+		isOnStair = true;
+		attacking = false;
+		sitting = false;
+		jumping = false;
+		height = SIMON_HEIGHT;
 		break;
 	}
 	curAni = animations[State];
@@ -319,10 +460,6 @@ void CSimon::Update_State()
 		{
 			isReverse = false;
 			vx = -SIMON_WALKING_SPEED;
-		}
-		else
-		{
-			ChangeState(STATE_STANDING);
 		}
 		break;
 	case STATE_SITTING:
@@ -380,6 +517,9 @@ void CSimon::Update_State()
 			case STATE_STANDING:case STATE_WALKING:
 				ChangeState(STATE_STANDING);
 				break;
+			case STATE_WALK_ONSTAIR_UP:case STATE_STAND_ONSTAIR_UP:
+				ChangeState(STATE_STAND_ONSTAIR_UP);
+				break;
 			case STATE_FALL:case STATE_JUMP:
 				if (vy > 0)
 				{
@@ -400,11 +540,40 @@ void CSimon::Update_State()
 			case STATE_WALKING:
 				vx = 0;
 				break;
-			case STATE_FALL:
+			}
+			if (vy == 0)
+			{
 				vx = 0;
-				break;
 			}
 
+		}
+		break;
+	case STATE_STAND_ONSTAIR_UP:
+		isWalkingOnStair = false;
+		if (keyCode[DIK_UP])
+		{
+			ChangeState(STATE_WALK_ONSTAIR_UP);
+		}
+		break;
+	case STATE_WALK_ONSTAIR_UP:
+		isOnStair = true;
+		isWalkingOnStair = true;
+		isReverse = true;
+		vx = SIMON_WALKING_SPEED / 2;
+		vy = -SIMON_WALKING_SPEED / 2;
+		if (prevY - y >= 16)
+		{
+			if (prevY - y > 16)
+			{
+				y += prevY - y - 16;
+				prevY = y;
+				isWalkingOnStair = false;
+			}
+			
+		}
+		if (!keyCode[DIK_UP] && !isWalkingOnStair)
+		{
+			ChangeState(STATE_STAND_ONSTAIR_UP);
 		}
 		break;
 	}
