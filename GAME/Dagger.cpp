@@ -1,5 +1,7 @@
 #include"Dagger.h"
 #include"Simon.h"
+#include"HoldItemObject.h"
+#include"Brick.h"
 Dagger::Dagger()
 {
 	this->animation = Animations::GetInstance()->Get(TAG_WEAPON, 3);
@@ -30,7 +32,45 @@ void Dagger::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (available)
 	{
 		CGameObject::Update(dt, coObjects);
-		x += dx;
+		vector<LPCOLLISIONEVENT> coEvents;
+		vector<LPCOLLISIONEVENT> coEventsResult;
+
+		coEvents.clear();
+
+		// turn off collision when die 
+		CalcPotentialCollisions(coObjects, coEvents);
+		// No collision occured, proceed normally
+
+		if (coEvents.size() == 0)
+		{
+			x += dx;
+			y += dy;
+		}
+		else
+		{
+			float min_tx, min_ty, nx = 0, ny;
+
+			FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
+
+			// block 
+			x += min_tx * dx + nx * 0.2f;		// nx*0.2f : need to push out a bit to avoid overlapping next frame
+			//y += min_ty * dy + ny * 0.2f;
+			for (UINT i = 0; i < coEventsResult.size(); i++)
+			{
+				LPCOLLISIONEVENT e = coEventsResult[i];
+				if (dynamic_cast<HoldItemObject*>(e->obj))
+				{
+					dynamic_cast<HoldItemObject*>(e->obj)->isHit();
+					isDead = true;
+					SIMON->throwing = false;
+				}
+				if (dynamic_cast<CBrick*>(e->obj))
+				{
+					isDead = true;
+					SIMON->throwing = false;
+				}
+			}
+		}
 		for (UINT i = 0; i < coObjects->size(); i++)
 		{
 			float l, t, r, b;
@@ -42,6 +82,10 @@ void Dagger::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				case TAG_HOLDER:
 					coObjects->at(i)->isHit();
 					this->isDead = true;
+					SIMON->throwing = false;
+					break;
+				case TAG_BRICK:
+					isDead = true;
 					SIMON->throwing = false;
 					break;
 				}

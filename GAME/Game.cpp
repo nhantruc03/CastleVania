@@ -317,9 +317,9 @@ void CGame::Run()
 		{
 			frameStart = now;
 
+			Update(dt);
 			ProcessKeyboard();
 
-			Update(dt);
 			Render();
 		}
 		else

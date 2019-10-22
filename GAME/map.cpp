@@ -77,7 +77,7 @@ vector<LPGAMEOBJECT> Map::get_BricksList()
 
 		}
 		iFile.close();
-		for (int i = 0; i < rows; i++)
+		/*for (int i = 0; i < rows; i++)
 		{
 			for (int j = 0; j < columns; j++)
 			{
@@ -90,8 +90,12 @@ vector<LPGAMEOBJECT> Map::get_BricksList()
 
 				}
 			}
-		}
-		
+		}*/
+		CBrick* brick = new CBrick();
+		brick->SetPosition(768, 304);
+		brick->width = 1536;
+		brick->height = 32;
+		objects.push_back(brick);
 	}
 	else
 	{

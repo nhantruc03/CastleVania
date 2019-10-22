@@ -5,7 +5,7 @@ class CBrick : public CGameObject
 public:
 	CBrick()
 	{
-		tag = NULL;
+		tag = TAG_BRICK;
 		width = 32;
 		height = 32;
 		isDead = false;

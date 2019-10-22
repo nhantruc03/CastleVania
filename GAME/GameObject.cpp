@@ -1,6 +1,7 @@
 #include "GameObject.h"
 #include<algorithm>
-
+#include"Simon.h"
+#include"Dagger.h"
 CGameObject::CGameObject()
 {
 	tag = NULL;
@@ -55,9 +56,17 @@ void CGameObject::CalcPotentialCollisions(vector<LPGAMEOBJECT>* coObjects, vecto
 {
 	for (UINT i = 0; i < coObjects->size(); i++)
 	{
+		if (dynamic_cast<CSimon*>(this) && (coObjects->at(i)->tag == TAG_HOLDER || coObjects->at(i)->tag == 999))
+		{
+			continue;
+		}
+		if (dynamic_cast<Dagger*>(this) && (coObjects->at(i)->tag == TAG_ITEM || coObjects->at(i)->tag == 999))
+		{
+			continue;
+		}
 		LPCOLLISIONEVENT e = SweptAABBEx(coObjects->at(i));
 
-		if (e->t > 0 && e->t <= 1.0f && e->obj->tag!=TAG_HOLDER && !e->obj->isBurn &&e->obj->tag!=TAG_ITEM&&e->obj->tag!=999)
+		if (e->t > 0 && e->t <= 1.0f  && !e->obj->isBurn )
 			coEvents.push_back(e);
 		else
 			delete e;

@@ -11,6 +11,7 @@ public:
 	bool gotoleft;
 	bool goup;
 	bool gotoright;
+	bool godown;
 	RECT stair_collide;
 	void onstair_handle(DWORD dt);
 	bool isCollidewith_UPLTR;
@@ -19,6 +20,7 @@ public:
 	bool isCollidewith_DWNRTL;
 	float isWalkingOnStair;
 	float prevY;
+	float prevX;
 	bool isOnStair;
 	bool check_auto_move;
 	float upgrade_time;

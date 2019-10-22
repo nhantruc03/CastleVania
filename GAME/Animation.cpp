@@ -15,7 +15,6 @@ void CAnimation::Render(float x, float y,int alpha,int r,int g,int b)
 {
 	if (currentFrame!=-1)
 	{
-
 		frames[currentFrame]->GetSprite()->isreverse = this->isreverse;
 		frames[currentFrame]->GetSprite()->Draw(x, y,alpha,r,g,b);
 	}

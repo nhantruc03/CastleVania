@@ -10,7 +10,7 @@ PlayScene::PlayScene(int level)
 	this->level = level;
 	map = Maps::GetInstance()->GetMap(this->level);
 	simon = CSimon::GetInstance();
-	simon->SetPosition(1200.0f, 255.0f);
+	simon->SetPosition(1400, 5.0f);
 	simon->Respawn();
 	camera = Camera::GetInstance();
 	objects.clear();
@@ -19,12 +19,12 @@ PlayScene::PlayScene(int level)
 	{
 		invisibleObject* lencauthang_LTR = new invisibleObject();
 		lencauthang_LTR->type = 1;
-		lencauthang_LTR->SetPosition(1248, 310);
+		lencauthang_LTR->SetPosition(1251, 327);
 		objects.push_back(lencauthang_LTR);
 
 		invisibleObject* xuongcauthang_RTL = new invisibleObject();
 		xuongcauthang_RTL->type = 2;
-		xuongcauthang_RTL->SetPosition(1312+32*2, 121);
+		xuongcauthang_RTL->SetPosition(1379, 121);
 		objects.push_back(xuongcauthang_RTL);
 	}
 	switch (level)
@@ -105,8 +105,7 @@ void PlayScene::UpdateObjects(DWORD dt)
 	vector<LPGAMEOBJECT>::iterator it = objects.begin(); // iterator: con tro chi den 1 phan tu ben trong container, khong can biet thu tu phan tu ben trong mang
 	while (it != objects.end())
 	{
-
-		CGameObject *o = *it;
+		LPGAMEOBJECT o = *it;
 		RECT temp = o->GetBoundingBox();
 		if (camera->IsContain(temp))
 		{
@@ -114,29 +113,42 @@ void PlayScene::UpdateObjects(DWORD dt)
 			{
 			case TAG_HOLDER:
 			{
-				HoldItemObject*h = (HoldItemObject*)o;
-				if (h->isDead)
+				HoldItemObject* h=(HoldItemObject*) o;
+				
+				if (h->isDead==true)
 				{
-					Item * testitem = new Item(h->item);
-					testitem->SetPosition(h->x, h->y);
-					it = objects.erase(it);
 
+					it = objects.erase(it);
+					Item* testitem = new Item(h->item);
+					testitem->SetPosition(h->x, h->y);
+					
 					objects.push_back(testitem);
+					
 					delete h;
 					continue;
 				}
-				h->Update(dt, &objects);
+				else
+				{
+					h->Update(dt, &objects);
+				}
 				break;
 			}
 			case TAG_ITEM:
-				Item*i = (Item*)o;
+			{
+				Item*i = (Item*) o;
 				if (i->isDead)
 				{
 					it = objects.erase(it);
 					delete i;
 					continue;
 				}
-				i->Update(dt, &objects);
+				else
+				{
+					i->Update(dt, &objects);
+				}
+				break; 
+			}
+			default:
 				break;
 			}
 		}
