@@ -10,7 +10,7 @@ PlayScene::PlayScene(int level)
 	this->level = level;
 	map = Maps::GetInstance()->GetMap(this->level);
 	simon = CSimon::GetInstance();
-	simon->SetPosition(1400, 5.0f);
+	simon->SetPosition(1800, 5.0f);
 	simon->Respawn();
 	camera = Camera::GetInstance();
 	objects.clear();
@@ -26,6 +26,17 @@ PlayScene::PlayScene(int level)
 		xuongcauthang_RTL->type = 2;
 		xuongcauthang_RTL->SetPosition(1379, 121);
 		objects.push_back(xuongcauthang_RTL);
+
+		invisibleObject* xuongcauthang_LTR = new invisibleObject();
+		xuongcauthang_LTR->type = -2;
+		xuongcauthang_LTR->SetPosition(1821, 62);
+		objects.push_back(xuongcauthang_LTR);
+
+		invisibleObject* lencauthang_RTL = new invisibleObject();
+		lencauthang_RTL->type = -1;
+		lencauthang_RTL->SetPosition(1885, 200);
+		objects.push_back(lencauthang_RTL);
+		
 	}
 	switch (level)
 	{
