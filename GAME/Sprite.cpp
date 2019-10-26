@@ -18,7 +18,7 @@ void CSprite::Draw(float x, float y,int alpha,int r,int g,int b)
 	D3DXVECTOR3 CamPosition = Camera::GetInstance()->GetPosition();
 	D3DXVECTOR3 p(x , y , 0);
 	D3DXVECTOR2 pScalingCenter = D3DXVECTOR2(x, y);							// vi tri thu phong hinh anh
-	D3DXVECTOR2 pTranslation = D3DXVECTOR2(floor(SCREEN_WIDTH/2-CamPosition.x), 0);	// tinh tien hinh anh
+	D3DXVECTOR2 pTranslation = D3DXVECTOR2(floor(SCREEN_WIDTH/2-CamPosition.x), CamPosition.y);	// tinh tien hinh anh
 	D3DXVECTOR2 pScaling = D3DXVECTOR2(isreverse ? -1 : 1, 1);					// lat hinh va thu phong hinh anh
 	CGame::GetInstance()->Draw(p, texture, rect, center, pScalingCenter, pScaling, pTranslation,alpha,r,g,b);
 }

@@ -54,7 +54,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	{
 		vy += SIMON_GRAVITY * dt;
 	}
-	if (vx < 0 && x < 16) x = 16;
+	
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
@@ -71,12 +71,11 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	else
 	{
 		float min_tx, min_ty, nx = 0, ny;
-
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
 
 		// block 
 		x += min_tx * dx + nx * 0.2f;		// nx*0.2f : need to push out a bit to avoid overlapping next frame
-		//y += min_ty * dy + ny * 0.2f;
+		y += min_ty * dy + ny * 0.4f;
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
@@ -87,18 +86,13 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					x += dx;
 					y += dy;
 				}
-				if (ny == -1)
-				{
-					y += min_ty * dy + ny * 0.4f;
-				}
-				else
+				if(ny==1)
 				{
 					y += dy;
 				}
 				if (ny == -1)
 				{
 					vy = 0;
-
 				}
 			}
 			if (dynamic_cast<Item *>(e->obj))
@@ -175,7 +169,6 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			}
 		}
 	}
-
 	Update_State();
 	inoutstair_handle(dt);
 	vector<Weapon*>::iterator it = Weapons.begin(); // iterator: con tro chi den 1 phan tu ben trong container, khong can biet thu tu phan tu ben trong mang
@@ -204,7 +197,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 }
 void CSimon::inoutstair_handle(DWORD dt)
 {
-	if (((isCollidewith_UPLTR||isCollidewith_UPRTL) && keyCode[DIK_UP]&& !isOnStair) || ((isCollidewith_DWNRTL||isCollidewith_DWNLTR) && keyCode[DIK_DOWN] && !isOnStair) && (State==STATE_STANDING||State==STATE_WALKING))
+	if ((((isCollidewith_UPLTR||isCollidewith_UPRTL) && keyCode[DIK_UP]&& !isOnStair) || ((isCollidewith_DWNRTL||isCollidewith_DWNLTR) && keyCode[DIK_DOWN] && !isOnStair)) && (State==STATE_STANDING||State==STATE_WALKING))
 	{
 		if (isCollidewith_UPLTR || isCollidewith_DWNRTL)
 		{
@@ -377,15 +370,6 @@ void CSimon::OnKeyDown(int key)
 
 void CSimon::OnKeyUp(int key)
 {
-	if (State == STATE_WALKING)
-	{
-		if (key == DIK_LEFT || key == DIK_RIGHT)
-		{
-			ChangeState(STATE_STANDING);
-		}
-	}
-
-
 }
 
 void CSimon::ChangeState(int newState)
@@ -509,7 +493,6 @@ void CSimon::Update_State()
 
 		break;
 	case STATE_WALKING:
-
 		if (keyCode[DIK_RIGHT])
 		{
 			isReverse = true;
@@ -519,6 +502,10 @@ void CSimon::Update_State()
 		{
 			isReverse = false;
 			vx = -SIMON_WALKING_SPEED;
+		}
+		else
+		{
+			ChangeState(STATE_STANDING);
 		}
 		break;
 	case STATE_SITTING:

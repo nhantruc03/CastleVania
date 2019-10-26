@@ -11,6 +11,7 @@ Camera * Camera::GetInstance()
 
 Camera::Camera(int width, int height)
 {
+	movedownstair = false;
 	camWidht = width;
 	camHeight = height;
 	camPosition = D3DXVECTOR3(0, 0, 0);
@@ -19,8 +20,14 @@ Camera::Camera(int width, int height)
 RECT Camera::GetBound()
 {
 	RECT CamBound;
+	
 	CamBound.left = camPosition.x - camWidht / 2;
-	CamBound.top = 0;
+	if (movedownstair)
+	{
+		CamBound.top = 384;
+	}
+	else
+		CamBound.top = 0;
 	CamBound.right = CamBound.left + camWidht;
 	CamBound.bottom = CamBound.top + camHeight;
 	return CamBound;
@@ -55,7 +62,17 @@ void Camera::Update(int maplevel)
 	}
 	else
 	{
-
+		if (movedownstair)
+		{
+			if (camPosition.x - camWidht / 2 < 3072)
+			{
+				camPosition = D3DXVECTOR3(3072+camWidht / 2, -384, 0);
+			}
+			if (camPosition.x + camWidht / 2 > 4112)
+			{
+				camPosition = D3DXVECTOR3(4112 - camWidht / 2, -384, 0);
+			}
+		}
 	}
 }
 

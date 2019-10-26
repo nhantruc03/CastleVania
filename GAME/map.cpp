@@ -1,7 +1,7 @@
 #include "Map.h"
 #include"HoldItemObject.h"
 #include<fstream>
-
+#include"invisibleObject.h"
 Map::Map(int level)
 {
 	rows = columns = 0;
@@ -64,52 +64,84 @@ vector<LPGAMEOBJECT> Map::get_BricksList()
 	{
 		std::ifstream iFile;
 		char fileName[30];
-		sprintf_s(fileName, "Res\\Text\\objects.txt");
+		sprintf_s(fileName, "Res\\Text\\objects1.txt");
 		iFile.open(fileName);
 		while (!iFile.eof())
 		{
-
-			int holder_id, item_id, x, y;
-			iFile >> holder_id >> item_id >> x >> y;
-			HoldItemObject * HoldObject = new HoldItemObject(holder_id, item_id);
-			HoldObject->SetPosition(x, y);
-			objects.push_back(HoldObject);
+			char objects_type;
+			iFile >> objects_type;
+			switch (objects_type)
+			{
+			case 'h':
+			{
+				int holder_id, item_id, x, y;
+				iFile >> holder_id >> item_id >> x >> y;
+				HoldItemObject * HoldObject = new HoldItemObject(holder_id, item_id);
+				HoldObject->SetPosition(x, y);
+				objects.push_back(HoldObject); 
+			}
+				break;
+			case 'b':
+			{
+				float x, y, width, height;
+				iFile >> x >> y >> width >> height;
+				CBrick* brick = new CBrick();
+				brick->SetPosition(x, y);
+				brick->width = width;
+				brick->height = height;
+				objects.push_back(brick); 
+			}
+				break;
+			}
 
 		}
 		iFile.close();
-		/*for (int i = 0; i < rows; i++)
-		{
-			for (int j = 0; j < columns; j++)
-			{
-				if (MapMatrix[i][j] == 49)
-				{
-
-					CBrick *brick = new CBrick();
-					brick->SetPosition((j * 32) + 16, (i * 32) + 16);
-					objects.push_back(brick);
-
-				}
-			}
-		}*/
-		CBrick* brick = new CBrick();
-		brick->SetPosition(768, 304);
-		brick->width = 1536;
-		brick->height = 32;
-		objects.push_back(brick);
 	}
 	else
 	{
-		for (int i = 0; i < rows; i++)
+		std::ifstream iFile;
+		char fileName[30];
+		sprintf_s(fileName, "Res\\Text\\objects2.txt");
+		iFile.open(fileName);
+		while (!iFile.eof())
 		{
-			for (int j = 0; j < columns; j++)
+			char objects_type;
+			iFile >> objects_type;
+			switch (objects_type)
 			{
-				if (MapMatrix[i][j] == 15)
+			case 'i':
+			{
+				int type,x,y;
+				iFile >> type>> x>>y;
+				invisibleObject* invisibleO = new invisibleObject();
+				invisibleO->type = type;
+				invisibleO->SetPosition(x, y);
+				objects.push_back(invisibleO);
+			}
+			break;
+			case 'b':
+			{
+				float x, y, width, height;
+				iFile >> x >> y >> width >> height;
+				CBrick* brick = new CBrick();
+				brick->SetPosition(x, y);
+				brick->width = width;
+				brick->height = height;
+				objects.push_back(brick); }
+			break;
+			}
+			for (int i = 0; i < rows; i++)
+			{
+				for (int j = 0; j < columns; j++)
 				{
+					if (MapMatrix[i][j] == 15)
+					{
 
-					CBrick *brick = new CBrick();
-					brick->SetPosition((j * 32) + 16, (i * 32) + 16);
-					objects.push_back(brick);
+						CBrick *brick = new CBrick();
+						brick->SetPosition((j * 32) + 16, (i * 32) + 16);
+						objects.push_back(brick);
 
+					}
 				}
 			}
 		}

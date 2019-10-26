@@ -21,6 +21,7 @@ public:
 	D3DXVECTOR3 GetPosition() { return camPosition; };
 	bool IsContain(RECT a);
 	void Update(int maplevel);
+	bool movedownstair;
 
 
 	~Camera();

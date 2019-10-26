@@ -43,7 +43,7 @@
 //// ===== Các thông số cho PLAYER ====
 #define SIMON_WALKING_SPEED		0.13f
 #define SIMON_JUMP_SPEED_Y		0.5f
-#define SIMON_GRAVITY			0.002f
+#define SIMON_GRAVITY			0.0018f
 
 #define STATE_STANDING				0
 #define STATE_WALKING				1

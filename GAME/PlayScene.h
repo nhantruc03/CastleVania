@@ -12,6 +12,11 @@ private:
 	vector<LPGAMEOBJECT>objects;
 
 public:
+
+	RECT downstair;
+	RECT upstair;
+	RECT downstair2;
+	RECT upstair2;
 	RECT endrect;
 	PlayScene(int level);
 	~PlayScene();
