@@ -27,6 +27,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameGlobal.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="Ghost.cpp" />
     <ClCompile Include="HoldItemObject.cpp" />
     <ClCompile Include="invisibleObject.cpp" />
     <ClCompile Include="Item.cpp" />
@@ -48,9 +49,11 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Dagger.h" />
     <ClInclude Include="debug.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameGlobal.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="Ghost.h" />
     <ClInclude Include="HoldItemObject.h" />
     <ClInclude Include="invisibleObject.h" />
     <ClInclude Include="Item.h" />

@@ -12,7 +12,9 @@ private:
 	vector<LPGAMEOBJECT>objects;
 
 public:
-
+	bool cancreateghost;
+	DWORD timetocreateghost;
+	int countghost;	
 	RECT downstair;
 	RECT upstair;
 	RECT downstair2;

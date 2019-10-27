@@ -3,10 +3,14 @@
 #include"Brick.h"
 #include"HoldItemObject.h"
 #include"Item.h"
+#include"Enemy.h"
 CSimon*CSimon::_instance = NULL;
 CSimon::CSimon()
 {
+	ishit = false;
+	untouchable = 0;
 	upgrade_time = 0;
+	isinjured = false;
 	tag = TAG_SIMON;
 	AddAnimation(tag, 0); // stand
 	AddAnimation(tag, 1); // walk
@@ -19,6 +23,7 @@ CSimon::CSimon()
 	AddAnimation(tag, 8); // walk up stair_up
 	AddAnimation(tag, 9); // stand on stair_down
 	AddAnimation(tag, 10);// walk on stair_down
+	AddAnimation(tag, 11); // injured
 	morningstarlevel = 1;
 	width = SIMON_WIDTH;
 	height = SIMON_HEIGHT;
@@ -54,7 +59,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	{
 		vy += SIMON_GRAVITY * dt;
 	}
-	
+
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
@@ -62,12 +67,18 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 	// turn off collision when die 
 	CalcPotentialCollisions(coObjects, coEvents);
+	if (GetTickCount() - untouchable_start > 2000)
+	{
+		untouchable_start = 0;
+		untouchable = 0;
+	}
 	// No collision occured, proceed normally
 	if (coEvents.size() == 0)
 	{
 		x += dx;
 		y += dy;
 	}
+
 	else
 	{
 		float min_tx, min_ty, nx = 0, ny;
@@ -75,20 +86,22 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 		// block 
 		x += min_tx * dx + nx * 0.2f;		// nx*0.2f : need to push out a bit to avoid overlapping next frame
-		y += min_ty * dy + ny * 0.4f;
+		y += min_ty * dy + ny * 0.2f;
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
 			if (dynamic_cast<CBrick*>(e->obj))
 			{
+			
 				if (isOnStair)
 				{
 					x += dx;
 					y += dy;
 				}
-				if(ny==1)
+				if (ny == 1)
 				{
 					y += dy;
+					vx = 0;
 				}
 				if (ny == -1)
 				{
@@ -116,8 +129,46 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 						morningstarlevel = 3;
 					}
 				}
+
+				
 			}
+			if (dynamic_cast<Enemy*> (e->obj))
+			{
+
+				//this->ChangeState(STATE_INJURED);
+				if (untouchable == 0)
+				{
+					StartUntouchable();
+					
+					if (!isOnStair)
+					{
+						if (nx <= 0)
+						{
+							isReverse = false;
+						}
+						else
+						{
+							isReverse = true;
+						}
+						ishit = true;
+						
+					}
+				}
+				else
+				{
+					if (e->ny < 0)
+					{
+						y += dy;
+					}
+				}
+			}
+
 		}
+	}
+	if (ishit)
+	{
+		ChangeState(STATE_INJURED);
+		ishit = false;
 	}
 	// xu ly va nhan vat va cham voi item khi item vua duoc sinh ra
 	for (UINT i = 0; i < coObjects->size(); i++)
@@ -136,7 +187,6 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					break;
 				case TYPE_ITEM_DAGGER:
 					secondweapon = TYPE_WEAPON_DAGGER;
-
 					break;
 				case TYPE_ITEM_WHIP:
 					upgrade_time = 1000;
@@ -145,6 +195,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					{
 						morningstarlevel = 3;
 					}
+					break;
 				}
 				coObjects->at(i)->isDead = true;
 				break;
@@ -165,6 +216,17 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					break;
 				}
 				stair_collide = coObjects->at(i)->GetBoundingBox();
+				break;
+			case TAG_ENEMY:
+					if (untouchable == 0 && coObjects->at(i)->isBurn==false)
+					{
+						StartUntouchable();
+						if (!isOnStair)
+						{
+							isReverse = false;
+							ChangeState(STATE_INJURED);
+						}
+					}
 				break;
 			}
 		}
@@ -306,7 +368,9 @@ void CSimon::Render()
 	}
 	else
 	{
-		curAni->Render(x, y);
+		int alpha = 255;
+		if (untouchable) alpha = rand() % 255;
+		curAni->Render(x, y,alpha);
 	}
 	for (Weapon* o : Weapons)
 	{
@@ -321,19 +385,19 @@ void CSimon::OnKeyDown(int key)
 		switch (key)
 		{
 		case DIK_SPACE:
-			if (!jumping && !sitting && !attacking&&!isOnStair)
+			if (!jumping && !sitting && !attacking&&!isOnStair && !isinjured)
 			{
 				ChangeState(STATE_JUMP);
 			}
 			break;
 		case DIK_DOWN:
-			if (!jumping && !attacking && !sitting&&!isOnStair && !isCollidewith_DWNRTL && !isCollidewith_DWNLTR)
+			if (!jumping && !attacking && !sitting&&!isOnStair && !isCollidewith_DWNRTL && !isCollidewith_DWNLTR && !isinjured)
 			{
 				ChangeState(STATE_SITTING);
 			}
 			break;
 		case DIK_A:
-			if (!attacking)
+			if (!attacking && !isinjured)
 			{
 				if (!keyCode[DIK_UP] &&State!=STATE_WALK_ONSTAIR_UP&&State!=STATE_WALK_ONSTAIR_DOWN)
 				{
@@ -381,9 +445,9 @@ void CSimon::ChangeState(int newState)
 	case STATE_STANDING:
 		height = SIMON_HEIGHT;
 		vx = 0;
-		vy = 0;
 		jumping = false;
 		sitting = false;
+		isinjured = false;
 		attacking = false;
 		isOnStair = false;
 		isWalkingOnStair = false;
@@ -392,7 +456,7 @@ void CSimon::ChangeState(int newState)
 		attacking = false;
 		sitting = false;
 		jumping = false;
-		vy = 0;
+		//vy = 0;
 		height = SIMON_HEIGHT;
 		break;
 	case STATE_SITTING:
@@ -406,7 +470,6 @@ void CSimon::ChangeState(int newState)
 		height = SIMON_SITTING_HEIGHT;
 		vy = -SIMON_JUMP_SPEED_Y;
 		jumping = true;
-		STATE_JUMP;
 		break;
 	case STATE_FALL:
 		height = SIMON_HEIGHT;
@@ -462,6 +525,34 @@ void CSimon::ChangeState(int newState)
 		sitting = false;
 		jumping = false;
 		height = SIMON_HEIGHT;
+		break;
+	case STATE_INJURED:
+		height = SIMON_HEIGHT;
+		isonground = false;
+		isinjured = true;
+		if (isReverse)
+		{
+			vx = SIMON_WALKING_SPEED;
+		}
+		else
+		{
+			vx = -SIMON_WALKING_SPEED;
+		}
+		if (prevState == STATE_SITTING)
+		{
+			y -= 16 / 2;
+		}
+		vy = -(SIMON_JUMP_SPEED_Y/1.3f);
+		attacking = false;
+		sitting = false;
+		jumping = false;
+		if (prevState == STATE_ATTACK || prevState == STATE_SIT_ATTACKING)
+		{
+			if (animations[prevState]->CheckEndAni() == false)
+			{
+				animations[prevState]->currentFrame = -1;
+			}
+		}
 		break;
 	}
 	curAni = animations[State];
@@ -714,6 +805,13 @@ void CSimon::Update_State()
 		if (!keyCode[DIK_DOWN] && !isWalkingOnStair)
 		{
 			ChangeState(STATE_STAND_ONSTAIR_DOWN);
+		}
+		break;
+	case STATE_INJURED:
+		if (vy == 0)
+		{
+			ChangeState(STATE_STANDING);
+
 		}
 		break;
 	}

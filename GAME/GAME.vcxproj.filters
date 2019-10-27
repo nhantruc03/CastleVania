@@ -40,6 +40,9 @@
     <Filter Include="Game Objects\Player">
       <UniqueIdentifier>{a4d5c4ad-ffe6-4801-845f-84a10ae4260f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game Objects\Enemy">
+      <UniqueIdentifier>{351f5550-9d9d-4e47-81e8-8dea5f2af891}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="debug.cpp">
@@ -104,6 +107,9 @@
     </ClCompile>
     <ClCompile Include="invisibleObject.cpp">
       <Filter>Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Ghost.cpp">
+      <Filter>Game Objects\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -178,6 +184,12 @@
     </ClInclude>
     <ClInclude Include="invisibleObject.h">
       <Filter>Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Game Objects\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Ghost.h">
+      <Filter>Game Objects\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

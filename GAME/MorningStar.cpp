@@ -51,6 +51,9 @@ void MorningStar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				case TAG_HOLDER:
 					coObjects->at(i)->isHit();
 					break;
+				case TAG_ENEMY:
+					coObjects->at(i)->isHit();
+					break;
 				default:
 					break;
 				}

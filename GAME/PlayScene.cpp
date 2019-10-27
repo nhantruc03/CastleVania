@@ -4,17 +4,21 @@
 #include<fstream>
 #include"Maps.h"
 #include"invisibleObject.h"
+#include"Ghost.h"
 PlayScene::PlayScene(int level)
 {
 	keyCode.clear();
 	this->level = level;
 	map = Maps::GetInstance()->GetMap(this->level);
 	simon = CSimon::GetInstance();
-	simon->SetPosition(1500, 5.0f);
+	simon->SetPosition(30, 250.0f);//287.0f);
 	simon->Respawn();
 	camera = Camera::GetInstance();
 	objects.clear();
 	objects = map->get_BricksList();
+	timetocreateghost = 0;
+	cancreateghost = true;
+	countghost = 0;
 	switch (level)
 	{
 	case 1:
@@ -44,8 +48,7 @@ PlayScene::PlayScene(int level)
 		upstair2.top = 384;
 		upstair2.bottom = 385;
 
-
-		break;
+				break;
 	}
 	gotoleft = false;
 	gotoright = false;
@@ -132,7 +135,36 @@ void PlayScene::Update(DWORD dt)
 				simon->SetPosition(simon->x, simon->y - 64);
 			}
 		}
-		
+		if (timetocreateghost > 0)
+		{
+			timetocreateghost -= dt;
+		}
+		if ((simon->x >= 0.0f&& simon->x <= 841.0f) || (simon->x > 2216 && simon->x < 2791))
+		{
+			if (cancreateghost)
+			{
+				if (timetocreateghost <= 0)
+				{
+					if (simon->vx >= 0)
+					{
+						Ghost* ghost = new Ghost(camera->GetPosition().x + camera->camWidht / 2 , 287.0f, -1);
+						objects.push_back(ghost);
+					}
+					else
+					{
+						Ghost* ghost = new Ghost(camera->GetPosition().x - camera->camWidht / 2 , 287.0f, 1);
+						objects.push_back(ghost);
+					}
+					countghost++;
+					timetocreateghost = 500;
+					if (countghost == 3)
+					{
+						cancreateghost = false;
+					}
+				}
+			}
+
+		}
 		
 		
 	}
@@ -151,8 +183,8 @@ void PlayScene::UpdateObjects(DWORD dt)
 	{
 		LPGAMEOBJECT o = *it;
 		RECT temp = o->GetBoundingBox();
-		if (camera->IsContain(temp))
-		{
+		/*if (camera->IsContain(temp))
+		{*/
 			switch (o->tag)
 			{
 			case TAG_HOLDER:
@@ -192,10 +224,34 @@ void PlayScene::UpdateObjects(DWORD dt)
 				}
 				break; 
 			}
+			case TAG_ENEMY:
+			{
+				Enemy* e = (Enemy*)o;
+				if (e->isDead)
+				{
+					it = objects.erase(it);
+					if (e->type == TYPE_ENEMY_GHOST)
+					{
+						countghost--;
+						if (countghost == 0)
+						{
+							timetocreateghost = 2500;
+							cancreateghost = true;
+						}
+					}
+
+					delete e;
+					continue;
+				}
+				else
+				{
+					e->Update(dt, &objects);
+				}
+			}
 			default:
 				break;
 			}
-		}
+		/*}*/
 		++it;
 	}
 }

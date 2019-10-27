@@ -7,11 +7,10 @@ class Camera
 	static Camera* instance;
 private:
 
-	
+
+public:
 	int camWidht, camHeight;
 	D3DXVECTOR3 camPosition;
-public:
-
 	static Camera* GetInstance();
 	Camera(int width,int height);
 	RECT GetBound();

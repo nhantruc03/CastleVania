@@ -130,7 +130,7 @@ vector<LPGAMEOBJECT> Map::get_BricksList()
 				objects.push_back(brick); }
 			break;
 			}
-			for (int i = 0; i < rows; i++)
+			/*for (int i = 0; i < rows; i++)
 			{
 				for (int j = 0; j < columns; j++)
 				{
@@ -143,7 +143,7 @@ vector<LPGAMEOBJECT> Map::get_BricksList()
 
 					}
 				}
-			}
+			}*/
 		}
 	}
 

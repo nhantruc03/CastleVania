@@ -39,7 +39,13 @@
 	#define TYPE_EFFECT_BURN 0
 #define TAG_MAP2 6
 #define TAG_BRICK 7
+#define TAG_ENEMY 8
+	#define TYPE_ENEMY_GHOST 0
 
+
+
+#define ENEMY_GRAVITY			0.0018f
+#define ENEMY_WALKING_SPEED		0.1f
 //// ===== Các thông số cho PLAYER ====
 #define SIMON_WALKING_SPEED		0.13f
 #define SIMON_JUMP_SPEED_Y		0.5f
@@ -56,6 +62,7 @@
 #define STATE_WALK_ONSTAIR_UP		8
 #define STATE_STAND_ONSTAIR_DOWN	9
 #define STATE_WALK_ONSTAIR_DOWN		10
+#define STATE_INJURED				11
 
 
 #define SIMON_WIDTH					32

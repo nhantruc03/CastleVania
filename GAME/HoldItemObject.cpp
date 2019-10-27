@@ -2,7 +2,7 @@
 
 HoldItemObject::HoldItemObject(int type_id, int itemid)
 {
-	hit_effect = Sprites::GetInstance()->Get(5, 4);
+	hit_effect = Sprites::GetInstance()->Get(5, 3);
 	ishit = false;
 	tag = TAG_HOLDER;
 	isBurn = false;
