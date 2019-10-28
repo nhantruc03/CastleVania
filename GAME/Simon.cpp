@@ -11,6 +11,7 @@ CSimon::CSimon()
 	untouchable = 0;
 	upgrade_time = 0;
 	isinjured = false;
+	falling = false;
 	tag = TAG_SIMON;
 	AddAnimation(tag, 0); // stand
 	AddAnimation(tag, 1); // walk
@@ -54,6 +55,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 
 	curAni->Update();
+
 	// simple fall down
 	if (!isOnStair)
 	{
@@ -134,13 +136,11 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			}
 			if (dynamic_cast<Enemy*> (e->obj))
 			{
-
-				//this->ChangeState(STATE_INJURED);
 				if (untouchable == 0)
 				{
 					StartUntouchable();
 					
-					if (!isOnStair)
+					if (!isOnStair) // khi tren cau thang va bi thuong thi khong bi vang di
 					{
 						if (nx <= 0)
 						{
@@ -151,7 +151,6 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 							isReverse = true;
 						}
 						ishit = true;
-						
 					}
 				}
 				else
@@ -165,6 +164,20 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 		}
 	}
+
+	// cho roi nhanh hon khi roi tu cau thang xuong
+	if (vy > 0.03f && !attacking &&!jumping && !isinjured && !isOnStair)
+	{
+		falling = true;
+	}
+	if (falling)
+	{
+		vx = 0;
+		vy = vy * 2;
+		falling = false;
+		ChangeState(STATE_FALL);
+	}
+	// kiem tra va cham voi quai vat va chuyen state injured
 	if (ishit)
 	{
 		ChangeState(STATE_INJURED);
@@ -231,7 +244,8 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			}
 		}
 	}
-	Update_State();
+	Update_State(); // de sau doan kiem tra tren de kiem tra va cham voi diem len xuong cau thang
+
 	inoutstair_handle(dt);
 	vector<Weapon*>::iterator it = Weapons.begin(); // iterator: con tro chi den 1 phan tu ben trong container, khong can biet thu tu phan tu ben trong mang
 	while (it != Weapons.end())
@@ -811,7 +825,6 @@ void CSimon::Update_State()
 		if (vy == 0)
 		{
 			ChangeState(STATE_STANDING);
-
 		}
 		break;
 	}

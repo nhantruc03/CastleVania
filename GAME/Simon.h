@@ -8,6 +8,8 @@ class CSimon : public CGameObject
 {
 	static CSimon * _instance;
 public:
+	bool falling;
+
 	bool ishit;
 	int untouchable;
 	DWORD untouchable_start;

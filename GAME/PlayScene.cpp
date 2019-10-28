@@ -1,10 +1,11 @@
-#include "PlayScene.h"
+﻿#include "PlayScene.h"
 #include"HoldItemObject.h"
 #include"Item.h"
 #include<fstream>
 #include"Maps.h"
 #include"invisibleObject.h"
 #include"Ghost.h"
+#include"Panther.h"
 PlayScene::PlayScene(int level)
 {
 	keyCode.clear();
@@ -19,6 +20,11 @@ PlayScene::PlayScene(int level)
 	timetocreateghost = 0;
 	cancreateghost = true;
 	countghost = 0;
+
+	cancreatepanther = true;
+	countpanther = 0;
+	outofareacreatepanther = true;
+
 	switch (level)
 	{
 	case 1:
@@ -74,6 +80,7 @@ void PlayScene::Update(DWORD dt)
 		UpdateObjects(dt);
 		if (level == 1)
 		{
+			// gioi han 2 bien cua map 1
 			if (simon->vx < 0 && simon->x < 16) simon->x= 16;
 			if (simon->vx > 0 && simon->x > 1520)simon->x = 1520;
 			if (simon->IsContain(endrect.left, endrect.top, endrect.right, endrect.bottom) && level == 1)
@@ -112,12 +119,16 @@ void PlayScene::Update(DWORD dt)
 		}
 		else
 		{
+			// gioi han bien trai cua map 2
 			if (simon->vx < 0 && simon->x < 16) simon->x = 16;
+
 			if (camera->movedownstair)
 			{
+				// gioi han 2 bien duoi ham
 				if (simon->vx < 0 && simon->x < 3088) simon->x = 3088;
 				if (simon->vx > 0 && simon->x > 4080) simon->x = 4080;
 			}
+			// di xuong ham
 			if ((simon->IsContain(downstair.left, downstair.top, downstair.right, downstair.bottom) || simon->IsContain(downstair2.left, downstair2.top, downstair2.right, downstair2.bottom)) && (simon->y > downstair.top || simon->y > downstair2.top) && simon->State == STATE_WALK_ONSTAIR_DOWN)
 			{
 				camera->movedownstair = true;
@@ -126,6 +137,7 @@ void PlayScene::Update(DWORD dt)
 				simon->prevY = simon->y + 64;
 				simon->SetPosition(simon->x, simon->y + 64);
 			}
+			// di len ham
 			else if ((simon->IsContain(upstair.left, upstair.top, upstair.right, upstair.bottom) || simon->IsContain(upstair2.left, upstair2.top, upstair2.right, upstair2.bottom)) && (simon->y < upstair.bottom || simon->y < upstair2.bottom) && simon->State == STATE_WALK_ONSTAIR_UP)
 			{
 				camera->movedownstair = false;
@@ -135,11 +147,13 @@ void PlayScene::Update(DWORD dt)
 				simon->SetPosition(simon->x, simon->y - 64);
 			}
 		}
+
+		// tao enemy ghost
 		if (timetocreateghost > 0)
 		{
 			timetocreateghost -= dt;
 		}
-		if ((simon->x >= 0.0f&& simon->x <= 841.0f) || (simon->x > 2216 && simon->x < 2791))
+		if ((simon->x >= 0.0f&& simon->x <= 832.0f) || (simon->x > 2208 && simon->x < 2784))
 		{
 			if (cancreateghost)
 			{
@@ -164,6 +178,28 @@ void PlayScene::Update(DWORD dt)
 				}
 			}
 
+		}
+
+		// tao enemy panther
+		if (1216 < simon->x && simon->x< 2240)
+		{
+			if (cancreatepanther && !outofareacreatepanther)
+			{
+				outofareacreatepanther = true;
+				if (countpanther == 0) 
+				{
+					int direction = abs(1106 - simon->x) < abs(2240- simon->x) ? -1 : 1; // panther xoay mat vao simon
+					objects.push_back(new Panther(1444.0f, 175.0f, direction, direction == -1 ? 32.0f : 20.0f));
+					objects.push_back(new Panther(1792.0f, 110.0f, direction, direction == -1 ? 278.0f : 232.0f));
+					objects.push_back(new Panther(1920.0f, 175.0f, direction, direction == -1 ? 32.0f : 96.0f));
+					countpanther += 3;
+				}
+				cancreatepanther = false;
+			}
+		}
+		else
+		{
+			outofareacreatepanther = false;
 		}
 		
 		
@@ -237,6 +273,14 @@ void PlayScene::UpdateObjects(DWORD dt)
 						{
 							timetocreateghost = 2500;
 							cancreateghost = true;
+						}
+					}
+					if (e->type == 1)
+					{
+						countpanther--;
+						if (countpanther == 0)
+						{
+							cancreatepanther = true;
 						}
 					}
 

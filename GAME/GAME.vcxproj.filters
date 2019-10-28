@@ -111,6 +111,9 @@
     <ClCompile Include="Ghost.cpp">
       <Filter>Game Objects\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="Panther.cpp">
+      <Filter>Game Objects\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="debug.h">
@@ -189,6 +192,9 @@
       <Filter>Game Objects\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Ghost.h">
+      <Filter>Game Objects\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Panther.h">
       <Filter>Game Objects\Enemy</Filter>
     </ClInclude>
   </ItemGroup>

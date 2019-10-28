@@ -34,13 +34,10 @@ void Ghost::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vy += ENEMY_GRAVITY * dt;
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
-
 	coEvents.clear();
-
 	// turn off collision when die 
 	CalcPotentialCollisions(coObjects, coEvents);
 	// No collision occured, proceed normally
-
 	if (coEvents.size() == 0)
 	{
 		x += dx;
@@ -49,9 +46,7 @@ void Ghost::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	else
 	{
 		float min_tx, min_ty, nx = 0, ny;
-
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
-
 		// block 
 		x += min_tx * dx + nx * 0.2f;		// nx*0.2f : need to push out a bit to avoid overlapping next frame
 		y += min_ty * dy + ny * 0.2f;
@@ -72,7 +67,6 @@ void Ghost::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 		}
 	}
-
 	animation->Update();
 	if (isBurn)
 	{
@@ -90,30 +84,6 @@ void Ghost::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		this->isDead = true;
 	}
 }
-
-//void Ghost::Burn()
-//{
-//	animation = Animations::GetInstance()->Get(TAG_EFFECT, TYPE_EFFECT_BURN);
-//	animation->isreverse = false;
-//	isBurn = true;
-//}
-//
-//void Ghost::Render()
-//{
-//	if (ishit)
-//	{
-//		hit_effect->Draw(x - 8, y - 8);
-//		health -= 1;
-//		ishit = false;
-//		if (health == 0)
-//		{
-//			Burn();
-//		}
-//	}
-//	animation->isreverse = isReverse;
-//	animation->Render(x, y);
-//}
-
 Ghost::~Ghost()
 {
 }

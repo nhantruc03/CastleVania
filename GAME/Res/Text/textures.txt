@@ -8,3 +8,4 @@
 7 Res\Image\hit_effect.png 255 0 255
 8 Res\Image\Level2.png 245 245 245
 9 Res\Image\ghost.png 255 0 255
+10 Res\Image\panther.png 255 0 255

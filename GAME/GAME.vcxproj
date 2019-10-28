@@ -35,6 +35,7 @@
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Maps.cpp" />
     <ClCompile Include="MorningStar.cpp" />
+    <ClCompile Include="Panther.cpp" />
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Simon.cpp" />
@@ -60,6 +61,7 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="Maps.h" />
     <ClInclude Include="MorningStar.h" />
+    <ClInclude Include="Panther.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
