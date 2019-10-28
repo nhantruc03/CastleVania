@@ -39,7 +39,7 @@ void Panther::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		this->isrunning = true;
 		this->issleeping = false;
-		this->vx = 0.3 * direct;
+		this->vx = ENEMY_WALKING_SPEED * 2.5 * direct;
 		this->animation = animations[1];
 	}
 	if (abs(x - prevX) >= distancebeforejump && !issleeping)
@@ -47,7 +47,7 @@ void Panther::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		jump();
 	}
 	CGameObject::Update(dt, coObjects);
-	vy += SIMON_GRAVITY * dt;// Simple fall down
+	vy += ENEMY_GRAVITY * dt;// Simple fall down
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 	coEvents.clear();
@@ -120,7 +120,7 @@ void Panther::jump()
 
 void Panther::run()
 {
-	vx = 0.2 * -direct;
+	vx = ENEMY_WALKING_SPEED*2 * -direct;
 	this->isReverse = !isReverse;
 	isrunning = true;
 	animation = animations[1];

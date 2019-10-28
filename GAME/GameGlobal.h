@@ -44,8 +44,8 @@
 
 
 
-#define ENEMY_GRAVITY			0.0018f
-#define ENEMY_WALKING_SPEED		0.1f
+#define ENEMY_GRAVITY			0.001f
+#define ENEMY_WALKING_SPEED		0.05f
 //// ===== Các thông số cho PLAYER ====
 #define SIMON_WALKING_SPEED		0.13f
 #define SIMON_JUMP_SPEED_Y		0.5f

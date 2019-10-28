@@ -50,6 +50,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Dagger.h" />
     <ClInclude Include="debug.h" />
+    <ClInclude Include="Door.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameGlobal.h" />

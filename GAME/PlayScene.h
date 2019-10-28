@@ -4,6 +4,7 @@
 #include "Simon.h"
 #include"map.h"
 #include"Brick.h"
+#include"Door.h"
 using namespace std;
 class PlayScene : public Scene
 {
@@ -24,6 +25,12 @@ public:
 	RECT upstair;
 	RECT downstair2;
 	RECT upstair2;
+
+	bool isgoingthroughdoor;
+	Door* door1;
+	RECT DOOR1;
+
+
 	RECT endrect;
 	PlayScene(int level);
 	~PlayScene();

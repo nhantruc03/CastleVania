@@ -4,6 +4,7 @@
 #include"HoldItemObject.h"
 #include"Item.h"
 #include"Enemy.h"
+#include"Door.h"
 CSimon*CSimon::_instance = NULL;
 CSimon::CSimon()
 {
@@ -108,6 +109,13 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				if (ny == -1)
 				{
 					vy = 0;
+				}
+			}
+			if (dynamic_cast<Door*>(e->obj))
+			{
+				if (nx < 0)
+				{
+					x += dx;
 				}
 			}
 			if (dynamic_cast<Item *>(e->obj))

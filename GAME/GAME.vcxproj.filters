@@ -197,5 +197,8 @@
     <ClInclude Include="Panther.h">
       <Filter>Game Objects\Enemy</Filter>
     </ClInclude>
+    <ClInclude Include="Door.h">
+      <Filter>Game Objects\OthetObject</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

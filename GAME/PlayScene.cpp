@@ -6,13 +6,15 @@
 #include"invisibleObject.h"
 #include"Ghost.h"
 #include"Panther.h"
+#include"Door.h"
 PlayScene::PlayScene(int level)
 {
 	keyCode.clear();
+	isgoingthroughdoor = false;
 	this->level = level;
 	map = Maps::GetInstance()->GetMap(this->level);
 	simon = CSimon::GetInstance();
-	simon->SetPosition(30, 250.0f);//287.0f);
+	simon->SetPosition(1000, 250.0f);//287.0f);
 	simon->Respawn();
 	camera = Camera::GetInstance();
 	objects.clear();
@@ -54,7 +56,10 @@ PlayScene::PlayScene(int level)
 		upstair2.top = 384;
 		upstair2.bottom = 385;
 
-				break;
+		door1 = new Door(0);
+		door1->SetPosition(3088, 80);
+		objects.push_back(door1);
+		break;
 	}
 	gotoleft = false;
 	gotoright = false;
@@ -75,7 +80,10 @@ void PlayScene::Update(DWORD dt)
 	else
 	{
 		UpdatePlayer(dt);
-		camera->SetPosition(simon->x, camera->GetPosition().y);
+		if (!isgoingthroughdoor)
+		{
+			camera->SetPosition(simon->x, camera->GetPosition().y);
+		}
 		camera->Update(level);
 		UpdateObjects(dt);
 		if (level == 1)
@@ -140,6 +148,10 @@ void PlayScene::Update(DWORD dt)
 			// di len ham
 			else if ((simon->IsContain(upstair.left, upstair.top, upstair.right, upstair.bottom) || simon->IsContain(upstair2.left, upstair2.top, upstair2.right, upstair2.bottom)) && (simon->y < upstair.bottom || simon->y < upstair2.bottom) && simon->State == STATE_WALK_ONSTAIR_UP)
 			{
+				if (simon->IsContain(upstair.left, upstair.top, upstair.right, upstair.bottom))
+				{
+					camera->inzone2 = true;
+				}
 				camera->movedownstair = false;
 				camera->SetPosition(simon->x, 0);
 				simon->prevX = simon->x;
@@ -189,9 +201,9 @@ void PlayScene::Update(DWORD dt)
 				if (countpanther == 0) 
 				{
 					int direction = abs(1106 - simon->x) < abs(2240- simon->x) ? -1 : 1; // panther xoay mat vao simon
-					objects.push_back(new Panther(1444.0f, 175.0f, direction, direction == -1 ? 32.0f : 20.0f));
-					objects.push_back(new Panther(1792.0f, 110.0f, direction, direction == -1 ? 278.0f : 232.0f));
-					objects.push_back(new Panther(1920.0f, 175.0f, direction, direction == -1 ? 32.0f : 96.0f));
+					objects.push_back(new Panther(1444.0f, 175.0f, direction, direction == -1 ? 50.0f : 20.0f));
+					objects.push_back(new Panther(1792.0f, 110.0f, direction, direction == -1 ? 278.0f : 240.0f));
+					objects.push_back(new Panther(1920.0f, 175.0f, direction, direction == -1 ? 50.0f : 120.0f));
 					countpanther += 3;
 				}
 				cancreatepanther = false;
@@ -199,9 +211,51 @@ void PlayScene::Update(DWORD dt)
 		}
 		else
 		{
-			outofareacreatepanther = false;
+			if (countpanther == 0)
+			{
+				outofareacreatepanther = false;
+			}
 		}
 		
+		// di qua cua 1
+		RECT tempdoor = door1->GetBoundingBox();
+		if (simon->IsContain(tempdoor.left, tempdoor.top, tempdoor.right, tempdoor.bottom)  && door1->isclosed() )
+		{
+			keyCode.clear();
+			isgoingthroughdoor = true;
+			simon->vx = 0;
+			door1->open();
+			simon->check_auto_move = true;
+		}
+		if (isgoingthroughdoor)
+		{
+			if (door1->isopened())
+			{
+				gotoright = true;
+			}
+			if (gotoright)
+			{
+				simon->ChangeState(STATE_WALKING);
+				simon->isReverse = true;
+				simon->vx = 0.05f;
+				if (simon->x - door1->x >= 64)
+				{
+					simon->ChangeState(STATE_STANDING);
+					gotoright = false;
+					door1->close();
+				}
+			}
+			if (door1->isclosed() && simon->check_auto_move == true)
+			{
+				camera->SetPosition(camera->camPosition.x += 2, camera->camPosition.y);
+				if (camera->camPosition.x - camera->camWidht / 2 >= 3088)
+				{
+					camera->inzone2 = true;
+					simon->check_auto_move = false;
+					isgoingthroughdoor = false;
+				}
+			}
+		}
 		
 	}
 
@@ -291,6 +345,10 @@ void PlayScene::UpdateObjects(DWORD dt)
 				{
 					e->Update(dt, &objects);
 				}
+			}
+			case 9:
+			{
+				o->Update(dt,&objects);
 			}
 			default:
 				break;

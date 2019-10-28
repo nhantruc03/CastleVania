@@ -9,3 +9,4 @@
 8 Res\Image\Level2.png 245 245 245
 9 Res\Image\ghost.png 255 0 255
 10 Res\Image\panther.png 255 0 255
+11 Res\Image\door.png 255 0 255

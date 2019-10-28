@@ -76,7 +76,6 @@ void Ghost::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			isDead = true;
 			animation->SetEndAniFalse();
 			animation->currentFrame = -1;
-
 		}
 	}
 	if (!Camera::GetInstance()->IsContain(this->GetBoundingBox()))
