@@ -8,11 +8,6 @@
 CSimon*CSimon::_instance = NULL;
 CSimon::CSimon()
 {
-	ishit = false;
-	untouchable = 0;
-	upgrade_time = 0;
-	isinjured = false;
-	falling = false;
 	tag = TAG_SIMON;
 	AddAnimation(tag, 0); // stand
 	AddAnimation(tag, 1); // walk
@@ -29,21 +24,43 @@ CSimon::CSimon()
 	morningstarlevel = 1;
 	width = SIMON_WIDTH;
 	height = SIMON_HEIGHT;
+
+
 	srand(time(NULL));
-	check_auto_move = false;
+
+	ishit = false;
+	untouchable = 0;
+	upgrade_time = 0;
+	isinjured = false;
+
+	falling = false;
+	
+	sitting = false;
+	secondweapon = NULL;
+	throwing = false;
+	jumping = false;
+	heart = 5;
+	attacking = false;
+
+	
 	isWalkingOnStair = false;
 	isOnStair = false;
 	goup = gotoleft = gotoright = godown = false;
+
+
+	check_auto_move = false;
 }
 void CSimon::Respawn()
 {
+	isWalkingOnStair = false;
+	isOnStair = false;
 	check_auto_move = false;
+	sitting = false;
 	throwing = false;
-	secondweapon = NULL;
-	heart = 5;
 	jumping = false;
 	attacking = false;
 	isReverse = true;
+	goup = gotoleft = gotoright = godown = false;
 	ChangeState(STATE_STANDING);
 }
 void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
@@ -120,27 +137,44 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			}
 			if (dynamic_cast<Item *>(e->obj))
 			{
-				x += dx;
-				e->obj->isDead = true;
-				if (e->obj->type == TYPE_ITEM_BIG_HEART)
+				if (!dynamic_cast<Item *>(e->obj)->rewarded)
 				{
-					heart += 5;
-				}
-				if (e->obj->type == TYPE_ITEM_DAGGER)
-				{
-					secondweapon = TYPE_WEAPON_DAGGER;
-				}
-				if (e->obj->type == TYPE_ITEM_WHIP)
-				{
-					upgrade_time = 1000;
-					morningstarlevel += 1;
-					if (morningstarlevel > 3)
+					if (ny > 0)
 					{
-						morningstarlevel = 3;
+						y -= min_ty * dy + ny * 0.2f;
 					}
+					if (e->obj->type == TYPE_ITEM_BIG_HEART)
+					{
+						heart += 5;
+					}
+					if (e->obj->type == TYPE_ITEM_HEART)
+					{
+						heart += 1;
+					}
+					if (e->obj->type == TYPE_ITEM_DAGGER)
+					{
+						secondweapon = TYPE_WEAPON_DAGGER;
+					}
+					if (e->obj->type == TYPE_ITEM_HOLY_WATER)
+					{
+						secondweapon = TYPE_WEAPON_HOLY_WATER;
+					}
+					if (e->obj->type == TYPE_ITEM_STOP_WATCH)
+					{
+						secondweapon = TYPE_WEAPON_STOP_WATCH;
+					}
+					if (e->obj->type == TYPE_ITEM_WHIP)
+					{
+						upgrade_time = 1000;
+						morningstarlevel += 1;
+						if (morningstarlevel > 3)
+						{
+							morningstarlevel = 3;
+						}
+					}
+					dynamic_cast<Item*>(e->obj)->GetReward();
 				}
-
-				
+			
 			}
 			if (dynamic_cast<Enemy*> (e->obj))
 			{
@@ -174,12 +208,19 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	}
 
 	// cho roi nhanh hon khi roi tu cau thang xuong
-	if (vy > 0.03f && !attacking &&!jumping && !isinjured && !isOnStair)
+	if (vy > 0.03f &&!jumping && !isinjured && !isOnStair)
 	{
 		falling = true;
 	}
 	if (falling)
 	{
+		
+		if (vx > 0)
+		{
+			x += 0.2f; // tranh overlapping
+		}
+		else
+			x -= 0.2f;
 		vx = 0;
 		vy = vy * 2;
 		falling = false;
@@ -201,24 +242,36 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			switch (coObjects->at(i)->tag)
 			{
 			case TAG_ITEM:
-				switch (coObjects->at(i)->type)
+				if (!dynamic_cast<Item *>(coObjects->at(i))->rewarded)
 				{
-				case TYPE_ITEM_BIG_HEART:
-					heart += 5;
-					break;
-				case TYPE_ITEM_DAGGER:
-					secondweapon = TYPE_WEAPON_DAGGER;
-					break;
-				case TYPE_ITEM_WHIP:
-					upgrade_time = 1000;
-					morningstarlevel += 1;
-					if (morningstarlevel > 3)
+					switch (coObjects->at(i)->type)
 					{
-						morningstarlevel = 3;
+					case TYPE_ITEM_BIG_HEART:
+						heart += 5;
+						break;
+					case TYPE_ITEM_HEART:
+						heart += 1;
+						break;
+					case TYPE_ITEM_DAGGER:
+						secondweapon = TYPE_WEAPON_DAGGER;
+						break;
+					case TYPE_ITEM_HOLY_WATER:
+						secondweapon = TYPE_WEAPON_HOLY_WATER;
+						break;
+					case TYPE_ITEM_STOP_WATCH:
+						secondweapon = TYPE_WEAPON_STOP_WATCH;
+						break;
+					case TYPE_ITEM_WHIP:
+						upgrade_time = 1000;
+						morningstarlevel += 1;
+						if (morningstarlevel > 3)
+						{
+							morningstarlevel = 3;
+						}
+						break;
 					}
-					break;
+					dynamic_cast<Item*>(coObjects->at(i))->GetReward();
 				}
-				coObjects->at(i)->isDead = true;
 				break;
 			case 999:
 				switch (coObjects->at(i)->type)

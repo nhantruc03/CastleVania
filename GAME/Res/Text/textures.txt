@@ -10,3 +10,5 @@
 9 Res\Image\ghost.png 255 0 255
 10 Res\Image\panther.png 255 0 255
 11 Res\Image\door.png 255 0 255
+12 Res\Image\effect400.png 255 0 255
+13 Res\Image\effect700.png 255 0 255

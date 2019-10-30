@@ -109,6 +109,15 @@ vector<LPGAMEOBJECT> Map::get_BricksList()
 			iFile >> objects_type;
 			switch (objects_type)
 			{
+			case 'h':
+			{
+				int holder_id, item_id, x, y;
+				iFile >> holder_id >> item_id >> x >> y;
+				HoldItemObject * HoldObject = new HoldItemObject(holder_id, item_id);
+				HoldObject->SetPosition(x, y);
+				objects.push_back(HoldObject);
+			}
+			break;
 			case 'i':
 			{
 				int type,x,y;

@@ -3,19 +3,26 @@
 HoldItemObject::HoldItemObject(int type_id, int itemid)
 {
 	hit_effect = Sprites::GetInstance()->Get(5, 3);
-	ishit = false;
+	
 	tag = TAG_HOLDER;
-	isBurn = false;
 	item = itemid;
 	type = type_id;
+
+	vx = vy = 0;
+	ishit = false;
+	isBurn = false;
+	isDead = false;
 	if (type == TYPE_HOLDER_FIREPILLAR)
 	{
 		width = 32;
 		height = 64;
 		animation = Animations::GetInstance()->Get(tag, 0);
-		vx = vy = 0;
-		isBurn = false;
-		isDead = false;
+	}
+	if (type == TYPE_HOLDER_CANDLE)
+	{
+		width = 16;
+		height = 32;
+		animation = Animations::GetInstance()->Get(tag, 1);
 	}
 }
 

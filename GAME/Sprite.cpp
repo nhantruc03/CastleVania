@@ -4,6 +4,7 @@
 #include "Simon.h"
 CSprite::CSprite(int tag, int l, int t, int r, int b, LPDIRECT3DTEXTURE9 tex)
 {
+	isreverse = false;
 	this->tag = tag;
 	rect.left = l;
 	rect.right = r;

@@ -3,6 +3,7 @@
 #include"Simon.h"
 #include"Dagger.h"
 #include"Enemy.h"
+#include"Item.h"
 CGameObject::CGameObject()
 {
 	tag = NULL;
@@ -57,7 +58,7 @@ void CGameObject::CalcPotentialCollisions(vector<LPGAMEOBJECT>* coObjects, vecto
 {
 	for (UINT i = 0; i < coObjects->size(); i++)
 	{
-		if (dynamic_cast<CSimon*>(this) && (coObjects->at(i)->tag == TAG_HOLDER || coObjects->at(i)->tag == 999 ))
+		if (dynamic_cast<CSimon*>(this) && (coObjects->at(i)->tag == TAG_HOLDER || coObjects->at(i)->tag == 999 || (dynamic_cast<Item*>(coObjects->at(i))&& dynamic_cast<Item*>(coObjects->at(i))->rewarded)))
 		{
 			continue;
 		}
@@ -66,6 +67,10 @@ void CGameObject::CalcPotentialCollisions(vector<LPGAMEOBJECT>* coObjects, vecto
 			continue;
 		}
 		if (dynamic_cast<Enemy*>(this) && (coObjects->at(i)->tag == TAG_ITEM || coObjects->at(i)->tag == 999 || coObjects->at(i)->tag == TAG_HOLDER || coObjects->at(i)->tag == 8))	
+		{
+			continue;
+		}
+		if (dynamic_cast<Item*>(this) && (coObjects->at(i)->tag != TAG_BRICK))
 		{
 			continue;
 		}

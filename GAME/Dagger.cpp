@@ -2,6 +2,7 @@
 #include"Simon.h"
 #include"HoldItemObject.h"
 #include"Brick.h"
+#include"Enemy.h"
 Dagger::Dagger()
 {
 	this->animation = Animations::GetInstance()->Get(TAG_WEAPON, 3);
@@ -69,6 +70,12 @@ void Dagger::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					isDead = true;
 					SIMON->throwing = false;
 				}
+				if (dynamic_cast<Enemy*>(e->obj))
+				{
+					dynamic_cast<Enemy*>(e->obj)->isHit();
+					isDead = true;
+					SIMON->throwing = false;
+				}
 			}
 		}
 		for (UINT i = 0; i < coObjects->size(); i++)
@@ -87,6 +94,10 @@ void Dagger::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				case TAG_BRICK:
 					isDead = true;
 					SIMON->throwing = false;
+					break;
+				case TAG_ENEMY:
+					isDead = true;
+					coObjects->at(i)->isHit();
 					break;
 				}
 

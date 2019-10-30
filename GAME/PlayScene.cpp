@@ -14,7 +14,7 @@ PlayScene::PlayScene(int level)
 	this->level = level;
 	map = Maps::GetInstance()->GetMap(this->level);
 	simon = CSimon::GetInstance();
-	simon->SetPosition(1000, 250.0f);//287.0f);
+	simon->SetPosition(30, 250.0f);//287.0f);
 	simon->Respawn();
 	camera = Camera::GetInstance();
 	objects.clear();
@@ -158,104 +158,107 @@ void PlayScene::Update(DWORD dt)
 				simon->prevY = simon->y - 64;
 				simon->SetPosition(simon->x, simon->y - 64);
 			}
-		}
 
-		// tao enemy ghost
-		if (timetocreateghost > 0)
-		{
-			timetocreateghost -= dt;
-		}
-		if ((simon->x >= 0.0f&& simon->x <= 832.0f) || (simon->x > 2208 && simon->x < 2784))
-		{
-			if (cancreateghost)
+//			 tao enemy ghost
+			DWORD now = GetTickCount();
+			if (timetocreateghost > 0)
 			{
-				if (timetocreateghost <= 0)
+				timetocreateghost -= dt;
+			}
+			if ((simon->x >= 0.0f&& simon->x <= 832.0f) || (simon->x > 2208 && simon->x < 2784))
+			{
+				if (cancreateghost)
 				{
-					if (simon->vx >= 0)
+					if (timetocreateghost <= 0)
 					{
-						Ghost* ghost = new Ghost(camera->GetPosition().x + camera->camWidht / 2 , 287.0f, -1);
-						objects.push_back(ghost);
+						if (simon->vx >= 0)
+						{
+							Ghost* ghost = new Ghost(camera->GetPosition().x + camera->camWidht / 2, 287.0f, -1);
+							objects.push_back(ghost);
+						}
+						else
+						{
+							Ghost* ghost = new Ghost(camera->GetPosition().x - camera->camWidht / 2, 287.0f, 1);
+							objects.push_back(ghost);
+						}
+						countghost++;
+						timetocreateghost = 500;
+						if (countghost == 3)
+						{
+							cancreateghost = false;
+						}
 					}
-					else
+				}
+
+			}
+
+			// tao enemy panther
+			if (1216 < simon->x && simon->x < 2240)
+			{
+				if (cancreatepanther && !outofareacreatepanther)
+				{
+					outofareacreatepanther = true;
+					if (countpanther == 0)
 					{
-						Ghost* ghost = new Ghost(camera->GetPosition().x - camera->camWidht / 2 , 287.0f, 1);
-						objects.push_back(ghost);
+						int direction = abs(1106 - simon->x) < abs(2240 - simon->x) ? -1 : 1; // panther xoay mat vao simon
+						objects.push_back(new Panther(1444.0f, 175.0f, direction, direction == -1 ? 50.0f : 20.0f));
+						objects.push_back(new Panther(1792.0f, 110.0f, direction, direction == -1 ? 278.0f : 240.0f));
+						objects.push_back(new Panther(1920.0f, 175.0f, direction, direction == -1 ? 50.0f : 120.0f));
+						countpanther += 3;
 					}
-					countghost++;
-					timetocreateghost = 500;
-					if (countghost == 3)
-					{
-						cancreateghost = false;
-					}
+					cancreatepanther = false;
+				}
+			}
+			else
+			{
+				if (countpanther == 0)
+				{
+					outofareacreatepanther = false;
 				}
 			}
 
+			// di qua cua 1
+			RECT tempdoor = door1->GetBoundingBox();
+			if (simon->IsContain(tempdoor.left, tempdoor.top, tempdoor.right, tempdoor.bottom) && door1->isclosed())
+			{
+				keyCode.clear();
+				isgoingthroughdoor = true;
+				simon->vx = 0;
+				door1->open();
+				simon->check_auto_move = true;
+			}
+			if (isgoingthroughdoor)
+			{
+				if (door1->isopened())
+				{
+					gotoright = true;
+				}
+				if (gotoright)
+				{
+					simon->ChangeState(STATE_WALKING);
+					simon->isReverse = true;
+					simon->vx = 0.05f;
+					if (simon->x - door1->x >= 64)
+					{
+						simon->ChangeState(STATE_STANDING);
+						gotoright = false;
+						door1->close();
+					}
+				}
+				if (door1->isclosed() && simon->check_auto_move == true)
+				{
+					camera->SetPosition(camera->camPosition.x += 2, camera->camPosition.y);
+					if (camera->camPosition.x - camera->camWidht / 2 >= 3088)
+					{
+						camera->inzone2 = true;
+						simon->check_auto_move = false;
+						isgoingthroughdoor = false;
+					}
+				}
+			}
 		}
 
-		// tao enemy panther
-		if (1216 < simon->x && simon->x< 2240)
-		{
-			if (cancreatepanther && !outofareacreatepanther)
-			{
-				outofareacreatepanther = true;
-				if (countpanther == 0) 
-				{
-					int direction = abs(1106 - simon->x) < abs(2240- simon->x) ? -1 : 1; // panther xoay mat vao simon
-					objects.push_back(new Panther(1444.0f, 175.0f, direction, direction == -1 ? 50.0f : 20.0f));
-					objects.push_back(new Panther(1792.0f, 110.0f, direction, direction == -1 ? 278.0f : 240.0f));
-					objects.push_back(new Panther(1920.0f, 175.0f, direction, direction == -1 ? 50.0f : 120.0f));
-					countpanther += 3;
-				}
-				cancreatepanther = false;
-			}
-		}
-		else
-		{
-			if (countpanther == 0)
-			{
-				outofareacreatepanther = false;
-			}
-		}
 		
-		// di qua cua 1
-		RECT tempdoor = door1->GetBoundingBox();
-		if (simon->IsContain(tempdoor.left, tempdoor.top, tempdoor.right, tempdoor.bottom)  && door1->isclosed() )
-		{
-			keyCode.clear();
-			isgoingthroughdoor = true;
-			simon->vx = 0;
-			door1->open();
-			simon->check_auto_move = true;
-		}
-		if (isgoingthroughdoor)
-		{
-			if (door1->isopened())
-			{
-				gotoright = true;
-			}
-			if (gotoright)
-			{
-				simon->ChangeState(STATE_WALKING);
-				simon->isReverse = true;
-				simon->vx = 0.05f;
-				if (simon->x - door1->x >= 64)
-				{
-					simon->ChangeState(STATE_STANDING);
-					gotoright = false;
-					door1->close();
-				}
-			}
-			if (door1->isclosed() && simon->check_auto_move == true)
-			{
-				camera->SetPosition(camera->camPosition.x += 2, camera->camPosition.y);
-				if (camera->camPosition.x - camera->camWidht / 2 >= 3088)
-				{
-					camera->inzone2 = true;
-					simon->check_auto_move = false;
-					isgoingthroughdoor = false;
-				}
-			}
-		}
 		
 	}
 
@@ -325,7 +328,7 @@ void PlayScene::UpdateObjects(DWORD dt)
 						countghost--;
 						if (countghost == 0)
 						{
-							timetocreateghost = 2500;
+							timetocreateghost = 3000;
 							cancreateghost = true;
 						}
 					}

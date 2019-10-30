@@ -49,7 +49,7 @@ public:
 	DWORD dt;
 
 public:
-	void SetPosition(float x, float y) { this->x = x, this->y = y; }
+	virtual void SetPosition(float x, float y) { this->x = x, this->y = y; }
 	void GetSpeed(float &vx, float &vy) { vx = this->vx; vy = this->vy; }
 	LPCOLLISIONEVENT SweptAABBEx(LPGAMEOBJECT coO);
 	void CalcPotentialCollisions(vector<LPGAMEOBJECT> *coObjects, vector<LPCOLLISIONEVENT> &coEvents);

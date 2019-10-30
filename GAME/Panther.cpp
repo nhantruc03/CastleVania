@@ -39,7 +39,7 @@ void Panther::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		this->isrunning = true;
 		this->issleeping = false;
-		this->vx = ENEMY_WALKING_SPEED * 2.5 * direct;
+		this->vx = ENEMY_WALKING_SPEED * 3 * direct;
 		this->animation = animations[1];
 	}
 	if (abs(x - prevX) >= distancebeforejump && !issleeping)
