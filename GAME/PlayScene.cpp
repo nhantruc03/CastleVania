@@ -14,7 +14,7 @@ PlayScene::PlayScene(int level)
 	this->level = level;
 	map = Maps::GetInstance()->GetMap(this->level);
 	simon = CSimon::GetInstance();
-	simon->SetPosition(30, 250.0f);//287.0f);
+	simon->SetPosition(30, 287.0f);//287.0f);
 	simon->Respawn();
 	camera = Camera::GetInstance();
 	objects.clear();
@@ -134,7 +134,6 @@ void PlayScene::Update(DWORD dt)
 			{
 				// gioi han 2 bien duoi ham
 				if (simon->vx < 0 && simon->x < 3088) simon->x = 3088;
-				if (simon->vx > 0 && simon->x > 4080) simon->x = 4080;
 			}
 			// di xuong ham
 			if ((simon->IsContain(downstair.left, downstair.top, downstair.right, downstair.bottom) || simon->IsContain(downstair2.left, downstair2.top, downstair2.right, downstair2.bottom)) && (simon->y > downstair.top || simon->y > downstair2.top) && simon->State == STATE_WALK_ONSTAIR_DOWN)

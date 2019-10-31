@@ -47,7 +47,7 @@ void Sprites::LoadResources()
 	}
 	iFile.close();
 	texture = CTextures::GetInstance()->Get(8);
-	for (int i = 0; i < 114; i++)
+	for (int i = 0; i < 119; i++)
 	{
 		Add(TAG_MAP2, i * 32, 0, (i * 32) + 32, 32, texture);
 	}

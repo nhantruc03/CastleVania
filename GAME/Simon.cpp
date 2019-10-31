@@ -203,7 +203,6 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					}
 				}
 			}
-
 		}
 	}
 
@@ -484,7 +483,7 @@ void CSimon::OnKeyDown(int key)
 				}
 				else
 				{
-					if (State != STATE_SITTING && throwing == false && secondweapon != NULL && heart >= 1)
+					if (State != STATE_SITTING && throwing == false && secondweapon ==1 && heart >= 1)
 					{
 						heart -= 1;
 						Weapon* weapon = WeaponsManager::CreateWeapon(secondweapon);
