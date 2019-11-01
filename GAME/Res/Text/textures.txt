@@ -12,3 +12,4 @@
 11 Res\Image\door.png 255 0 255
 12 Res\Image\effect400.png 255 0 255
 13 Res\Image\effect700.png 255 0 255
+14 Res\Image\holy_water.png 255 0 255

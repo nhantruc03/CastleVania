@@ -33,7 +33,7 @@ MorningStar::MorningStar(int level)
 
 void MorningStar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	if (SIMON->State!= STATE_ATTACK && SIMON->State!= STATE_SIT_ATTACKING)
+	if (SIMON->State!= STATE_ATTACK && SIMON->State!= STATE_SIT_ATTACKING && SIMON->State!=STATE_ATTACK_ONSTAIR_DOWN && SIMON->State!=STATE_ATTACK_ONSTAIR_UP)
 	{
 		this->isDead = true;
 		available = false;
@@ -77,7 +77,11 @@ void MorningStar::Render()
 	{
 	case 0:
 		x += isReverse ? -36 : 36;
-		if (SIMON->State== STATE_ATTACK)
+		if (SIMON->State == STATE_ATTACK_ONSTAIR_UP)
+		{
+			x += isReverse ? -3 : 3;
+		}
+		if (SIMON->State== STATE_ATTACK || SIMON->State==STATE_ATTACK_ONSTAIR_DOWN || SIMON->State==STATE_ATTACK_ONSTAIR_UP)
 		{
 			y += 7;
 		}
@@ -86,25 +90,44 @@ void MorningStar::Render()
 
 	case 1:
 		x += (isReverse ? -24 : 24);
-		if (SIMON->State== STATE_ATTACK)
+		if (SIMON->State == STATE_ATTACK_ONSTAIR_UP)
+		{
+			x += isReverse ? -12 : 12;
+		}
+		if (SIMON->State== STATE_ATTACK || SIMON->State == STATE_ATTACK_ONSTAIR_DOWN || SIMON->State == STATE_ATTACK_ONSTAIR_UP)
 		{
 			y -= 4;
 		}
 		else y += 3;
-		//this->isDead = true;
 		break;
 	case 2:
 		if (level != 3)
 		{
 			x += (isReverse ? 50 : -50);
+			if (SIMON->State == STATE_ATTACK_ONSTAIR_DOWN )
+			{
+				x+= (isReverse ? 1 : -1);
+			}
 		}
 		else
 		{
 			x += (isReverse ? 63 : -63);
+			if (SIMON->State == STATE_ATTACK_ONSTAIR_DOWN)
+			{
+				x += (isReverse ? 2 : -2);
+			}
+		}
+		if (SIMON->State == STATE_ATTACK_ONSTAIR_UP)
+		{
+			x += (isReverse ? -6 : 6);
 		}
 		if (SIMON->State== STATE_ATTACK)
 		{
 			y -= 8;
+		}
+		else if (SIMON->State == STATE_ATTACK_ONSTAIR_DOWN || SIMON->State == STATE_ATTACK_ONSTAIR_UP)
+		{
+			y -= 10;
 		}
 		else y -= 3;
 		available = true;

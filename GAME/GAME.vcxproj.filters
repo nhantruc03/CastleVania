@@ -114,6 +114,9 @@
     <ClCompile Include="Panther.cpp">
       <Filter>Game Objects\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="Holy_water.cpp">
+      <Filter>Game Objects\Weapon</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="debug.h">
@@ -199,6 +202,9 @@
     </ClInclude>
     <ClInclude Include="Door.h">
       <Filter>Game Objects\OthetObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Holy_water.h">
+      <Filter>Game Objects\Weapon</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -21,6 +21,8 @@ CSimon::CSimon()
 	AddAnimation(tag, 9); // stand on stair_down
 	AddAnimation(tag, 10);// walk on stair_down
 	AddAnimation(tag, 11); // injured
+	AddAnimation(tag, 12); // attack on stair down
+	AddAnimation(tag, 13);	// attack on stair up
 	morningstarlevel = 1;
 	width = SIMON_WIDTH;
 	height = SIMON_HEIGHT;
@@ -65,11 +67,15 @@ void CSimon::Respawn()
 }
 void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
+	if (timeusingstopwatch)
+	{
+		timeusingstopwatch -= dt;
+	}
 	isCollidewith_DWNLTR = false;
 	isCollidewith_DWNRTL = false;
 	isCollidewith_UPLTR = false;
 	isCollidewith_UPRTL = false;
-	CGameObject::Update(dt);
+
 
 
 	curAni->Update();
@@ -79,7 +85,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	{
 		vy += SIMON_GRAVITY * dt;
 	}
-
+	CGameObject::Update(dt);
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
@@ -98,7 +104,6 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		x += dx;
 		y += dy;
 	}
-
 	else
 	{
 		float min_tx, min_ty, nx = 0, ny;
@@ -207,13 +212,12 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	}
 
 	// cho roi nhanh hon khi roi tu cau thang xuong
-	if (vy > 0.03f &&!jumping && !isinjured && !isOnStair)
+	if (vy > 0 &&!jumping && !isinjured && !isOnStair )
 	{
 		falling = true;
 	}
 	if (falling)
 	{
-		
 		if (vx > 0)
 		{
 			x += 0.2f; // tranh overlapping
@@ -315,7 +319,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		{
 		case TAG_WEAPON:
 		{
-			Weapon* w = WeaponsManager::ConvertToWeapon(o);
+			Weapon* w = (Weapon*) o;
 			if (w->isDead)
 			{
 				it = Weapons.erase(it);
@@ -433,19 +437,21 @@ void CSimon::inoutstair_handle(DWORD dt)
 void CSimon::Render()
 {
 	curAni->isreverse = this->isReverse;
+	int r = 255;
+	int g = 255;
+	int b = 255;
+	int alpha = 255;
 	if (upgrade_time)
 	{
-		int r = rand() % 255;
-		int g = rand() % 255;
-		int b = rand() % 255;
-		curAni->Render(x, y, 255, r, g, b);
+		r = rand() % 255;
+		g = rand() % 255;
+		b = rand() % 255;
 	}
 	else
 	{
-		int alpha = 255;
 		if (untouchable) alpha = rand() % 255;
-		curAni->Render(x, y,alpha);
 	}
+	curAni->Render(x, y, alpha,r,g,b);
 	for (Weapon* o : Weapons)
 	{
 		o->Render();
@@ -483,19 +489,43 @@ void CSimon::OnKeyDown(int key)
 				}
 				else
 				{
-					if (State != STATE_SITTING && throwing == false && secondweapon ==1 && heart >= 1)
+					if (keyCode[DIK_UP] && State != STATE_SITTING && throwing == false && secondweapon ==1 && heart >= 1)
 					{
 						heart -= 1;
 						Weapon* weapon = WeaponsManager::CreateWeapon(secondweapon);
 						weapon->isReverse = isReverse;
 						Weapons.push_back(weapon);
 						throwing = true;
+						if (isWalkingOnStair)
+						{
+							vx = vy = 0;
+						}
 						ChangeState(STATE_ATTACK);
+					}
+					else if (keyCode[DIK_UP] && State != STATE_SITTING && throwing == false && secondweapon == 2 && heart >= 1)
+					{
+						heart -= 1;
+						Weapon* weapon = WeaponsManager::CreateWeapon(secondweapon);
+						weapon->isReverse = isReverse;
+						Weapons.push_back(weapon);
+						throwing = true;
+						if (isWalkingOnStair)
+						{
+							vx = vy = 0;
+						}
+						ChangeState(STATE_ATTACK);
+					}
+					if (keyCode[DIK_UP] && secondweapon == 3 && heart >= 5 && !timeusingstopwatch)
+					{
+						heart -= 5;
+						timeusingstopwatch = 5000;
 					}
 				}
 			}
 			break;
 		case DIK_M:
+			secondweapon = 2;
+			heart += 5;
 			morningstarlevel += 1;
 			if (morningstarlevel > 3)
 			{
@@ -557,6 +587,14 @@ void CSimon::ChangeState(int newState)
 		if (sitting)
 		{
 			State = STATE_SIT_ATTACKING;
+		}
+		else if (prevState == STATE_STAND_ONSTAIR_DOWN || prevState==STATE_WALK_ONSTAIR_DOWN)
+		{
+			State = STATE_ATTACK_ONSTAIR_DOWN;
+		}
+		else if (prevState == STATE_STAND_ONSTAIR_UP || prevState == STATE_WALK_ONSTAIR_UP)
+		{
+			State = STATE_ATTACK_ONSTAIR_UP;
 		}
 		else
 		{
@@ -712,7 +750,7 @@ void CSimon::Update_State()
 			ChangeState(STATE_STANDING);
 		}
 		break;
-	case STATE_ATTACK:case STATE_SIT_ATTACKING:
+	case STATE_ATTACK:case STATE_SIT_ATTACKING:case STATE_ATTACK_ONSTAIR_DOWN:case STATE_ATTACK_ONSTAIR_UP:
 
 		if (curAni->CheckEndAni())
 		{
@@ -728,12 +766,17 @@ void CSimon::Update_State()
 			case STATE_STANDING:case STATE_WALKING:
 				ChangeState(STATE_STANDING);
 				break;
-			case STATE_WALK_ONSTAIR_UP:case STATE_STAND_ONSTAIR_UP:
-
+			case STATE_STAND_ONSTAIR_UP:
 				ChangeState(STATE_STAND_ONSTAIR_UP);
 				break;
-			case STATE_STAND_ONSTAIR_DOWN: case STATE_WALK_ONSTAIR_DOWN:
+			case STATE_STAND_ONSTAIR_DOWN:
 				ChangeState(STATE_STAND_ONSTAIR_DOWN);
+				break;
+			case STATE_WALK_ONSTAIR_DOWN:
+				ChangeState(STATE_WALK_ONSTAIR_DOWN);
+				break;
+			case STATE_WALK_ONSTAIR_UP:
+				ChangeState(STATE_WALK_ONSTAIR_UP);
 				break;
 			case STATE_FALL:case STATE_JUMP:
 				if (vy > 0)
@@ -764,11 +807,11 @@ void CSimon::Update_State()
 		break;
 	case STATE_STAND_ONSTAIR_UP:
 		isWalkingOnStair = false;
-		if (keyCode[DIK_UP])
+		if (keyCode[DIK_UP] || keyCode[DIK_RIGHT])
 		{
 			ChangeState(STATE_WALK_ONSTAIR_UP);
 		}
-		if (keyCode[DIK_DOWN])
+		if (keyCode[DIK_DOWN] || keyCode[DIK_LEFT] )
 		{
 			ChangeState(STATE_WALK_ONSTAIR_DOWN);
 		}
@@ -816,18 +859,18 @@ void CSimon::Update_State()
 				isWalkingOnStair = false;
 			}
 		}
-		if (!keyCode[DIK_UP] && !isWalkingOnStair)
+		if (!keyCode[DIK_UP] && !isWalkingOnStair  && !keyCode[DIK_RIGHT])
 		{
 			ChangeState(STATE_STAND_ONSTAIR_UP);
 		}
 		break;
 	case STATE_STAND_ONSTAIR_DOWN:
 		isWalkingOnStair = false;
-		if (keyCode[DIK_UP])
+		if (keyCode[DIK_UP] || keyCode[DIK_RIGHT])
 		{
 			ChangeState(STATE_WALK_ONSTAIR_UP);
 		}
-		if (keyCode[DIK_DOWN])
+		if (keyCode[DIK_DOWN] || keyCode[DIK_LEFT])
 		{
 			ChangeState(STATE_WALK_ONSTAIR_DOWN);
 		}
@@ -876,7 +919,7 @@ void CSimon::Update_State()
 				isWalkingOnStair = false;
 			}
 		}
-		if (!keyCode[DIK_DOWN] && !isWalkingOnStair)
+		if (!keyCode[DIK_DOWN] && !isWalkingOnStair && !keyCode[DIK_LEFT])
 		{
 			ChangeState(STATE_STAND_ONSTAIR_DOWN);
 		}

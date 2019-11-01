@@ -2,6 +2,13 @@
 #include"Simon.h"
 Panther::Panther(float x, float y, int direction, float distancebeforejump)
 {
+	this->isDead = false;
+	this->ishit = false;
+	this->tag = TAG_ENEMY;
+	this->type = 1;
+	AddAnimation(tag, 1);
+	AddAnimation(tag, 2);
+	AddAnimation(tag, 3);
 	this->distancebeforejump = distancebeforejump;
 	issleeping = true;
 	checkjump_only1time = false;
@@ -16,15 +23,8 @@ Panther::Panther(float x, float y, int direction, float distancebeforejump)
 	}
 	else
 		isReverse = true;
-	this->isDead = false;
-	this->ishit = false; 
-	this->tag = TAG_ENEMY;
-	this->type = 1;
-	AddAnimation(tag, 1);
-	AddAnimation(tag, 2);
-	AddAnimation(tag, 3);
 	hit_effect = Sprites::GetInstance()->Get(5, 3);
-	this->vx = 0; //ENEMY_WALKING_SPEED * direct;
+	this->vx = 0;
 	this->vy = 0;
 	this->width = 64;
 	this->height = 32;
@@ -34,85 +34,87 @@ Panther::Panther(float x, float y, int direction, float distancebeforejump)
 
 void Panther::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	
-	if (abs(SIMON->x - this->x) <= 160 && issleeping)
+	if (!SIMON->timeusingstopwatch)
 	{
-		this->isrunning = true;
-		this->issleeping = false;
-		this->vx = ENEMY_WALKING_SPEED * 3 * direct;
-		this->animation = animations[1];
-	}
-	if (abs(x - prevX) >= distancebeforejump && !issleeping)
-	{
-		jump();
-	}
-	CGameObject::Update(dt, coObjects);
-	vy += ENEMY_GRAVITY * dt;// Simple fall down
-	vector<LPCOLLISIONEVENT> coEvents;
-	vector<LPCOLLISIONEVENT> coEventsResult;
-	coEvents.clear();
-	// turn off collision when die 
-	CalcPotentialCollisions(coObjects, coEvents);
-	// No collision occured, proceed normally
-	if (coEvents.size() == 0)
-	{
-		x += dx;
-		y += dy;
-	}
-	else
-	{
-		float min_tx, min_ty, nx = 0, ny;
-		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
-		// block 
-		x += min_tx * dx + nx * 0.2f;		// nx*0.2f : need to push out a bit to avoid overlapping next frame
-		y += min_ty * dy + ny * 0.2f;
-		for (UINT i = 0; i < coEventsResult.size(); i++)
+		if (abs(SIMON->x - this->x) <= 160 && issleeping)
 		{
-			LPCOLLISIONEVENT e = coEventsResult[i];
-			if (dynamic_cast<CBrick*>(e->obj))
+			this->isrunning = true;
+			this->issleeping = false;
+			this->vx = ENEMY_WALKING_SPEED * 3 * direct;
+			this->animation = animations[1];
+		}
+		if (abs(x - prevX) >= distancebeforejump && !issleeping)
+		{
+			jump();
+		}
+		vy += ENEMY_GRAVITY * dt;// Simple fall down
+
+		CGameObject::Update(dt, coObjects);
+		vector<LPCOLLISIONEVENT> coEvents;
+		vector<LPCOLLISIONEVENT> coEventsResult;
+		coEvents.clear();
+		// turn off collision when die 
+		CalcPotentialCollisions(coObjects, coEvents);
+		// No collision occured, proceed normally
+		if (coEvents.size() == 0)
+		{
+			x += dx;
+			y += dy;
+		}
+		else
+		{
+			float min_tx, min_ty, nx = 0, ny;
+			FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
+			// block 
+			x += min_tx * dx + nx * 0.2f;		// nx*0.2f : need to push out a bit to avoid overlapping next frame
+			y += min_ty * dy + ny * 0.2f;
+			for (UINT i = 0; i < coEventsResult.size(); i++)
 			{
-				if(checkjump_only1time)
+				LPCOLLISIONEVENT e = coEventsResult[i];
+				if (dynamic_cast<CBrick*>(e->obj))
 				{
-					x += dx;
-				}
-				if (ny == -1)
-				{
-					this->vy = 0;
 					if (checkjump_only1time)
 					{
-						if (!isrunning)
+						x += dx;
+					}
+					if (ny == -1)
+					{
+						this->vy = 0;
+						if (checkjump_only1time)
 						{
-							run();
+							if (!isrunning)
+							{
+								run();
+							}
 						}
 					}
 				}
 			}
 		}
-	}
-	animation->Update();
-	if (isBurn)
-	{
-		vx = vy = 0;
-		if (animation->CheckEndAni())
+		animation->Update();
+		if (isBurn)
 		{
-			isDead = true;
-			animation->SetEndAniFalse();
-			animation->currentFrame = -1;
+			vx = vy = 0;
+			if (animation->CheckEndAni())
+			{
+				isDead = true;
+				animation->SetEndAniFalse();
+				animation->currentFrame = -1;
 
+			}
+		}
+		if (!Camera::GetInstance()->IsContain(this->GetBoundingBox()) && !issleeping)
+		{
+			this->isDead = true;
 		}
 	}
-	if (!Camera::GetInstance()->IsContain(this->GetBoundingBox()) && !issleeping)
-	{
-		this->isDead = true;
-	}
-
 }
 
 void Panther::jump()
 {
 	if (checkjump_only1time == true)
 		return;
-	vy = -0.3;
+	vy = -ENEMY_JUMP_SPEED_Y;
 	checkjump_only1time = true;
 	isrunning = false;
 	animation = animations[2];

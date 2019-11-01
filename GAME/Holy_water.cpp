@@ -1,38 +1,48 @@
-#include"Dagger.h"
+#include"Holy_water.h"
 #include"Simon.h"
 #include"HoldItemObject.h"
 #include"Brick.h"
 #include"Enemy.h"
-Dagger::Dagger()
+Holy_water::Holy_water()
 {
-	this->animation = Animations::GetInstance()->Get(TAG_WEAPON, 3);
-	width = 32;
-	height = 18;
+	tag = TAG_WEAPON;
+	AddAnimation(tag, 4);
+	AddAnimation(tag, 5);
+	width = 16;
+	height = 16;
 
 
 	vx = vy = 0;
-	type = TYPE_WEAPON_DAGGER;
+	type = TYPE_WEAPON_HOLY_WATER;
 	available = false;
 	isDead = false;
-
+	animation = animations[0];
 	x = SIMON->x;
 	y = SIMON->y - 20;
-	tag = TAG_WEAPON;
+	active = false;
 }
 
-void Dagger::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void Holy_water::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 
-	RECT dagger = GetBoundingBox();
-	if (Camera::GetInstance()->IsContain(dagger) == false)
+	RECT Holy_water = GetBoundingBox();
+	if (Camera::GetInstance()->IsContain(Holy_water) == false)
 	{
 		SIMON->throwing = false;
 		isDead = true;
 		available = false;
 	}
+	if (animation == animations[1]&&animation->CheckEndAni())
+	{
+		animation->SetEndAniFalse();
+		this->isDead = true;
+		SIMON->throwing = false;
+		available = false;
+	}
 	if (available)
 	{
 		animation->Update();
+		vy += ENEMY_GRAVITY * dt;
 		CGameObject::Update(dt, coObjects);
 		vector<LPCOLLISIONEVENT> coEvents;
 		vector<LPCOLLISIONEVENT> coEventsResult;
@@ -56,25 +66,26 @@ void Dagger::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			// block 
 			x += min_tx * dx + nx * 0.2f;		// nx*0.2f : need to push out a bit to avoid overlapping next frame
-			//y += min_ty * dy + ny * 0.2f;
+			y += min_ty * dy + ny * 0.2f;
 			for (UINT i = 0; i < coEventsResult.size(); i++)
 			{
 				LPCOLLISIONEVENT e = coEventsResult[i];
 				if (dynamic_cast<HoldItemObject*>(e->obj))
 				{
 					dynamic_cast<HoldItemObject*>(e->obj)->isHit();
-					isDead = true;
-					SIMON->throwing = false;
 				}
 				if (dynamic_cast<CBrick*>(e->obj))
 				{
-					x += dx;
+					if (!active)
+					{
+						active = true; 
+						vx = vy = 0;
+						animation = animations[1];
+					}
 				}
 				if (dynamic_cast<Enemy*>(e->obj))
 				{
 					dynamic_cast<Enemy*>(e->obj)->isHit();
-					isDead = true;
-					SIMON->throwing = false;
 				}
 			}
 		}
@@ -88,12 +99,8 @@ void Dagger::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 				case TAG_HOLDER:
 					coObjects->at(i)->isHit();
-					this->isDead = true;
-					SIMON->throwing = false;
 					break;
 				case TAG_ENEMY:
-					isDead = true;
-					SIMON->throwing = false;
 					coObjects->at(i)->isHit();
 					break;
 				}
@@ -105,7 +112,7 @@ void Dagger::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 }
 
-void Dagger::Render()
+void Holy_water::Render()
 {
 	if (!available)
 	{
@@ -118,7 +125,7 @@ void Dagger::Render()
 			{
 				x = SIMON->x;
 				y = SIMON->y - 20;
-				vx = isReverse ? 0.7f : -0.7f;
+				vx = isReverse ? 0.2f : -0.2f;
 				available = true;
 			}
 			break;
