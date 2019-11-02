@@ -7,18 +7,23 @@
 #include"Ghost.h"
 #include"Panther.h"
 #include"Door.h"
+#include"Bat.h"
+#include"Fishman.h"
 PlayScene::PlayScene(int level)
 {
+	srand(time(NULL));
 	keyCode.clear();
 	isgoingthroughdoor = false;
 	this->level = level;
 	map = Maps::GetInstance()->GetMap(this->level);
 	simon = CSimon::GetInstance();
-	simon->SetPosition(30, 280.0f);//287.0f);
+	simon->SetPosition(3200, 280.0f);//287.0f);
 	simon->Respawn();
 	camera = Camera::GetInstance();
 	objects.clear();
 	objects = map->get_BricksList();
+
+
 	timetocreateghost = 0;
 	cancreateghost = true;
 	countghost = 0;
@@ -26,6 +31,14 @@ PlayScene::PlayScene(int level)
 	cancreatepanther = true;
 	countpanther = 0;
 	outofareacreatepanther = true;
+
+	timetocreatebat = 0;
+	cancreatebat = true;
+	countbat = 0;
+
+	timetocreatefishman = 0;
+	cancreatefishman = true;
+	countfishman = 0;
 
 	switch (level)
 	{
@@ -158,8 +171,7 @@ void PlayScene::Update(DWORD dt)
 				simon->SetPosition(simon->x, simon->y - 64);
 			}
 
-//			 tao enemy ghost
-			DWORD now = GetTickCount();
+			// tao enemy ghost
 			if (timetocreateghost > 0)
 			{
 				timetocreateghost -= dt;
@@ -216,6 +228,131 @@ void PlayScene::Update(DWORD dt)
 				}
 			}
 
+			// tao enemy bat
+			if (!isgoingthroughdoor)
+			{
+				if (timetocreatebat > 0)
+				{
+					timetocreatebat -= dt;
+				}
+				if (simon->x >= 3072 && simon->y<352)
+				{
+					if (cancreatebat)
+					{
+						if (timetocreatebat <= 0)
+						{
+							if (simon->y < 160)
+							{
+								Bat* bat = new Bat(camera->GetPosition().x + camera->camWidht / 2, 112.0f, -1);
+								objects.push_back(bat);
+							}
+							else
+							{
+								int random = rand() % 3;
+								if (random == 0)
+								{
+									Bat* bat = new Bat(camera->GetPosition().x + camera->camWidht / 2, 208.0f, -1);
+									objects.push_back(bat);
+								}
+								else if (random == 1)
+								{
+									Bat* bat = new Bat(camera->GetPosition().x + camera->camWidht / 2, 304.0f, -1);
+									objects.push_back(bat);
+								}
+								else if (random == 2)
+								{
+									Bat* bat = new Bat(camera->GetPosition().x - camera->camWidht / 2, 304.0f, 1);
+									objects.push_back(bat);
+								}
+
+							}
+							countbat++;
+							timetocreatebat = 3000;
+							if (countbat == 2)
+							{
+								cancreatebat = false;
+							}
+						}
+					}
+				}
+			}
+
+			// tao enemy fishman
+			if (timetocreatefishman > 0)
+			{
+				timetocreatefishman -= dt;
+			}
+			if (camera->movedownstair)
+			{
+				if (cancreatefishman)
+				{
+					if (timetocreatefishman <= 0)
+					{
+						if (simon->x > 3360.0f && simon->x<3520)
+						{
+							if (countfishman < 2)
+							{
+								Fishman* fishman = new Fishman(3264, 672, 1);
+								objects.push_back(fishman);
+								countfishman++;
+							}
+							if (countfishman < 2)
+							{
+								Fishman* fishman = new Fishman(3520, 672, -1);
+								objects.push_back(fishman);
+								countfishman++;
+							}							
+						}
+						if (simon->vx <= 0 && simon->x < 3264 && simon->x > 3072)
+						{
+							if (countfishman < 2)
+							{
+								Fishman* fishman = new Fishman(3136, 672, 1);
+								objects.push_back(fishman);
+								countfishman++;
+							}
+							if (countfishman < 2)
+							{
+								Fishman* fishman = new Fishman(3392, 672, -1);
+								objects.push_back(fishman);
+								countfishman++;
+							}							
+						}
+						if (simon->x > 3520 && simon->x < 3712)
+						{
+							if (countfishman < 2)
+							{
+								Fishman* fishman = new Fishman(3520, 672, 1);
+								objects.push_back(fishman);
+								countfishman++;
+							}
+							if (countfishman < 2)
+							{
+								Fishman* fishman = new Fishman(3648, 672, 1);
+								objects.push_back(fishman);
+								countfishman++;
+							}
+						}
+						if (simon->x > 3712)
+						{
+							if (countfishman < 2)
+							{
+								Fishman* fishman = new Fishman(3776, 672, 1);
+								objects.push_back(fishman);
+								countfishman++;
+							}
+							if (countfishman < 2)
+							{
+								Fishman* fishman = new Fishman(3904, 672, 1);
+								objects.push_back(fishman);
+								countfishman++;
+							}
+						}
+						timetocreatefishman = 3000;
+					}
+				}
+
+			}
 			// di qua cua 1
 			RECT tempdoor = door1->GetBoundingBox();
 			if (simon->IsContain(tempdoor.left, tempdoor.top, tempdoor.right, tempdoor.bottom) && door1->isclosed())
@@ -247,7 +384,7 @@ void PlayScene::Update(DWORD dt)
 				if (door1->isclosed() && simon->check_auto_move == true)
 				{
 					camera->SetPosition(camera->camPosition.x += 2, camera->camPosition.y);
-					if (camera->camPosition.x - camera->camWidht / 2 >= 3088)
+					if (camera->camPosition.x - camera->camWidht / 2 >= 3072)
 					{
 						camera->inzone2 = true;
 						simon->check_auto_move = false;
@@ -331,12 +468,29 @@ void PlayScene::UpdateObjects(DWORD dt)
 							cancreateghost = true;
 						}
 					}
-					if (e->type == 1)
+					if (e->type == TYPE_ENEMY_PANTHER)
 					{
 						countpanther--;
 						if (countpanther == 0)
 						{
 							cancreatepanther = true;
+						}
+					}
+					if (e->type == TYPE_ENEMY_BAT)
+					{
+						countbat--;
+						if (countbat == 0)
+						{
+							timetocreatebat = 1000;
+							cancreatebat = true;
+						}
+					}
+					if (e->type == TYPE_ENEMY_FISHMAN)
+					{
+						countfishman--;
+						if (countfishman == 0)
+						{
+							timetocreatefishman = 3000;
 						}
 					}
 

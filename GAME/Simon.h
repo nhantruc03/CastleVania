@@ -52,7 +52,6 @@ public:
 	static CSimon* GetInstance();
 	void Update_State();
 	bool isinjured;
-	bool isonground;
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
 
 	//virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);

@@ -5,6 +5,7 @@
 #include"map.h"
 #include"Brick.h"
 #include"Door.h"
+
 using namespace std;
 class PlayScene : public Scene
 {
@@ -20,6 +21,14 @@ public:
 	bool cancreatepanther;
 	bool outofareacreatepanther;
 	int countpanther;
+
+	bool cancreatebat;
+	DWORD timetocreatebat;
+	int countbat;
+
+	bool cancreatefishman;
+	DWORD timetocreatefishman;
+	int countfishman;
 
 	RECT downstair;
 	RECT upstair;

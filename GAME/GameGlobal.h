@@ -53,6 +53,10 @@
 #define TAG_BRICK 7
 #define TAG_ENEMY 8
 	#define TYPE_ENEMY_GHOST 0
+	#define TYPE_ENEMY_PANTHER 1
+	#define TYPE_ENEMY_BAT 2
+	#define TYPE_ENEMY_FISHMAN 3
+	#define TYPE_ENEMY_BULLET 4
 #define TAG_DOOR 9
 
 

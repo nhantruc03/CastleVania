@@ -65,9 +65,9 @@ void Camera::Update(int maplevel)
 	{
 		if (inzone2)
 		{
-			if (camPosition.x - camWidht / 2 < 3088)
+			if (camPosition.x - camWidht / 2 < 3072)
 			{
-				camPosition = D3DXVECTOR3(3088 + camWidht / 2, 0, 0);
+				camPosition = D3DXVECTOR3(3072 + camWidht / 2, 0, 0);
 			}
 		}
 		if (movedownstair)

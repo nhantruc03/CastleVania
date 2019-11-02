@@ -186,7 +186,10 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				if (untouchable == 0)
 				{
 					StartUntouchable();
-					
+					if (dynamic_cast<Enemy*> (e->obj)->type == TYPE_ENEMY_BULLET)
+					{
+						dynamic_cast<Enemy*> (e->obj)->isDead = true;
+					}
 					if (!isOnStair) // khi tren cau thang va bi thuong thi khong bi vang di
 					{
 						if (nx <= 0)
@@ -298,6 +301,10 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					if (untouchable == 0 && coObjects->at(i)->isBurn==false)
 					{
 						StartUntouchable();
+						if (coObjects->at(i)->type == TYPE_ENEMY_BULLET)
+						{
+							coObjects->at(i)->isDead = true;
+						}
 						if (!isOnStair)
 						{
 							isReverse = false;
@@ -640,7 +647,6 @@ void CSimon::ChangeState(int newState)
 		break;
 	case STATE_INJURED:
 		height = SIMON_HEIGHT;
-		isonground = false;
 		isinjured = true;
 		if (isReverse)
 		{

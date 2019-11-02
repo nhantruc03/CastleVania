@@ -10,8 +10,6 @@ Holy_water::Holy_water()
 	AddAnimation(tag, 5);
 	width = 16;
 	height = 16;
-
-
 	vx = vy = 0;
 	type = TYPE_WEAPON_HOLY_WATER;
 	available = false;
@@ -42,7 +40,10 @@ void Holy_water::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (available)
 	{
 		animation->Update();
-		vy += ENEMY_GRAVITY * dt;
+		if (animation == animations[1])
+		{
+			vy += ENEMY_GRAVITY * dt;
+		}
 		CGameObject::Update(dt, coObjects);
 		vector<LPCOLLISIONEVENT> coEvents;
 		vector<LPCOLLISIONEVENT> coEventsResult;

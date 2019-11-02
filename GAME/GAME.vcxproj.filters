@@ -117,6 +117,15 @@
     <ClCompile Include="Holy_water.cpp">
       <Filter>Game Objects\Weapon</Filter>
     </ClCompile>
+    <ClCompile Include="Bat.cpp">
+      <Filter>Game Objects\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Fishman.cpp">
+      <Filter>Game Objects\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy_bullet.cpp">
+      <Filter>Game Objects\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="debug.h">
@@ -205,6 +214,15 @@
     </ClInclude>
     <ClInclude Include="Holy_water.h">
       <Filter>Game Objects\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="Bat.h">
+      <Filter>Game Objects\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Fishman.h">
+      <Filter>Game Objects\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy_bullet.h">
+      <Filter>Game Objects\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

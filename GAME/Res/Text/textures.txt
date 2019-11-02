@@ -13,3 +13,6 @@
 12 Res\Image\effect400.png 255 0 255
 13 Res\Image\effect700.png 255 0 255
 14 Res\Image\holy_water.png 255 0 255
+15 Res\Image\bat.png 255 0 255
+16 Res\Image\fishman.png 255 0 255
+17 Res\Image\enemy_bullet.png 255 0 255
