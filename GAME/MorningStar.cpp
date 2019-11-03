@@ -1,5 +1,6 @@
 #include"MorningStar.h"
 #include"Simon.h"
+#include"Special_brick.h"
 MorningStar::MorningStar(int level)
 {
 	this->level = level;
@@ -48,6 +49,9 @@ void MorningStar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				switch (coObjects->at(i)->tag)
 				{
+				case TAG_SPECIAL_BRICK:
+					coObjects->at(i)->isDead=true;
+					break;
 				case TAG_HOLDER:
 					coObjects->at(i)->isHit();
 					break;

@@ -40,7 +40,7 @@ void Holy_water::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (available)
 	{
 		animation->Update();
-		if (animation == animations[1])
+		if (animation == animations[0])
 		{
 			vy += ENEMY_GRAVITY * dt;
 		}
@@ -126,7 +126,7 @@ void Holy_water::Render()
 			{
 				x = SIMON->x;
 				y = SIMON->y - 20;
-				vx = isReverse ? 0.2f : -0.2f;
+				vx = isReverse ? 0.25f : -0.25f;
 				available = true;
 			}
 			break;

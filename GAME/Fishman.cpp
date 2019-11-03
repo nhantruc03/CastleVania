@@ -2,6 +2,7 @@
 #include"Camera.h"
 #include"Simon.h"
 #include"Enemy_bullet.h"
+#include"Special_brick.h"
 Fishman::Fishman(float x, float y, int direction)
 {
 	srand(time(NULL));
@@ -23,7 +24,7 @@ Fishman::Fishman(float x, float y, int direction)
 	AddAnimation(tag, 6);
 	AddAnimation(tag, 7);
 	animation = animations[0];
-	hit_effect = Sprites::GetInstance()->Get(5, 3);
+	hit_effect = Sprites::GetInstance()->Get(TAG_EFFECT, TYPE_EFFECT_HIT);
 	this->vx = 0;
 	this->vy = -0.5f;
 	this->width = 32;
@@ -66,7 +67,7 @@ void Fishman::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				run();
 			}
 		}
-		vy += ENEMY_GRAVITY * dt;
+		vy += ENEMY_GRAVITY/2 * dt;
 		CGameObject::Update(dt, coObjects);
 		vector<LPCOLLISIONEVENT> coEvents;
 		vector<LPCOLLISIONEVENT> coEventsResult;
@@ -89,7 +90,7 @@ void Fishman::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			for (UINT i = 0; i < coEventsResult.size(); i++)
 			{
 				LPCOLLISIONEVENT e = coEventsResult[i];
-				if (dynamic_cast<CBrick*>(e->obj))
+				if (dynamic_cast<CBrick*>(e->obj) || dynamic_cast<Special_brick*>(e->obj))
 				{
 					x += dx;
 					if (ny == 1)

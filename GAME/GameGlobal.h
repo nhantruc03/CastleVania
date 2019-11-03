@@ -45,10 +45,13 @@
 	#define TYPE_ITEM_HOLY_WATER 7
 	#define TYPE_ITEM_HOLY_CROSS 8
 	#define TYPE_ITEM_STOP_WATCH 9
+	#define TYPE_ITEM_CHICKEN 10
 #define TAG_EFFECT 5
-	#define TYPE_EFFECT_BURN 0
-	#define TYPE_EFFECT_400 1
-	#define TYPE_EFFECT_700 2
+	#define TYPE_EFFECT_BURN 0 // Burn gom 3 sprite 0 1 2 
+	#define TYPE_EFFECT_HIT 3
+	#define TYPE_EFFECT_400 4
+	#define TYPE_EFFECT_700 5
+
 #define TAG_MAP2 6
 #define TAG_BRICK 7
 #define TAG_ENEMY 8
@@ -58,11 +61,14 @@
 	#define TYPE_ENEMY_FISHMAN 3
 	#define TYPE_ENEMY_BULLET 4
 #define TAG_DOOR 9
+#define TAG_SPECIAL_BRICK 10
+#define TYPE_SPECIAL_BRICK1 0
+#define TYPE_SPECIAL_BRICK2	1
 
 
 
-#define ENEMY_GRAVITY			0.0005f
-#define ENEMY_WALKING_SPEED		0.05f
+#define ENEMY_GRAVITY			0.001f//0.0005f
+#define ENEMY_WALKING_SPEED		0.1f //0.05f
 #define ENEMY_JUMP_SPEED_Y		0.15f
 //// ===== Các thông số cho PLAYER ====
 #define SIMON_WALKING_SPEED		0.13f

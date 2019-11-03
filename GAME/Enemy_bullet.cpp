@@ -19,7 +19,7 @@ Enemy_bullet::Enemy_bullet(float x, float y, int direction)
 	this->isDead = false;
 	this->ishit = false;
 	animation = Animations::GetInstance()->Get(tag, 8);
-	hit_effect = Sprites::GetInstance()->Get(TAG_EFFECT, 3);
+	hit_effect = Sprites::GetInstance()->Get(TAG_EFFECT, TYPE_EFFECT_HIT);
 	this->vx = ENEMY_WALKING_SPEED*1.5 * direct;
 	this->vy = 0;
 	this->width = 10;

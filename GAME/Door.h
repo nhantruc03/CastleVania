@@ -32,7 +32,7 @@ public:
 	}
 	Door(int id)
 	{
-		tag = 9;
+		tag = TAG_DOOR;
 		type = id;
 		width = 48;
 		height = 96;

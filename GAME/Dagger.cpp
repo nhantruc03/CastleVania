@@ -5,19 +5,19 @@
 #include"Enemy.h"
 Dagger::Dagger()
 {
+	tag = TAG_WEAPON;
+	type = TYPE_WEAPON_DAGGER;
 	this->animation = Animations::GetInstance()->Get(TAG_WEAPON, 3);
 	width = 32;
 	height = 18;
 
 
 	vx = vy = 0;
-	type = TYPE_WEAPON_DAGGER;
 	available = false;
 	isDead = false;
 
 	x = SIMON->x;
 	y = SIMON->y - 20;
-	tag = TAG_WEAPON;
 }
 
 void Dagger::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)

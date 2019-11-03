@@ -11,28 +11,28 @@ Item::Item(int type_id)
 	timetoshoweffect = 1000;
 	if (type == TYPE_ITEM_BIG_HEART)
 	{
-		animation = Animations::GetInstance()->Get(tag, 0);
+		animation = Animations::GetInstance()->Get(tag, TYPE_ITEM_BIG_HEART);
 		width = 24;
 		height = 20;
 		vy = 0.2f;
 	}
 	else if (type == TYPE_ITEM_WHIP)
 	{
-		animation = Animations::GetInstance()->Get(tag, 1);
+		animation = Animations::GetInstance()->Get(tag, TYPE_ITEM_WHIP);
 		width = 32;
 		height = 32;
 		vy = 0.2f;
 	}
 	else if (type == TYPE_ITEM_DAGGER)
 	{
-		animation = Animations::GetInstance()->Get(tag, 2);
+		animation = Animations::GetInstance()->Get(tag, TYPE_ITEM_DAGGER);
 		width = 32;
 		height = 18;
 		vy = 0.2f;
 	}
 	else if (type == TYPE_ITEM_HEART)
 	{
-		animation = Animations::GetInstance()->Get(tag, 3);
+		animation = Animations::GetInstance()->Get(tag, TYPE_ITEM_HEART);
 		width = 16;
 		height = 16;
 		vy = 0.05f;
@@ -40,46 +40,53 @@ Item::Item(int type_id)
 	}
 	else if (type == TYPE_ITEM_MONEY_1000)
 	{
-		animation = Animations::GetInstance()->Get(tag, 4);
+		animation = Animations::GetInstance()->Get(tag, TYPE_ITEM_MONEY_1000);
 		width = 30;
 		height = 30;
 		vy = 0.2f;
 	}
 	else if (type == TYPE_ITEM_MONEY_700)
 	{
-		effect = Sprites::GetInstance()->Get(5, 5);
-		animation = Animations::GetInstance()->Get(tag, 5);
+		effect = Sprites::GetInstance()->Get(TAG_EFFECT, TYPE_EFFECT_700);
+		animation = Animations::GetInstance()->Get(tag, TYPE_ITEM_MONEY_700);
 		width = 30;
 		height = 30;
 		vy = 0.2f;
 	}
 	else if (type == TYPE_ITEM_MONEY_400)
 	{
-		effect = Sprites::GetInstance()->Get(5, 4);
-		animation = Animations::GetInstance()->Get(tag, 6);
+		effect = Sprites::GetInstance()->Get(TAG_EFFECT, TYPE_EFFECT_400);
+		animation = Animations::GetInstance()->Get(tag, TYPE_ITEM_MONEY_400);
 		width = 30;
 		height = 30;
 		vy = 0.2f;
 	}
 	else if (type == TYPE_ITEM_HOLY_WATER)
 	{
-		animation = Animations::GetInstance()->Get(tag, 7);
+		animation = Animations::GetInstance()->Get(tag, TYPE_ITEM_HOLY_WATER);
 		width = 32;
 		height = 32;
 		vy = 0.2f;
 	}
 	else if (type == TYPE_ITEM_HOLY_CROSS)
 	{
-		animation = Animations::GetInstance()->Get(tag, 8);
+		animation = Animations::GetInstance()->Get(tag, TYPE_ITEM_HOLY_CROSS);
 		width = 32;
 		height = 32;
 		vy = 0.2f;
 	}
 	else if (type == TYPE_ITEM_STOP_WATCH)
 	{
-		animation = Animations::GetInstance()->Get(tag, 9);
+		animation = Animations::GetInstance()->Get(tag, TYPE_ITEM_STOP_WATCH);
 		width = 30;
 		height = 32;
+		vy = 0.2f;
+	}
+	else if (type == TYPE_ITEM_CHICKEN)
+	{
+		animation = Animations::GetInstance()->Get(tag, TYPE_ITEM_CHICKEN);
+		width = 32;
+		height = 26;
 		vy = 0.2f;
 	}
 }

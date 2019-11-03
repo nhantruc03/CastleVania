@@ -5,6 +5,7 @@
 #include"Item.h"
 #include"Enemy.h"
 #include"Door.h"
+#include"Special_brick.h"
 CSimon*CSimon::_instance = NULL;
 CSimon::CSimon()
 {
@@ -115,7 +116,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
-			if (dynamic_cast<CBrick*>(e->obj))
+			if (dynamic_cast<CBrick*>(e->obj) || dynamic_cast<Special_brick*>(e->obj))
 			{
 			
 				if (isOnStair)
@@ -283,10 +284,16 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				switch (coObjects->at(i)->type)
 				{
 				case 1:
-					isCollidewith_UPLTR = true;
+					if (y < coObjects->at(i)->y)
+					{
+						isCollidewith_UPLTR = true;
+					}
 					break;
 				case -1:
-					isCollidewith_UPRTL = true;
+					if (y < coObjects->at(i)->y)
+					{
+						isCollidewith_UPRTL = true;
+					}
 					break;
 				case 2:
 					isCollidewith_DWNRTL = true;
@@ -344,7 +351,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 }
 void CSimon::inoutstair_handle(DWORD dt)
 {
-	if ((((isCollidewith_UPLTR||isCollidewith_UPRTL) && keyCode[DIK_UP]&& !isOnStair) || ((isCollidewith_DWNRTL||isCollidewith_DWNLTR) && keyCode[DIK_DOWN] && !isOnStair)) && (State==STATE_STANDING||State==STATE_WALKING))
+	if ((((isCollidewith_UPLTR||isCollidewith_UPRTL) && keyCode[DIK_UP]&& !isOnStair) || ((isCollidewith_DWNRTL||isCollidewith_DWNLTR) && keyCode[DIK_DOWN] && !isOnStair)) && (State==STATE_STANDING||State==STATE_WALKING) && !falling)
 	{
 		if (isCollidewith_UPLTR || isCollidewith_DWNRTL)
 		{

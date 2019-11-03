@@ -23,7 +23,7 @@ Panther::Panther(float x, float y, int direction, float distancebeforejump)
 	}
 	else
 		isReverse = true;
-	hit_effect = Sprites::GetInstance()->Get(5, 3);
+	hit_effect = Sprites::GetInstance()->Get(TAG_EFFECT, TYPE_EFFECT_HIT);
 	this->vx = 0;
 	this->vy = 0;
 	this->width = 64;
@@ -40,7 +40,7 @@ void Panther::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			this->isrunning = true;
 			this->issleeping = false;
-			this->vx = ENEMY_WALKING_SPEED * 3 * direct;
+			this->vx = ENEMY_WALKING_SPEED* 2 * direct;
 			this->animation = animations[1];
 		}
 		if (abs(x - prevX) >= distancebeforejump && !issleeping)
@@ -122,7 +122,7 @@ void Panther::jump()
 
 void Panther::run()
 {
-	vx = ENEMY_WALKING_SPEED*2 * -direct;
+	vx = ENEMY_WALKING_SPEED * -direct;
 	this->isReverse = !isReverse;
 	isrunning = true;
 	animation = animations[1];

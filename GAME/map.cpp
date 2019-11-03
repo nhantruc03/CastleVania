@@ -2,6 +2,7 @@
 #include"HoldItemObject.h"
 #include<fstream>
 #include"invisibleObject.h"
+#include"Special_brick.h"
 Map::Map(int level)
 {
 	rows = columns = 0;
@@ -138,7 +139,17 @@ vector<LPGAMEOBJECT> Map::get_BricksList()
 				brick->height = height;
 				objects.push_back(brick); }
 			break;
+			case 's':
+			{
+				int sb_id, item_id, x, y;
+				iFile >> sb_id >> item_id >> x >> y;
+				Special_brick * sb= new Special_brick(sb_id, item_id);
+				sb->SetPosition(x, y);
+				objects.push_back(sb);
 			}
+			break;
+			}
+			
 			/*for (int i = 0; i < rows; i++)
 			{
 				for (int j = 0; j < columns; j++)

@@ -2,7 +2,7 @@
 
 HoldItemObject::HoldItemObject(int type_id, int itemid)
 {
-	hit_effect = Sprites::GetInstance()->Get(5, 3);
+	hit_effect = Sprites::GetInstance()->Get(TAG_EFFECT, TYPE_EFFECT_HIT);
 	
 	tag = TAG_HOLDER;
 	item = itemid;
@@ -16,13 +16,13 @@ HoldItemObject::HoldItemObject(int type_id, int itemid)
 	{
 		width = 32;
 		height = 64;
-		animation = Animations::GetInstance()->Get(tag, 0);
+		animation = Animations::GetInstance()->Get(tag, TYPE_HOLDER_FIREPILLAR);
 	}
 	if (type == TYPE_HOLDER_CANDLE)
 	{
 		width = 16;
 		height = 32;
-		animation = Animations::GetInstance()->Get(tag, 1);
+		animation = Animations::GetInstance()->Get(tag, TYPE_HOLDER_CANDLE);
 	}
 }
 

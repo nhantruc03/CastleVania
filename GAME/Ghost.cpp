@@ -1,7 +1,7 @@
 #include "Ghost.h"
 #include"Camera.h"
 #include"Simon.h"
-
+#include"Special_brick.h"
 Ghost::Ghost(float x, float y, int direction)
 {
 	this->x = x;
@@ -18,7 +18,7 @@ Ghost::Ghost(float x, float y, int direction)
 	this->ishit = false;
 	animation = Animations::GetInstance()->Get(8, 0);
 
-	hit_effect = Sprites::GetInstance()->Get(5, 3);
+	hit_effect = Sprites::GetInstance()->Get(TAG_EFFECT, TYPE_EFFECT_HIT);
 	this->vx = ENEMY_WALKING_SPEED * direct;
 	this->vy = 0;
 	this->width = 32;
@@ -55,7 +55,7 @@ void Ghost::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			for (UINT i = 0; i < coEventsResult.size(); i++)
 			{
 				LPCOLLISIONEVENT e = coEventsResult[i];
-				if (dynamic_cast<CBrick*>(e->obj))
+				if (dynamic_cast<CBrick*>(e->obj)||dynamic_cast<Special_brick*>(e->obj))
 				{
 					if (nx != 0)
 					{

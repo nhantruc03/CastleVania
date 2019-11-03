@@ -9,6 +9,7 @@
 #include"Door.h"
 #include"Bat.h"
 #include"Fishman.h"
+#include"Special_brick.h"
 PlayScene::PlayScene(int level)
 {
 	srand(time(NULL));
@@ -17,7 +18,7 @@ PlayScene::PlayScene(int level)
 	this->level = level;
 	map = Maps::GetInstance()->GetMap(this->level);
 	simon = CSimon::GetInstance();
-	simon->SetPosition(3200, 280.0f);//287.0f);
+	simon->SetPosition(3400, 280.0f);//287.0f);
 	simon->Respawn();
 	camera = Camera::GetInstance();
 	objects.clear();
@@ -424,10 +425,10 @@ void PlayScene::UpdateObjects(DWORD dt)
 				{
 
 					it = objects.erase(it);
-					Item* testitem = new Item(h->item);
-					testitem->SetPosition(h->x, h->y);
+					Item* item = new Item(h->item);
+					item->SetPosition(h->x, h->y);
 					
-					objects.push_back(testitem);
+					objects.push_back(item);
 					
 					delete h;
 					continue;
@@ -501,10 +502,36 @@ void PlayScene::UpdateObjects(DWORD dt)
 				{
 					e->Update(dt, &objects);
 				}
+				break;
 			}
-			case 9:
+			case TAG_DOOR:
 			{
 				o->Update(dt,&objects);
+				break;
+			}
+			case TAG_SPECIAL_BRICK:
+			{
+				Special_brick* sb = (Special_brick*)o;
+				if (sb->isDead)
+				{
+					it = objects.erase(it);
+					if (sb->item != -1)
+					{
+						Item* item = new Item(sb->item);
+						item->SetPosition(sb->x, sb->y);
+
+						objects.push_back(item);
+					}
+					
+
+					delete sb;
+					continue;
+				}
+				else
+				{
+					sb->Update(dt, &objects);
+				}
+				break;
 			}
 			default:
 				break;
