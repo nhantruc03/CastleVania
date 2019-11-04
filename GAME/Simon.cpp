@@ -37,6 +37,7 @@ CSimon::CSimon()
 	isinjured = false;
 
 	falling = false;
+	delayforsitting = 0;
 	
 	sitting = false;
 	secondweapon = NULL;
@@ -45,7 +46,7 @@ CSimon::CSimon()
 	heart = 5;
 	attacking = false;
 
-	
+	isgoingtostair = false;
 	isWalkingOnStair = false;
 	isOnStair = false;
 	goup = gotoleft = gotoright = godown = false;
@@ -71,6 +72,10 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	if (timeusingstopwatch)
 	{
 		timeusingstopwatch -= dt;
+	}
+	if (delayforsitting)
+	{
+		delayforsitting -= dt;
 	}
 	isCollidewith_DWNLTR = false;
 	isCollidewith_DWNRTL = false;
@@ -203,6 +208,13 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 						}
 						ishit = true;
 					}
+					else
+					{
+						x -= min_tx * dx + nx * 0.2f;		// nx*0.2f : need to push out a bit to avoid overlapping next frame
+						y -= min_ty * dy + ny * 0.2f;
+						/*x += dx;
+						y += dy;*/
+					}
 				}
 				else
 				{
@@ -216,7 +228,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	}
 
 	// cho roi nhanh hon khi roi tu cau thang xuong
-	if (vy > 0 &&!jumping && !isinjured && !isOnStair )
+	if (vy > 0 &&!jumping && !isinjured && !isOnStair &&State!=STATE_STANDING)
 	{
 		falling = true;
 	}
@@ -231,6 +243,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		vx = 0;
 		vy = vy * 2;
 		falling = false;
+		delayforsitting = 500;
 		ChangeState(STATE_FALL);
 	}
 	// kiem tra va cham voi quai vat va chuyen state injured
@@ -280,25 +293,25 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					dynamic_cast<Item*>(coObjects->at(i))->GetReward();
 				}
 				break;
-			case 999:
+			case TAG_INVISIBLE_OBJECT:
 				switch (coObjects->at(i)->type)
 				{
-				case 1:
+				case TYPE_INVI_O_GO_UP_STAIR_LTR:
 					if (y < coObjects->at(i)->y)
 					{
 						isCollidewith_UPLTR = true;
 					}
 					break;
-				case -1:
+				case TYPE_INVI_O_GO_UP_STAIR_RTL:
 					if (y < coObjects->at(i)->y)
 					{
 						isCollidewith_UPRTL = true;
 					}
 					break;
-				case 2:
+				case TYPE_INVI_O_GO_DOWN_STAIR_RTL:
 					isCollidewith_DWNRTL = true;
 					break;
-				case -2:
+				case TYPE_INVI_O_GO_DOWN_STAIR_LTR:
 					isCollidewith_DWNLTR = true;
 					break;
 				}
@@ -353,6 +366,7 @@ void CSimon::inoutstair_handle(DWORD dt)
 {
 	if ((((isCollidewith_UPLTR||isCollidewith_UPRTL) && keyCode[DIK_UP]&& !isOnStair) || ((isCollidewith_DWNRTL||isCollidewith_DWNLTR) && keyCode[DIK_DOWN] && !isOnStair)) && (State==STATE_STANDING||State==STATE_WALKING) && !falling)
 	{
+		isgoingtostair = true;
 		if (isCollidewith_UPLTR || isCollidewith_DWNRTL)
 		{
 			stair_type = 1;
@@ -371,50 +385,54 @@ void CSimon::inoutstair_handle(DWORD dt)
 			gotoright = true;
 		}
 	}
-
-	if (gotoright)
+	if (isgoingtostair)
 	{
-		ChangeState(STATE_WALKING);
-		isReverse = true;
-		vx = SIMON_WALKING_SPEED;
-		if (x >= stair_collide.left + (stair_collide.right - stair_collide.left) / 2)
+		if (gotoright)
 		{
-			if (!isOnStair)
+			ChangeState(STATE_WALKING);
+			isReverse = true;
+			vx = SIMON_WALKING_SPEED;
+			if (x >= stair_collide.left + (stair_collide.right - stair_collide.left) / 2)
 			{
-				x = stair_collide.left + (stair_collide.right - stair_collide.left) / 2;
-
-				gotoright = false;
-				gotoleft = false;
-				if (isCollidewith_UPLTR||isCollidewith_UPRTL)
+				if (!isOnStair)
 				{
-					goup = true;
-				}
-				else if (isCollidewith_DWNRTL||isCollidewith_DWNLTR)
-				{
-					godown = true;
+					x = stair_collide.left + (stair_collide.right - stair_collide.left) / 2;
+					isgoingtostair = false;
+					gotoright = false;
+					gotoleft = false;
+					if (isCollidewith_UPLTR || isCollidewith_UPRTL)
+					{
+						goup = true;
+					}
+					else if (isCollidewith_DWNRTL || isCollidewith_DWNLTR)
+					{
+						godown = true;
+					}
 				}
 			}
-		}
 
-	}
-	if (gotoleft)
-	{
-		ChangeState(STATE_WALKING);
-		isReverse = false;
-		vx = -SIMON_WALKING_SPEED;
-		if (x <= stair_collide.left + (stair_collide.right - stair_collide.left) / 2)
+		}
+		if (gotoleft)
 		{
-			if (!isOnStair) {
-				x = stair_collide.left + (stair_collide.right - stair_collide.left) / 2;
-				gotoright = false;
-				gotoleft = false;
-				if (isCollidewith_UPLTR||isCollidewith_UPRTL)
+			ChangeState(STATE_WALKING);
+			isReverse = false;
+			vx = -SIMON_WALKING_SPEED;
+			if (x <= stair_collide.left + (stair_collide.right - stair_collide.left) / 2)
+			{
+				if (!isOnStair) 
 				{
-					goup = true;
-				}
-				else if (isCollidewith_DWNRTL||isCollidewith_DWNLTR)
-				{
-					godown = true;
+					x = stair_collide.left + (stair_collide.right - stair_collide.left) / 2;
+					isgoingtostair = false;
+					gotoright = false;
+					gotoleft = false;
+					if (isCollidewith_UPLTR || isCollidewith_UPRTL)
+					{
+						goup = true;
+					}
+					else if (isCollidewith_DWNRTL || isCollidewith_DWNLTR)
+					{
+						godown = true;
+					}
 				}
 			}
 		}
@@ -667,7 +685,7 @@ void CSimon::ChangeState(int newState)
 		{
 			y -= 16 / 2;
 		}
-		vy = -(SIMON_JUMP_SPEED_Y/1.3f);
+		vy = -SIMON_JUMP_SPEED_Y/1.3f;
 		attacking = false;
 		sitting = false;
 		jumping = false;
@@ -726,7 +744,7 @@ void CSimon::Update_State()
 		break;
 	case STATE_SITTING:
 
-		if (!keyCode[DIK_DOWN])
+		if (!keyCode[DIK_DOWN]&&!delayforsitting)
 		{
 			sitting = false;
 			height = SIMON_HEIGHT;
@@ -760,7 +778,12 @@ void CSimon::Update_State()
 	case STATE_FALL:
 		if (vy == 0)
 		{
-			ChangeState(STATE_STANDING);
+			if (delayforsitting)
+			{
+				ChangeState(STATE_SITTING);
+			}
+			else
+				ChangeState(STATE_STANDING);
 		}
 		break;
 	case STATE_ATTACK:case STATE_SIT_ATTACKING:case STATE_ATTACK_ONSTAIR_DOWN:case STATE_ATTACK_ONSTAIR_UP:

@@ -3,6 +3,7 @@
 #include<fstream>
 #include"invisibleObject.h"
 #include"Special_brick.h"
+#include"Door.h"
 Map::Map(int level)
 {
 	rows = columns = 0;
@@ -121,8 +122,8 @@ vector<LPGAMEOBJECT> Map::get_BricksList()
 			break;
 			case 'i':
 			{
-				int type,x,y;
-				iFile >> type>> x>>y;
+				int type,x,y,width,height;
+				iFile >> type >> x >> y;
 				invisibleObject* invisibleO = new invisibleObject();
 				invisibleO->type = type;
 				invisibleO->SetPosition(x, y);
@@ -146,6 +147,15 @@ vector<LPGAMEOBJECT> Map::get_BricksList()
 				Special_brick * sb= new Special_brick(sb_id, item_id);
 				sb->SetPosition(x, y);
 				objects.push_back(sb);
+			}
+			break;
+			case 'd':
+			{
+				int door_type, x, y;
+				iFile >> door_type >> x >> y;
+				Door * door = new Door(door_type);
+				door->SetPosition(x, y);
+				objects.push_back(door);
 			}
 			break;
 			}

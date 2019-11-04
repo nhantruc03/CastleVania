@@ -30,25 +30,35 @@ void Sprites::LoadResources()
 	char fileName[30];
 	sprintf_s(fileName, "Res\\Text\\sprites.txt");
 	iFile.open(fileName);
-	int idtex, numsprites, tag;
 	while (!iFile.eof())
 	{
+		int tag,idtex;
 		iFile >> tag;
 		iFile >> idtex;
-		iFile >> numsprites;
 		texture = CTextures::GetInstance()->Get(idtex);
-		for (int i = 0; i < numsprites; i++)
+		if (tag != TAG_MAP1 && tag != TAG_MAP2)
 		{
-			int l, t, r, b;
-			iFile >> l >> t >> r >> b;
-			Add(tag, l, t, r, b, texture);
+			int numsprites;
+			iFile >> numsprites;
+			for (int i = 0; i < numsprites; i++)
+			{
+				int l, t, r, b;
+				iFile >> l >> t >> r >> b;
+				Add(tag, l, t, r, b, texture);
+
+			}
+		}
+		else
+		{
+			int numTileset, widthTileset, heightTileset;
+			iFile >> numTileset >> widthTileset >> heightTileset;
+			for (int i = 0; i < numTileset; i++)
+			{
+				Add(tag, i * widthTileset, 0, (i * widthTileset) + widthTileset, heightTileset, texture);
+			}
 
 		}
 	}
 	iFile.close();
-	texture = CTextures::GetInstance()->Get(8);
-	for (int i = 0; i < 119; i++)
-	{
-		Add(TAG_MAP2, i * 32, 0, (i * 32) + 32, 32, texture);
-	}
+	
 }

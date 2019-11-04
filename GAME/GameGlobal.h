@@ -8,7 +8,7 @@
 // Các thông số và biến tổng dùng cho toàn bộ Game
 #define WINDOW_CLASS_NAME L"CastleVania-17520122"
 #define MAIN_WINDOW_TITLE L"CastleVania-17520122"
-#define SCREEN_WIDTH 365//1536
+#define SCREEN_WIDTH 512//365//1536
 #define SCREEN_HEIGHT 365 // Chiều dài cửa sổ
 #define MAX_FRAME_RATE 120	// FPS
 #define BACKGROUND_COLOR D3DCOLOR_XRGB(0, 0, 0)		// Màu nền BackBuffer
@@ -62,8 +62,15 @@
 	#define TYPE_ENEMY_BULLET 4
 #define TAG_DOOR 9
 #define TAG_SPECIAL_BRICK 10
-#define TYPE_SPECIAL_BRICK1 0
-#define TYPE_SPECIAL_BRICK2	1
+	#define TYPE_SPECIAL_BRICK1 0
+	#define TYPE_SPECIAL_BRICK2	1
+#define TAG_INVISIBLE_OBJECT 999
+	#define TYPE_INVI_O_GO_UP_STAIR_LTR 1
+	#define TYPE_INVI_O_GO_UP_STAIR_RTL -1
+	#define TYPE_INVI_O_GO_DOWN_STAIR_RTL 2
+	#define TYPE_INVI_O_GO_DOWN_STAIR_LTR -2
+	#define TYPE_INVI_O_GO_DOWN_BASEMENT 100
+	#define TYPE_INVI_O_GO_UP_BASEMENT -100
 
 
 
