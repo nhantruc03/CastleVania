@@ -282,11 +282,8 @@ CGame::~CGame()
 
 void CGame::LoadResources()
 {
-	CTextures::GetInstance()->LoadResources();
-	Sprites::GetInstance()->LoadResources();
-	Animations::GetInstance()->LoadResources();
-	Maps::GetInstance()->LoadResources();
-	SceneManager::GetInstance()->ReplaceScene(new PlayScene(2));
+	
+	SceneManager::GetInstance()->ReplaceScene(new PlayScene(1));
 	
 }
 

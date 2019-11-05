@@ -38,10 +38,7 @@ void Panther::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		if (abs(SIMON->x - this->x) <= 160 && issleeping)
 		{
-			this->isrunning = true;
-			this->issleeping = false;
-			this->vx = ENEMY_WALKING_SPEED* 2 * direct;
-			this->animation = animations[1];
+			wakeup();
 		}
 		if (abs(x - prevX) >= distancebeforejump && !issleeping)
 		{
@@ -118,6 +115,14 @@ void Panther::jump()
 	checkjump_only1time = true;
 	isrunning = false;
 	animation = animations[2];
+}
+
+void Panther::wakeup()
+{
+	isrunning = true;
+	issleeping = false;
+	vx = ENEMY_WALKING_SPEED * 2 * direct;
+	animation = animations[1];
 }
 
 void Panther::run()

@@ -13,6 +13,7 @@ public:
 	Panther(float x, float y, int direction, float distancebeforejump);
 	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects);
 	void jump();
+	void wakeup();
 	void run();
 	~Panther();
 };

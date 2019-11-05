@@ -151,7 +151,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			{
 				if (!dynamic_cast<Item *>(e->obj)->rewarded)
 				{
-					if (ny > 0)
+					if (ny != 0)
 					{
 						y -= min_ty * dy + ny * 0.2f;
 					}
@@ -257,7 +257,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		ChangeState(STATE_INJURED);
 		ishit = false;
 	}
-	// xu ly va nhan vat va cham voi item khi item vua duoc sinh ra
+	// xu ly va nhan vat va cham voi object khi object xuat hien ben trong nhan vat
 	for (UINT i = 0; i < coObjects->size(); i++)
 	{
 		float l, t, r, b;

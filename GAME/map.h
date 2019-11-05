@@ -11,6 +11,7 @@ class Map
 	vector<LPGAMEOBJECT>objects;
 	Camera * camera;
 public:
+	int templevel;
 	int maplevel;
 	int** MapMatrix;
 	int columns;
@@ -19,7 +20,7 @@ public:
 	void Render();
 	void Setcam(Camera* cam) { camera = cam; };
 
-	vector<LPGAMEOBJECT> get_BricksList();
+	vector<LPGAMEOBJECT> get_objectlist();
 
 	~Map();
 };

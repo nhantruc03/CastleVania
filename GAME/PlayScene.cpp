@@ -12,17 +12,18 @@
 #include"Special_brick.h"
 PlayScene::PlayScene(int level)
 {
+	LoadResources();
 	srand(time(NULL));
 	keyCode.clear();
 	isgoingthroughdoor = false;
 	this->level = level;
 	map = Maps::GetInstance()->GetMap(this->level);
 	simon = CSimon::GetInstance();
-	simon->SetPosition(3000, 2.0f);//287.0f);
+	simon->SetPosition(100, 250.0f);//287.0f);
 	simon->Respawn();
 	camera = Camera::GetInstance();
 	objects.clear();
-	objects = map->get_BricksList();
+	objects = map->get_objectlist();
 
 
 	timetocreateghost = 0;
@@ -44,35 +45,13 @@ PlayScene::PlayScene(int level)
 	switch (level)
 	{
 	case 1:
-		endrect.left = 1376;
-		endrect.right = 1408;
-		endrect.top = 286;
-		endrect.bottom = 288;
-		break;
-	case 2:
-		/*downstair.left = 3200;
-		downstair.right = 3300;
-		downstair.top = 320 ;
-		downstair.bottom = 321;
-
-		downstair2.left = 3800;
-		downstair2.right = 3900;
-		downstair2.top = 320;
-		downstair2.bottom = 321;
-
-		upstair.left = 3200;
-		upstair.right = 3300;
-		upstair.top = 384;
-		upstair.bottom = 385;
-
-		upstair2.left = 3800;
-		upstair2.right = 3900;
-		upstair2.top = 384;
-		upstair2.bottom = 385;*/
-
-		/*door1 = new Door(0);
-		door1->SetPosition(3088, 80);
-		objects.push_back(door1);*/
+		for (int i = 0; i < objects.size(); i++)
+		{
+			if (objects[i]->tag == TAG_INVISIBLE_OBJECT && objects[i]->type == 0)
+			{
+				endrect = objects[i]->GetBoundingBox();
+			}
+		}
 		break;
 	}
 	gotoleft = false;
@@ -124,13 +103,14 @@ void PlayScene::Update(DWORD dt)
 			if (simon->vx > 0 && simon->x > 1520)simon->x = 1520;
 			if (simon->IsContain(endrect.left, endrect.top, endrect.right, endrect.bottom) && level == 1)
 			{
+				//simon->vx = 0;
 				simon->check_auto_move = true;
-				if (simon->x >= endrect.right)
+				if (simon->x >= endrect.right && !simon->jumping)
 				{
 
 					gotoleft = true;
 				}
-				if (simon->x <= endrect.left)
+				if (simon->x <= endrect.left && !simon->jumping)
 				{
 					gotoright = true;
 					gotoleft = false;
@@ -476,9 +456,6 @@ void PlayScene::UpdateObjects(DWORD dt)
 	while (it != objects.end())
 	{
 		LPGAMEOBJECT o = *it;
-		//RECT temp = o->GetBoundingBox();
-		/*if (camera->IsContain(temp))
-		{*/
 			switch (o->tag)
 			{
 			case TAG_HOLDER:
@@ -582,7 +559,7 @@ void PlayScene::UpdateObjects(DWORD dt)
 					if (sb->item != -1)
 					{
 						Item* item = new Item(sb->item);
-						item->SetPosition(sb->x, sb->y);
+						item->SetPosition(sb->x, sb->y-5);
 
 						objects.push_back(item);
 					}
@@ -600,14 +577,16 @@ void PlayScene::UpdateObjects(DWORD dt)
 			default:
 				break;
 			}
-		/*}*/
 		++it;
 	}
 }
 
 void PlayScene::LoadResources()
 {
-	
+	CTextures::GetInstance()->LoadResources();
+	Sprites::GetInstance()->LoadResources();
+	Animations::GetInstance()->LoadResources();
+	Maps::GetInstance()->LoadResources();
 }
 
 void PlayScene::Render()
