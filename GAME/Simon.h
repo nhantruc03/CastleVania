@@ -9,6 +9,8 @@ class CSimon : public CGameObject
 	static CSimon * _instance;
 public:
 
+	float timeusingholycross;
+
 	float delayforsitting;
 
 	bool isgoingtostair;

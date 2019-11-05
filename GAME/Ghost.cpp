@@ -5,6 +5,8 @@
 Ghost::Ghost(float x, float y, int direction)
 {
 	this->x = x;
+	this->tag = TAG_ENEMY;
+	this->type = TYPE_ENEMY_GHOST;
 	this->y = y;
 	this->direct = direction;
 	if (direct == -1)
@@ -13,18 +15,16 @@ Ghost::Ghost(float x, float y, int direction)
 	}
 	else
 		isReverse = true;
-
+	turn = false;
 	this->isDead = false;
 	this->ishit = false;
-	animation = Animations::GetInstance()->Get(8, 0);
+	animation = Animations::GetInstance()->Get(tag, 0);
 
 	hit_effect = Sprites::GetInstance()->Get(TAG_EFFECT, TYPE_EFFECT_HIT);
 	this->vx = ENEMY_WALKING_SPEED * direct;
 	this->vy = 0;
 	this->width = 32;
 	this->height = 64;
-	this->tag = TAG_ENEMY;
-	this->type = TYPE_ENEMY_GHOST;
 	this->health = 1;
 }
 
@@ -59,8 +59,7 @@ void Ghost::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					if (nx != 0)
 					{
-						this->vx *= -1;
-						this->isReverse = !isReverse;
+						turn = true;
 					}
 					if (ny == -1)
 					{
@@ -69,6 +68,13 @@ void Ghost::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 			}
 		}
+		if (turn)
+		{
+			vx = -vx;
+			isReverse = !isReverse;
+			turn = false;
+		}
+
 		animation->Update();
 		if (isBurn)
 		{

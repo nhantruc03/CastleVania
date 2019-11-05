@@ -82,6 +82,7 @@ void Holy_water::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						active = true; 
 						vx = vy = 0;
 						animation = animations[1];
+						y -= 5;
 					}
 				}
 				if (dynamic_cast<Enemy*>(e->obj))

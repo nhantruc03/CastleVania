@@ -5,8 +5,6 @@ class Door : public CGameObject
 public:
 	CAnimation* animation;
 	
-	//bool isclosed;
-//	bool isopened;
 	void open()
 	{
 		animation = animations[1];
@@ -18,16 +16,22 @@ public:
 	bool isclosed()
 	{
 		if (animation == animations[0])
+		{
 			return true;
+		}
 		if (animation == animations[3] && animation->CheckEndAni())
+		{
 			return true;
+		}
 		return false;
 	}
 
 	bool isopened()
 	{
 		if (animation == animations[1] && animation->CheckEndAni())
+		{
 			return true;
+		}
 		return false;
 	}
 	Door(int id)

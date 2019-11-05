@@ -58,15 +58,15 @@ void CGameObject::CalcPotentialCollisions(vector<LPGAMEOBJECT>* coObjects, vecto
 {
 	for (UINT i = 0; i < coObjects->size(); i++)
 	{
-		if (dynamic_cast<CSimon*>(this) && (coObjects->at(i)->tag == TAG_HOLDER || coObjects->at(i)->tag == 999 || (dynamic_cast<Item*>(coObjects->at(i))&& dynamic_cast<Item*>(coObjects->at(i))->rewarded)))
+		if (dynamic_cast<CSimon*>(this) && (coObjects->at(i)->tag == TAG_HOLDER || coObjects->at(i)->tag == TAG_INVISIBLE_OBJECT || (dynamic_cast<Item*>(coObjects->at(i))&& dynamic_cast<Item*>(coObjects->at(i))->rewarded)))
 		{
 			continue;
 		}
-		if (dynamic_cast<Dagger*>(this) && (coObjects->at(i)->tag == TAG_ITEM || coObjects->at(i)->tag == 999))
+		if (dynamic_cast<Weapon*>(this) && (coObjects->at(i)->tag == TAG_ITEM || coObjects->at(i)->tag == TAG_INVISIBLE_OBJECT))
 		{
 			continue;
 		}
-		if (dynamic_cast<Enemy*>(this) && (coObjects->at(i)->tag == TAG_ITEM || coObjects->at(i)->tag == 999 || coObjects->at(i)->tag == TAG_HOLDER || coObjects->at(i)->tag == 8))	
+		if (dynamic_cast<Enemy*>(this) && (coObjects->at(i)->tag == TAG_ITEM || coObjects->at(i)->tag == TAG_INVISIBLE_OBJECT || coObjects->at(i)->tag == TAG_HOLDER || coObjects->at(i)->tag == 8))
 		{
 			continue;
 		}
@@ -117,6 +117,8 @@ void CGameObject::FilterCollision(vector<LPCOLLISIONEVENT>& coEvents, vector<LPC
 void CGameObject::AddAnimation(int tag,int index)
 {
 	LPANIMATION ani = Animations::GetInstance()->Get(tag,index);
+	ani->SetEndAniFalse();
+	ani->currentFrame = -1;
 	animations.push_back(ani);
 }
 CGameObject::~CGameObject()

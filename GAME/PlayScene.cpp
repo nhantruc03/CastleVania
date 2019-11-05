@@ -18,7 +18,7 @@ PlayScene::PlayScene(int level)
 	this->level = level;
 	map = Maps::GetInstance()->GetMap(this->level);
 	simon = CSimon::GetInstance();
-	simon->SetPosition(3400, 2.0f);//287.0f);
+	simon->SetPosition(3000, 2.0f);//287.0f);
 	simon->Respawn();
 	camera = Camera::GetInstance();
 	objects.clear();
@@ -87,11 +87,28 @@ PlayScene::~PlayScene()
 
 void PlayScene::Update(DWORD dt)
 {
-	if (simon->upgrade_time)
+	if (simon->upgrade_time || simon->timeusingholycross)
 	{
-		simon->upgrade_time -= dt;
+		if (simon->upgrade_time)
+		{
+			simon->upgrade_time -= dt;
+		}
+		else if(simon->timeusingholycross)
+		{
+			simon->timeusingholycross -= dt;
+			if (simon->timeusingholycross <= TIME_USING_HOLY_CROSS/2)
+			{
+				for (int i = 0; i < objects.size(); i++)
+				{
+					if (objects[i]->tag == TAG_ENEMY)
+					{
+						objects[i]->isDead = true;
+					}
+				}
+			}
+		}
 	}
-	else
+	else if(!simon->upgrade_time && !simon->timeusingholycross)
 	{
 		UpdatePlayer(dt);
 		if (!isgoingthroughdoor)
@@ -459,7 +476,7 @@ void PlayScene::UpdateObjects(DWORD dt)
 	while (it != objects.end())
 	{
 		LPGAMEOBJECT o = *it;
-		RECT temp = o->GetBoundingBox();
+		//RECT temp = o->GetBoundingBox();
 		/*if (camera->IsContain(temp))
 		{*/
 			switch (o->tag)

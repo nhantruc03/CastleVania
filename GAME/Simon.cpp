@@ -34,6 +34,7 @@ CSimon::CSimon()
 	ishit = false;
 	untouchable = 0;
 	upgrade_time = 0;
+	timeusingholycross = 0;
 	isinjured = false;
 
 	falling = false;
@@ -99,7 +100,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 	// turn off collision when die 
 	CalcPotentialCollisions(coObjects, coEvents);
-	if (GetTickCount() - untouchable_start > 2000)
+	if (GetTickCount() - untouchable_start > UNTOUCHABLE_TIME)
 	{
 		untouchable_start = 0;
 		untouchable = 0;
@@ -174,9 +175,13 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					{
 						secondweapon = TYPE_WEAPON_STOP_WATCH;
 					}
+					if (e->obj->type == TYPE_ITEM_HOLY_CROSS)
+					{
+						timeusingholycross = TIME_USING_HOLY_CROSS;
+					}
 					if (e->obj->type == TYPE_ITEM_WHIP)
 					{
-						upgrade_time = 1000;
+						upgrade_time = TIME_UPGRADE;
 						morningstarlevel += 1;
 						if (morningstarlevel > 3)
 						{
@@ -228,7 +233,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	}
 
 	// cho roi nhanh hon khi roi tu cau thang xuong
-	if (vy > 0 &&!jumping && !isinjured && !isOnStair &&State!=STATE_STANDING)
+	if (vy > 0.02 &&!jumping && !isinjured && !isOnStair)
 	{
 		falling = true;
 	}
@@ -243,7 +248,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		vx = 0;
 		vy = vy * 2;
 		falling = false;
-		delayforsitting = 500;
+		delayforsitting = TIME_DELAY_FOR_SITTING;
 		ChangeState(STATE_FALL);
 	}
 	// kiem tra va cham voi quai vat va chuyen state injured
@@ -281,8 +286,11 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					case TYPE_ITEM_STOP_WATCH:
 						secondweapon = TYPE_WEAPON_STOP_WATCH;
 						break;
+					case TYPE_ITEM_HOLY_CROSS:
+						timeusingholycross = TIME_USING_HOLY_CROSS;
+						break;
 					case TYPE_ITEM_WHIP:
-						upgrade_time = 1000;
+						upgrade_time = TIME_UPGRADE;
 						morningstarlevel += 1;
 						if (morningstarlevel > 3)
 						{
@@ -463,6 +471,7 @@ void CSimon::inoutstair_handle(DWORD dt)
 	}
 	else if (State == STATE_WALK_ONSTAIR_DOWN && (isCollidewith_UPLTR||isCollidewith_UPRTL))
 	{
+		y = prevY + 16;
 		ChangeState(STATE_STANDING);
 	}
 }
@@ -550,7 +559,7 @@ void CSimon::OnKeyDown(int key)
 					if (keyCode[DIK_UP] && secondweapon == 3 && heart >= 5 && !timeusingstopwatch)
 					{
 						heart -= 5;
-						timeusingstopwatch = 5000;
+						timeusingstopwatch = TIME_USING_STOP_WATCH;
 					}
 				}
 			}
