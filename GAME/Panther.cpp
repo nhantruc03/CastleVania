@@ -1,6 +1,6 @@
 #include "Panther.h"
 #include"Simon.h"
-Panther::Panther(float x, float y, int direction, float distancebeforejump)
+Panther::Panther(float x, float y, int direction)
 {
 	this->isDead = false;
 	this->ishit = false;
@@ -9,9 +9,8 @@ Panther::Panther(float x, float y, int direction, float distancebeforejump)
 	AddAnimation(tag, 1);
 	AddAnimation(tag, 2);
 	AddAnimation(tag, 3);
-	this->distancebeforejump = distancebeforejump;
 	issleeping = true;
-	checkjump_only1time = false;
+	isjumping = false;
 	isrunning = false;
 	this->x = x;
 	this->y = y;
@@ -36,17 +35,22 @@ void Panther::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (!SIMON->timeusingstopwatch)
 	{
+		if (timeshowhiteffect)
+		{
+			timeshowhiteffect -= dt;
+		}
 		if (abs(SIMON->x - this->x) <= 160 && issleeping)
 		{
 			wakeup();
 		}
-		if (abs(x - prevX) >= distancebeforejump && !issleeping)
+		if ((x<=brick.left+1 || x>=brick.right-1)&&!issleeping && !isjumping)
 		{
 			jump();
 		}
 		vy += ENEMY_GRAVITY * dt;// Simple fall down
 
 		CGameObject::Update(dt, coObjects);
+
 		vector<LPCOLLISIONEVENT> coEvents;
 		vector<LPCOLLISIONEVENT> coEventsResult;
 		coEvents.clear();
@@ -70,14 +74,16 @@ void Panther::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				LPCOLLISIONEVENT e = coEventsResult[i];
 				if (dynamic_cast<CBrick*>(e->obj))
 				{
-					if (checkjump_only1time)
+
+					if (isjumping)
 					{
 						x += dx;
 					}
 					if (ny == -1)
 					{
+						brick = e->obj->GetBoundingBox();
 						this->vy = 0;
-						if (checkjump_only1time)
+						if (isjumping)
 						{
 							if (!isrunning)
 							{
@@ -109,10 +115,8 @@ void Panther::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void Panther::jump()
 {
-	if (checkjump_only1time == true)
-		return;
 	vy = -ENEMY_JUMP_SPEED_Y;
-	checkjump_only1time = true;
+	isjumping = true;
 	isrunning = false;
 	animation = animations[2];
 }
@@ -127,9 +131,11 @@ void Panther::wakeup()
 
 void Panther::run()
 {
-	vx = ENEMY_WALKING_SPEED * -direct;
-	this->isReverse = !isReverse;
+	direct = -direct;
+	isjumping = false;
 	isrunning = true;
+	vx = ENEMY_WALKING_SPEED * 2* direct;
+	this->isReverse = !isReverse;
 	animation = animations[1];
 }
 

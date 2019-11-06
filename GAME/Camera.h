@@ -9,6 +9,7 @@ private:
 
 
 public:
+	bool inzone1;
 	bool inzone2;
 	int camWidht, camHeight;
 	D3DXVECTOR3 camPosition;

@@ -70,7 +70,7 @@ void CGameObject::CalcPotentialCollisions(vector<LPGAMEOBJECT>* coObjects, vecto
 		{
 			continue;
 		}
-		if (dynamic_cast<Item*>(this) && (coObjects->at(i)->tag != TAG_BRICK))
+		if (dynamic_cast<Item*>(this) && (coObjects->at(i)->tag != TAG_BRICK && coObjects->at(i)->tag!= TAG_SPECIAL_BRICK))
 		{
 			continue;
 		}

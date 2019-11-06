@@ -1,6 +1,7 @@
 #include"MorningStar.h"
 #include"Simon.h"
 #include"Special_brick.h"
+#include"Enemy.h"
 MorningStar::MorningStar(int level)
 {
 	this->level = level;
@@ -56,7 +57,10 @@ void MorningStar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					coObjects->at(i)->isHit();
 					break;
 				case TAG_ENEMY:
-					coObjects->at(i)->isHit();
+					if (dynamic_cast<Enemy*>(coObjects->at(i))->timeshowhiteffect<=0)
+					{
+						coObjects->at(i)->isHit();
+					}
 					break;
 				default:
 					break;

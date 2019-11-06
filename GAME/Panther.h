@@ -4,13 +4,13 @@
 class Panther :public Enemy
 {
 public:
+	RECT brick;
 	bool available;
 	bool issleeping;
-	bool checkjump_only1time;
+	bool isjumping;
 	bool isrunning;
-	float distancebeforejump;
 	float prevX;
-	Panther(float x, float y, int direction, float distancebeforejump);
+	Panther(float x, float y, int direction);
 	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects);
 	void jump();
 	void wakeup();

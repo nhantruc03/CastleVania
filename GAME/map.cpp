@@ -40,20 +40,30 @@ Map::Map(int level)
 
 void Map::Render()
 {
-	for (int i = 0; i < rows; i++)
+	int firstcolumn = camera->GetBound().left / 32;
+	int lastcolumn = camera->GetBound().right / 32;
+	if (lastcolumn+1 <= columns)
 	{
-		for (int j = 0; j < columns; j++)
+		lastcolumn += 1;
+	}
+	int firstrow = camera->GetBound().top / 32;
+	int lastrow;
+	if (templevel == 1)
+	{
+		lastrow = 10;
+	}
+	else
+	{
+		lastrow = 11;
+		if (camera->movedownstair)
 		{
-			RECT tileset;
-			tileset.left = j * 32;
-			tileset.right = tileset.left + 32;
-			tileset.top = i * 32;
-			tileset.bottom = tileset.top + 32;
-			// kiem tra xem vi tri cua tileset co dang nam trong camera khong ?
-			if (camera->IsContain(tileset) == false)
-			{
-				continue;
-			}
+			lastrow = 23;
+		}
+	}
+	for (int i = firstrow; i < lastrow; i++)
+	{
+		for (int j = firstcolumn; j < lastcolumn; j++)
+		{
 			Sprites::GetInstance()->Get(maplevel, MapMatrix[i][j] -1)->Draw((j * 32) + 16, (i * 32) + 16);
 		}
 	}

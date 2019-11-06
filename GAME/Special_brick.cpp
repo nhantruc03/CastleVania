@@ -2,6 +2,7 @@
 
 Special_brick::Special_brick(int type_id, int itemid)
 {
+	check_spawnitem = false;
 	hit_effect = Sprites::GetInstance()->Get(TAG_EFFECT, TYPE_EFFECT_HIT);
 
 	tag = TAG_SPECIAL_BRICK;

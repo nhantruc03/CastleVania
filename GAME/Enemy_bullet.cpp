@@ -31,8 +31,12 @@ void Enemy_bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (!SIMON->timeusingstopwatch)
 	{
-		CGameObject::Update(dt, coObjects);
+		if (timeshowhiteffect)
+		{
+			timeshowhiteffect -= dt;
+		}
 		x += dx;
+		CGameObject::Update(dt, coObjects);
 		animation->Update();
 
 		if (isBurn)

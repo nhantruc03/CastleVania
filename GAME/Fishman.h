@@ -6,6 +6,7 @@ class Fishman :public Enemy
 {
 public:
 	float timetoattack;
+	bool canspawnbullet;
 	bool isrunning;
 	Fishman(float x, float y, int direction);
 	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects);

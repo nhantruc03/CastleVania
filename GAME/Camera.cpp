@@ -11,6 +11,7 @@ Camera * Camera::GetInstance()
 
 Camera::Camera(int width, int height)
 {
+	inzone1 = true;
 	inzone2 = false;
 	movedownstair = false;
 	camWidht = width;
@@ -63,6 +64,13 @@ void Camera::Update(int maplevel)
 	}
 	else
 	{
+		if (inzone1)
+		{
+			if (camPosition.x + camWidht / 2 > 3088)
+			{
+				camPosition = D3DXVECTOR3(3088- camWidht / 2, 0, 0);
+			}
+		}
 		if (inzone2)
 		{
 			if (camPosition.x - camWidht / 2 < 3072)

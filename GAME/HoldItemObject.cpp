@@ -3,7 +3,7 @@
 HoldItemObject::HoldItemObject(int type_id, int itemid)
 {
 	hit_effect = Sprites::GetInstance()->Get(TAG_EFFECT, TYPE_EFFECT_HIT);
-	
+	check_spawnitem = false;
 	tag = TAG_HOLDER;
 	item = itemid;
 	type = type_id;

@@ -31,6 +31,7 @@
     <ClCompile Include="GameGlobal.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Ghost.cpp" />
+    <ClCompile Include="Grid.cpp" />
     <ClCompile Include="HoldItemObject.cpp" />
     <ClCompile Include="Holy_water.cpp" />
     <ClCompile Include="invisibleObject.cpp" />
@@ -64,6 +65,7 @@
     <ClInclude Include="GameGlobal.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Ghost.h" />
+    <ClInclude Include="Grid.h" />
     <ClInclude Include="HoldItemObject.h" />
     <ClInclude Include="Holy_water.h" />
     <ClInclude Include="invisibleObject.h" />

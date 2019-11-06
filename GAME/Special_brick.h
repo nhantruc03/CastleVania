@@ -8,6 +8,7 @@ protected:
 	LPSPRITE hit_effect;
 
 public:
+	bool check_spawnitem;
 	int item;
 	Special_brick(int type_id, int itemid);
 	void Render();

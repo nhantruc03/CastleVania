@@ -9,7 +9,7 @@
 #define WINDOW_CLASS_NAME L"CastleVania-17520122"
 #define MAIN_WINDOW_TITLE L"CastleVania-17520122"
 #define SCREEN_WIDTH 512//365//1536
-#define SCREEN_HEIGHT 365 // Chiều dài cửa sổ
+#define SCREEN_HEIGHT 390 // Chiều dài cửa sổ
 #define MAX_FRAME_RATE 120	// FPS
 #define BACKGROUND_COLOR D3DCOLOR_XRGB(0, 0, 0)		// Màu nền BackBuffer
 #define KEYBOARD_BUFFER_SIZE 1024

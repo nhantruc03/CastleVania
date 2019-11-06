@@ -8,6 +8,7 @@ protected:
 	LPSPRITE hit_effect;
 	
 public:
+	bool check_spawnitem;
 	bool ishit;
 	int item;
 	HoldItemObject(int type_id, int itemid);

@@ -5,15 +5,21 @@
 #include"map.h"
 #include"Brick.h"
 #include"Door.h"
-
+#include"Grid.h"
+#include"Enemy.h"
+#include"invisibleObject.h"
 using namespace std;
 class PlayScene : public Scene
 {
 private:
 	CSimon* simon;
-	vector<LPGAMEOBJECT>objects;
+	
 
 public:
+	vector<Enemy*>listenemy;
+	vector<LPGAMEOBJECT>objects;
+	Grid *grid;
+
 	bool cancreateghost;
 	DWORD timetocreateghost;
 	int countghost;	
@@ -39,8 +45,9 @@ public:
 	Door* door1;
 	RECT DOOR1;
 
-
+	invisibleObject* endrectmap1;
 	RECT endrect;
+
 	PlayScene(int level);
 	~PlayScene();
 	int level;

@@ -361,7 +361,8 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				delete w;
 				continue;
 			}
-			w->Update(dt, coObjects);
+			else
+				w->Update(dt, coObjects);
 			break;
 		}
 		}

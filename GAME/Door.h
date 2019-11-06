@@ -49,7 +49,9 @@ public:
 	}
 	void Render()
 	{
-		animation->Render(x, y);
+		if((animation == animations[1] && animation->CheckEndAni())|| (animation == animations[3] && animation->CheckEndAni())){}
+		else
+			animation->Render(x, y);
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	{

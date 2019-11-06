@@ -31,6 +31,10 @@ void Bat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (!SIMON->timeusingstopwatch)
 	{
+		if (timeshowhiteffect)
+		{
+			timeshowhiteffect -= dt;
+		}
 		if (abs(y - prevY) >= 20)
 		{
 			vy = -vy;

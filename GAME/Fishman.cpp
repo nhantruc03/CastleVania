@@ -33,12 +33,17 @@ Fishman::Fishman(float x, float y, int direction)
 	isrunning = false;
 	timetoattack = 5000;
 	attacking = false;
+	canspawnbullet = false;;
 }
 
 void Fishman::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (!SIMON->timeusingstopwatch)
 	{
+		if (timeshowhiteffect)
+		{
+			timeshowhiteffect -= dt;
+		}
 		if ((vx > 0 && x > SIMON->x +64) || (vx < 0 && x < SIMON->x-64))
 		{
 			vx = -vx;
@@ -139,8 +144,7 @@ void Fishman::attack(vector<LPGAMEOBJECT>* coObjects)
 	this->vx = 0;
 	animation = animations[2];
 	attacking = true;
-	Enemy_bullet* bullet = new Enemy_bullet(x, y - 20, direct);
-	coObjects->push_back(bullet);
+	canspawnbullet = true;
 }
 
 Fishman::~Fishman()

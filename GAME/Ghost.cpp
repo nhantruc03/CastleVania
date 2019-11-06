@@ -18,6 +18,7 @@ Ghost::Ghost(float x, float y, int direction)
 	turn = false;
 	this->isDead = false;
 	this->ishit = false;
+	this->isBurn = false;
 	animation = Animations::GetInstance()->Get(tag, 0);
 
 	hit_effect = Sprites::GetInstance()->Get(TAG_EFFECT, TYPE_EFFECT_HIT);
@@ -25,13 +26,22 @@ Ghost::Ghost(float x, float y, int direction)
 	this->vy = 0;
 	this->width = 32;
 	this->height = 64;
-	this->health = 1;
+	this->health = 2;
 }
 
 void Ghost::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (!SIMON->timeusingstopwatch)
 	{
+		if (timeshowhiteffect>0)
+		{
+			timeshowhiteffect -= dt;
+		}
+		if (health == 0)
+		{
+			Burn();
+		}
+		//Enemy::Update(dt, coObjects);
 		vy += ENEMY_GRAVITY * dt;
 		CGameObject::Update(dt, coObjects);
 		vector<LPCOLLISIONEVENT> coEvents;
