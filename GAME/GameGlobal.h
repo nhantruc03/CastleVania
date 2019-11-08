@@ -51,7 +51,6 @@
 	#define TYPE_EFFECT_HIT 3
 	#define TYPE_EFFECT_400 4
 	#define TYPE_EFFECT_700 5
-
 #define TAG_MAP2 6
 #define TAG_BRICK 7
 #define TAG_ENEMY 8
@@ -75,8 +74,8 @@
 
 
 
-#define ENEMY_GRAVITY			0.001f//0.0005f
-#define ENEMY_WALKING_SPEED		0.1f //0.05f
+#define ENEMY_GRAVITY			0.001f
+#define ENEMY_WALKING_SPEED		0.1f 
 #define ENEMY_JUMP_SPEED_Y		0.15f
 //// ===== Các thông số cho PLAYER ====
 #define SIMON_WALKING_SPEED		0.13f
@@ -99,10 +98,9 @@
 #define STATE_ATTACK_ONSTAIR_UP		13
 
 
-#define TIME_USING_HOLY_CROSS 1000
 #define TIME_USING_STOP_WATCH 5000
 #define TIME_UPGRADE 1000
-#define TIME_DELAY_FOR_SITTING 500	
+#define TIME_DELAY_FOR_SITTING 200	
 #define UNTOUCHABLE_TIME 2000
 
 #define SIMON_WIDTH					32

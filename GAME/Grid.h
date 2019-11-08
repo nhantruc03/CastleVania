@@ -21,6 +21,5 @@ public:
 	void Loadresources();
 	void GetListObject(vector<CGameObject*>& ListObj);
 	void insert(CGameObject* object);
-	void update();
 };
 

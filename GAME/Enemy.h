@@ -24,6 +24,21 @@ public:
 		{
 			Burn();
 		}
+		animation->Update();
+		if (isBurn)
+		{
+			vx = vy = 0;
+			if (animation->CheckEndAni())
+			{
+				isDead = true;
+				animation->SetEndAniFalse();
+				animation->currentFrame = -1;
+			}
+		}
+		if (!Camera::GetInstance()->IsContain(this->GetBoundingBox()))
+		{
+			this->isDead = true;
+		}
 	}
 
 	virtual void isHit() { ishit = true; }
@@ -41,6 +56,10 @@ public:
 			timeshowhiteffect = 200;
 			health -= 1;
 			ishit = false;
+			if (health == 0)
+			{
+				Burn();
+			}
 		}
 		
 		animation->isreverse = isReverse;

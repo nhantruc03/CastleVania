@@ -17,14 +17,21 @@ PlayScene::PlayScene(int level)
 	srand(time(NULL));
 	keyCode.clear();
 	isgoingthroughdoor = false;
+	isgoingthroughendrect = false;
 	this->level = level;
+
 	map = Maps::GetInstance()->GetMap(this->level);
+
 	simon = CSimon::GetInstance();
-	simon->SetPosition(3000, 5);//287.0f);
+	simon->SetPosition(30, 250);//287.0f);
 	simon->Respawn();
+
 	camera = Camera::GetInstance();
+
+	//camera->inzone1 = false;
+
 	objects.clear();
-//	objects = map->get_objectlist();
+
 	grid = new Grid(level);
 	grid->Loadresources();
 
@@ -44,18 +51,6 @@ PlayScene::PlayScene(int level)
 	cancreatefishman = true;
 	countfishman = 0;
 
-	/*switch (level)
-	{
-	case 1:
-		for (int i = 0; i < objects.size(); i++)
-		{
-			if (objects[i]->tag == TAG_INVISIBLE_OBJECT && objects[i]->type == 0)
-			{
-				endrect = objects[i]->GetBoundingBox();
-			}
-		}
-		break;
-	}*/
 	gotoleft = false;
 	gotoright = false;
 }
@@ -68,23 +63,21 @@ PlayScene::~PlayScene()
 
 void PlayScene::Update(DWORD dt)
 {
-	if (simon->upgrade_time || simon->timeusingholycross)
+	if (simon->upgrade_time>0)
 	{
-		if (simon->upgrade_time)
-		{
-			simon->upgrade_time -= dt;
-		}
-		else if(simon->timeusingholycross)
-		{
-			simon->timeusingholycross -= dt;
-			if (simon->timeusingholycross <= TIME_USING_HOLY_CROSS/2)
-			{
-				listenemy.clear();
-			}
-		}
+		simon->upgrade_time -= dt;
 	}
-	else if(!simon->upgrade_time && !simon->timeusingholycross)
+	else if(simon->upgrade_time<=0)
 	{
+		if (simon->usingholycross || isgoingthroughdoor)
+		{
+			listenemy.clear();
+			cancreatebat = true;
+			cancreateghost = true;
+			cancreatefishman = true;
+			cancreatepanther = true;
+			simon->usingholycross = false;
+		}
 		for (Enemy* e : listenemy)
 		{
 			objects.push_back(e);
@@ -113,40 +106,42 @@ void PlayScene::Update(DWORD dt)
 			}
 			else
 			{
-				
-				if (simon->IsContain(endrectmap1->GetBoundingBox().left, endrectmap1->GetBoundingBox().top, endrectmap1->GetBoundingBox().right, endrectmap1->GetBoundingBox().bottom) && level == 1)
+				if (simon->IsContain(endrectmap1->GetBoundingBox().left, endrectmap1->GetBoundingBox().top, endrectmap1->GetBoundingBox().right, endrectmap1->GetBoundingBox().bottom))
 				{
-					//simon->vx = 0;
+					isgoingthroughendrect = true;
 					simon->check_auto_move = true;
 					if (simon->x >= endrectmap1->GetBoundingBox().right && !simon->jumping)
 					{
 
-						gotoleft = true;
+						simon->gotoleft = true;
 					}
 					if (simon->x <= endrectmap1->GetBoundingBox().left && !simon->jumping)
 					{
-						gotoright = true;
-						gotoleft = false;
+						simon->gotoright = true;
+						simon->gotoleft = false;
 					}
 				}
-				if (gotoleft)
+				if (isgoingthroughendrect)
 				{
-					simon->ChangeState(STATE_WALKING);
-					simon->isReverse = false;
-					simon->vx = -0.05f;
-				}
-				if (gotoright)
-				{
-					simon->ChangeState(STATE_WALKING);
-					simon->isReverse = true;
-					simon->vx = 0.05f;
-					if (simon->x >= endrectmap1->GetBoundingBox().right)
+					if (simon->gotoleft)
 					{
-						simon->check_auto_move = false;
-						level += 1;
-						gotoleft = gotoright = false;
-						delete endrectmap1;
-						SceneManager::GetInstance()->ReplaceScene(new PlayScene(level));
+						simon->ChangeState(STATE_WALKING);
+						simon->isReverse = false;
+						simon->vx = -0.05f;
+					}
+					if (simon->gotoright)
+					{
+						simon->ChangeState(STATE_WALKING);
+						simon->isReverse = true;
+						simon->vx = 0.05f;
+						if (simon->x >= endrectmap1->GetBoundingBox().right)
+						{
+							simon->check_auto_move = false;
+							level += 1;
+							simon->gotoleft = simon->gotoright = false;
+							delete endrectmap1;
+							SceneManager::GetInstance()->ReplaceScene(new PlayScene(level));
+						}
 					}
 				}
 			}
@@ -176,8 +171,8 @@ void PlayScene::Update(DWORD dt)
 								camera->movedownstair = true;
 								camera->SetPosition(simon->x, -384);
 
-								simon->prevX = simon->prevX+16;
-								simon->prevY = simon->prevY + 80;
+								simon->prevX = simon->prevX;
+								simon->prevY = simon->prevY + 64;
 
 								simon->SetPosition(simon->x, simon->y+64);
 							}
@@ -200,27 +195,6 @@ void PlayScene::Update(DWORD dt)
 				}
 				
 			}
-			//if ((simon->IsContain(downstair.left, downstair.top, downstair.right, downstair.bottom) || simon->IsContain(downstair2.left, downstair2.top, downstair2.right, downstair2.bottom)) && (simon->y > downstair.top || simon->y > downstair2.top) && simon->State == STATE_WALK_ONSTAIR_DOWN)
-			//{
-			//	camera->movedownstair = true;
-			//	camera->SetPosition(simon->x, -384);
-			//	simon->prevX = simon->x;
-			//	simon->prevY = simon->y + 64;
-			//	simon->SetPosition(simon->x, simon->y + 64);
-			//}
-			//// di len ham
-			//else if ((simon->IsContain(upstair.left, upstair.top, upstair.right, upstair.bottom) || simon->IsContain(upstair2.left, upstair2.top, upstair2.right, upstair2.bottom)) && (simon->y < upstair.bottom || simon->y < upstair2.bottom) && simon->State == STATE_WALK_ONSTAIR_UP)
-			//{
-			//	if (simon->IsContain(upstair.left, upstair.top, upstair.right, upstair.bottom))
-			//	{
-			//		camera->inzone2 = true;
-			//	}
-			//	camera->movedownstair = false;
-			//	camera->SetPosition(simon->x, 0);
-			//	simon->prevX = simon->x;
-			//	simon->prevY = simon->y - 64;
-			//	simon->SetPosition(simon->x, simon->y - 64);
-			//}
 
 			// tao enemy ghost
 			if (timetocreateghost > 0)
@@ -352,7 +326,8 @@ void PlayScene::Update(DWORD dt)
 								Fishman* fishman = new Fishman(3520, 672, -1);
 								listenemy.push_back(fishman);
 								countfishman++;
-							}							
+							}		
+							timetocreatefishman = 3000;
 						}
 						if (simon->vx <= 0 && simon->x < 3264 && simon->x > 3072)
 						{
@@ -368,6 +343,7 @@ void PlayScene::Update(DWORD dt)
 								listenemy.push_back(fishman);
 								countfishman++;
 							}							
+							timetocreatefishman = 3000;
 						}
 						if (simon->x > 3520 && simon->x < 3712)
 						{
@@ -384,6 +360,7 @@ void PlayScene::Update(DWORD dt)
 								listenemy.push_back(fishman);
 								countfishman++;
 							}
+							timetocreatefishman = 3000;
 						}
 						if (simon->x > 3712)
 						{
@@ -399,12 +376,14 @@ void PlayScene::Update(DWORD dt)
 								listenemy.push_back(fishman);
 								countfishman++;
 							}
+							timetocreatefishman = 3000;
 						}
-						timetocreatefishman = 3000;
+					
 					}
 				}
 
 			}
+
 			// di qua cua 1
 			if (door1 == NULL)
 			{
@@ -480,48 +459,12 @@ void PlayScene::UpdatePlayer(DWORD dt)
 void PlayScene::UpdateObjects(DWORD dt)
 {
 	grid->GetListObject(objects);
-	//vector<LPGAMEOBJECT>::iterator it = objects.begin(); // iterator: con tro chi den 1 phan tu ben trong container, khong can biet thu tu phan tu ben trong mang
-	//while (it != objects.end())
-	//{
-	//	LPGAMEOBJECT o = *it;
-	//	switch (o->tag)
-	//	{
-	//	case TAG_HOLDER:
-	//	{
-	//		HoldItemObject* h = (HoldItemObject*)o;
-	//		h->Update(dt, &objects);
-	//		break;
-	//	}
-	//	case TAG_ITEM:
-	//	{
-	//		Item*i = (Item*)o;
-	//		i->Update(dt, &objects);
-	//		break;
-	//	}
-	//	
-	//	case TAG_DOOR:
-	//	{
-	//		o->Update(dt, &objects);
-	//		break;
-	//	}
-	//	case TAG_SPECIAL_BRICK:
-	//	{
-	//		Special_brick* sb = (Special_brick*)o;
-	//		sb->Update(dt, &objects);
-	//		break;
-	//	}
-	//	default:
-	//		break;
-	//	}
-	//	++it;
-	//}
+
 	for (CGameObject* o : objects)
 	{
 		o->Update(dt, &objects);
 	}
-	/*vector<Enemy*>::iterator it = listenemy.begin();
-	while (it!= listenemy.end())
-	{*/
+
 	for (int i = 0; i < listenemy.size(); i++)
 	{
 		Enemy* e = listenemy[i];
@@ -586,139 +529,7 @@ void PlayScene::UpdateObjects(DWORD dt)
 				e->Update(dt, &objects);
 		}
 	}
-		/*	++it;
-	}*/
 
-	//vector<LPGAMEOBJECT>::iterator it = objects.begin(); // iterator: con tro chi den 1 phan tu ben trong container, khong can biet thu tu phan tu ben trong mang
-	//while (it != objects.end())
-	//{
-	//	LPGAMEOBJECT o = *it;
-	//		switch (o->tag)
-	//		{
-	//		case TAG_HOLDER:
-	//		{
-	//			HoldItemObject* h=(HoldItemObject*) o;
-	//			
-	//			if (h->isDead==true)
-	//			{
-
-	//				it = objects.erase(it);
-	//				Item* item = new Item(h->item);
-	//				item->SetPosition(h->x, h->y);
-	//				
-	//				//objects.push_back(item);
-	//				
-	//				grid->insert(item);
-
-	//				delete h;
-	//				continue;
-	//			}
-	//			else
-	//			{
-	//				h->Update(dt, &objects);
-	//			}
-	//			break;
-	//		}
-	//		case TAG_ITEM:
-	//		{
-	//			Item*i = (Item*) o;
-	//			if (i->isDead)
-	//			{
-	//				it = objects.erase(it);
-	//				delete i;
-	//				continue;
-	//			}
-	//			else
-	//			{
-	//				i->Update(dt, &objects);
-	//			}
-	//			break; 
-	//		}
-	//		case TAG_ENEMY:
-	//		{
-	//			Enemy* e = (Enemy*)o;
-	//			if (e->isDead)
-	//			{
-	//				it = objects.erase(it);
-	//				if (e->type == TYPE_ENEMY_GHOST)
-	//				{
-	//					countghost--;
-	//					if (countghost == 0)
-	//					{
-	//						timetocreateghost = 3000;
-	//						cancreateghost = true;
-	//					}
-	//				}
-	//				if (e->type == TYPE_ENEMY_PANTHER)
-	//				{
-	//					countpanther--;
-	//					if (countpanther == 0)
-	//					{
-	//						cancreatepanther = true;
-	//					}
-	//				}
-	//				if (e->type == TYPE_ENEMY_BAT)
-	//				{
-	//					countbat--;
-	//					if (countbat == 0)
-	//					{
-	//						timetocreatebat = 1000;
-	//						cancreatebat = true;
-	//					}
-	//				}
-	//				if (e->type == TYPE_ENEMY_FISHMAN)
-	//				{
-	//					countfishman--;
-	//					if (countfishman == 0)
-	//					{
-	//						timetocreatefishman = 3000;
-	//					}
-	//				}
-
-	//				delete e;
-	//				continue;
-	//			}
-	//			else
-	//			{
-	//				e->Update(dt, &objects);
-	//			}
-	//			break;
-	//		}
-	//		case TAG_DOOR:
-	//		{
-	//			o->Update(dt,&objects);
-	//			break;
-	//		}
-	//		case TAG_SPECIAL_BRICK:
-	//		{
-	//			Special_brick* sb = (Special_brick*)o;
-	//			if (sb->isDead)
-	//			{
-	//				it = objects.erase(it);
-	//				if (sb->item != -1)
-	//				{
-	//					Item* item = new Item(sb->item);
-	//					item->SetPosition(sb->x, sb->y-5);
-
-	//					objects.push_back(item);
-	//				}
-	//				
-
-	//				delete sb;
-	//				continue;
-	//			}
-	//			else
-	//			{
-	//				sb->Update(dt, &objects);
-	//			}
-	//			break;
-	//		}
-	//		default:
-	//			break;
-	//		}
-	//	++it;
-	//}
-	//grid->update();
 }
 
 void PlayScene::LoadResources()

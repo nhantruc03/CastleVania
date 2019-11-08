@@ -45,8 +45,8 @@ public:
 	Door* door1;
 	RECT DOOR1;
 
+	bool isgoingthroughendrect;
 	invisibleObject* endrectmap1;
-	RECT endrect;
 
 	PlayScene(int level);
 	~PlayScene();

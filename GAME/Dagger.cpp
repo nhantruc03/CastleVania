@@ -92,9 +92,12 @@ void Dagger::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					SIMON->throwing = false;
 					break;
 				case TAG_ENEMY:
-					isDead = true;
-					SIMON->throwing = false;
-					coObjects->at(i)->isHit();
+					if (dynamic_cast<Enemy*>(coObjects->at(i))->timeshowhiteffect <= 0)
+					{
+						isDead = true;
+						SIMON->throwing = false;
+						coObjects->at(i)->isHit();
+					}
 					break;
 				}
 

@@ -26,22 +26,14 @@ Ghost::Ghost(float x, float y, int direction)
 	this->vy = 0;
 	this->width = 32;
 	this->height = 64;
-	this->health = 2;
+	this->health = 1;
 }
 
 void Ghost::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (!SIMON->timeusingstopwatch)
-	{
-		if (timeshowhiteffect>0)
-		{
-			timeshowhiteffect -= dt;
-		}
-		if (health == 0)
-		{
-			Burn();
-		}
-		//Enemy::Update(dt, coObjects);
+	{	
+		Enemy::Update(dt, coObjects);
 		vy += ENEMY_GRAVITY * dt;
 		CGameObject::Update(dt, coObjects);
 		vector<LPCOLLISIONEVENT> coEvents;
@@ -83,22 +75,6 @@ void Ghost::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			vx = -vx;
 			isReverse = !isReverse;
 			turn = false;
-		}
-
-		animation->Update();
-		if (isBurn)
-		{
-			vx = vy = 0;
-			if (animation->CheckEndAni())
-			{
-				isDead = true;
-				animation->SetEndAniFalse();
-				animation->currentFrame = -1;
-			}
-		}
-		if (!Camera::GetInstance()->IsContain(this->GetBoundingBox()))
-		{
-			this->isDead = true;
 		}
 	}
 }

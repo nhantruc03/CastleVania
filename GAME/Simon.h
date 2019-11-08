@@ -9,7 +9,7 @@ class CSimon : public CGameObject
 	static CSimon * _instance;
 public:
 
-	float timeusingholycross;
+	bool usingholycross;
 
 	float delayforsitting;
 

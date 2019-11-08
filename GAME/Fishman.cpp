@@ -40,10 +40,7 @@ void Fishman::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (!SIMON->timeusingstopwatch)
 	{
-		if (timeshowhiteffect)
-		{
-			timeshowhiteffect -= dt;
-		}
+		Enemy::Update(dt, coObjects);
 		if ((vx > 0 && x > SIMON->x +64) || (vx < 0 && x < SIMON->x-64))
 		{
 			vx = -vx;
@@ -60,7 +57,7 @@ void Fishman::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				if (!attacking)
 				{
-					attack(coObjects);
+					attack();
 				}
 			}
 			if (attacking && animation->CheckEndAni())
@@ -113,21 +110,6 @@ void Fishman::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 			}
 		}
-		animation->Update();
-		if (isBurn)
-		{
-			vx = vy = 0;
-			if (animation->CheckEndAni())
-			{
-				isDead = true;
-				animation->SetEndAniFalse();
-				animation->currentFrame = -1;
-			}
-		}
-		if (!Camera::GetInstance()->IsContain(this->GetBoundingBox()))
-		{
-			this->isDead = true;
-		}
 	}
 }
 
@@ -138,7 +120,7 @@ void Fishman::run()
 	animation = animations[1];
 }
 
-void Fishman::attack(vector<LPGAMEOBJECT>* coObjects)
+void Fishman::attack()
 {
 	//isrunning = false;
 	this->vx = 0;

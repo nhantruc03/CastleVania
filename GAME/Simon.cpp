@@ -34,7 +34,7 @@ CSimon::CSimon()
 	ishit = false;
 	untouchable = 0;
 	upgrade_time = 0;
-	timeusingholycross = 0;
+	usingholycross = false;
 	isinjured = false;
 
 	falling = false;
@@ -74,7 +74,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	{
 		timeusingstopwatch -= dt;
 	}
-	if (delayforsitting)
+	if (delayforsitting > 0)
 	{
 		delayforsitting -= dt;
 	}
@@ -82,8 +82,6 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	isCollidewith_DWNRTL = false;
 	isCollidewith_UPLTR = false;
 	isCollidewith_UPRTL = false;
-
-
 
 	curAni->Update();
 
@@ -151,7 +149,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			{
 				if (!dynamic_cast<Item *>(e->obj)->rewarded)
 				{
-					if (ny != 0)
+					if (ny ==1)
 					{
 						y -= min_ty * dy + ny * 0.2f;
 					}
@@ -177,7 +175,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					}
 					if (e->obj->type == TYPE_ITEM_HOLY_CROSS)
 					{
-						timeusingholycross = TIME_USING_HOLY_CROSS;
+						usingholycross = true;
 					}
 					if (e->obj->type == TYPE_ITEM_WHIP)
 					{
@@ -197,11 +195,12 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				if (untouchable == 0)
 				{
 					StartUntouchable();
-					if (dynamic_cast<Enemy*> (e->obj)->type == TYPE_ENEMY_BULLET)
+					if (dynamic_cast<Enemy*> (e->obj)->type == TYPE_ENEMY_BAT)
 					{
-						dynamic_cast<Enemy*> (e->obj)->isDead = true;
+						e->obj->isHit();
 					}
-					if (!isOnStair) // khi tren cau thang va bi thuong thi khong bi vang di
+
+					if (!isOnStair) // khi khong tren cau thang thi bi vang
 					{
 						if (nx <= 0)
 						{
@@ -215,17 +214,20 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					}
 					else
 					{
-						x -= min_tx * dx + nx * 0.2f;		// nx*0.2f : need to push out a bit to avoid overlapping next frame
+						x -= min_tx * dx + nx * 0.2f;
 						y -= min_ty * dy + ny * 0.2f;
-						/*x += dx;
-						y += dy;*/
 					}
+
 				}
 				else
 				{
-					if (e->ny < 0)
+					if (e->ny == -1)
 					{
 						y += dy;
+					}
+					else if (e->ny == 1)
+					{
+						y -= min_ty * dy + ny * 0.2f;
 					}
 				}
 			}
@@ -233,7 +235,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	}
 
 	// cho roi nhanh hon khi roi tu cau thang xuong
-	if (vy > 0.02 &&!jumping && !isinjured && !isOnStair)
+	if (vy > 0 && vy<999 &&!jumping && !isinjured && !isOnStair)
 	{
 		falling = true;
 	}
@@ -287,7 +289,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 						secondweapon = TYPE_WEAPON_STOP_WATCH;
 						break;
 					case TYPE_ITEM_HOLY_CROSS:
-						timeusingholycross = TIME_USING_HOLY_CROSS;
+						usingholycross = true;
 						break;
 					case TYPE_ITEM_WHIP:
 						upgrade_time = TIME_UPGRADE;
@@ -329,9 +331,9 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					if (untouchable == 0 && coObjects->at(i)->isBurn==false)
 					{
 						StartUntouchable();
-						if (coObjects->at(i)->type == TYPE_ENEMY_BULLET)
+						if (coObjects->at(i)->type == TYPE_ENEMY_BAT)
 						{
-							coObjects->at(i)->isDead = true;
+							coObjects->at(i)->isHit();
 						}
 						if (!isOnStair)
 						{
@@ -469,11 +471,13 @@ void CSimon::inoutstair_handle(DWORD dt)
 	{
 		y = prevY - 16;
 		ChangeState(STATE_STANDING);
+		vy = 999;
 	}
 	else if (State == STATE_WALK_ONSTAIR_DOWN && (isCollidewith_UPLTR||isCollidewith_UPRTL))
 	{
 		y = prevY + 16;
 		ChangeState(STATE_STANDING);
+		vy = 999;
 	}
 }
 void CSimon::Render()
@@ -754,7 +758,7 @@ void CSimon::Update_State()
 		break;
 	case STATE_SITTING:
 
-		if (!keyCode[DIK_DOWN]&&!delayforsitting)
+		if (!keyCode[DIK_DOWN]&& delayforsitting<=0)
 		{
 			sitting = false;
 			height = SIMON_HEIGHT;
@@ -853,11 +857,11 @@ void CSimon::Update_State()
 		break;
 	case STATE_STAND_ONSTAIR_UP:
 		isWalkingOnStair = false;
-		if (keyCode[DIK_UP] || keyCode[DIK_RIGHT])
+		if (keyCode[DIK_UP] || (keyCode[DIK_RIGHT] && stair_type==1) || (keyCode[DIK_LEFT] && stair_type == 2))
 		{
 			ChangeState(STATE_WALK_ONSTAIR_UP);
 		}
-		if (keyCode[DIK_DOWN] || keyCode[DIK_LEFT] )
+		if (keyCode[DIK_DOWN] || (keyCode[DIK_RIGHT] && stair_type == 2) || (keyCode[DIK_LEFT] && stair_type == 1))
 		{
 			ChangeState(STATE_WALK_ONSTAIR_DOWN);
 		}
@@ -874,12 +878,12 @@ void CSimon::Update_State()
 			{
 				if (x - prevX > 16)
 				{
-					x -= x - prevX - 16;
+					x = prevX + 16;
 					prevX = x;
 				}
 				if (prevY - y > 16)
 				{
-					y += prevY - y - 16;
+					y = prevY - 16;
 					prevY = y;
 				}
 				isWalkingOnStair = false;
@@ -894,29 +898,29 @@ void CSimon::Update_State()
 			{
 				if (prevX -x > 16)
 				{
-					x += prevX - x- 16;
+					x = prevX - 16;
 					prevX = x;
 				}
 				if (prevY - y > 16)
 				{
-					y += prevY - y - 16;
+					y = prevY - 16;
 					prevY = y;
 				}
 				isWalkingOnStair = false;
 			}
 		}
-		if (!keyCode[DIK_UP] && !isWalkingOnStair  && !keyCode[DIK_RIGHT])
+		if (!keyCode[DIK_UP] && !isWalkingOnStair  && ((!keyCode[DIK_LEFT] && stair_type == 2) || (!keyCode[DIK_RIGHT] && stair_type == 1)))
 		{
 			ChangeState(STATE_STAND_ONSTAIR_UP);
 		}
 		break;
 	case STATE_STAND_ONSTAIR_DOWN:
 		isWalkingOnStair = false;
-		if (keyCode[DIK_UP] || keyCode[DIK_RIGHT])
+		if (keyCode[DIK_UP] || (keyCode[DIK_RIGHT] && stair_type == 1) || (keyCode[DIK_LEFT] && stair_type == 2))
 		{
 			ChangeState(STATE_WALK_ONSTAIR_UP);
 		}
-		if (keyCode[DIK_DOWN] || keyCode[DIK_LEFT])
+		if (keyCode[DIK_DOWN] || (keyCode[DIK_RIGHT] && stair_type == 2) || (keyCode[DIK_LEFT] && stair_type == 1))
 		{
 			ChangeState(STATE_WALK_ONSTAIR_DOWN);
 		}
@@ -934,12 +938,12 @@ void CSimon::Update_State()
 			{
 				if (prevX - x > 16)
 				{
-					x += prevX - x - 16;
+					x = prevX - 16;
 					prevX = x;
 				}
 				if (y - prevY > 16)
 				{
-					y -= y - prevY - 16;
+					y = prevY + 16;
 					prevY = y;
 				}
 				isWalkingOnStair = false;
@@ -954,18 +958,18 @@ void CSimon::Update_State()
 			{
 				if (x-prevX > 16)
 				{
-					x -= x- prevX - 16;
+					x = prevX + 16;
 					prevX = x;
 				}
 				if (y - prevY > 16)
 				{
-					y -= y - prevY - 16;
+					y = prevY + 16;
 					prevY = y;
 				}
 				isWalkingOnStair = false;
 			}
 		}
-		if (!keyCode[DIK_DOWN] && !isWalkingOnStair && !keyCode[DIK_LEFT])
+		if (!keyCode[DIK_DOWN] && !isWalkingOnStair && ((!keyCode[DIK_LEFT] && stair_type==1) || (!keyCode[DIK_RIGHT] && stair_type == 2)))
 		{
 			ChangeState(STATE_STAND_ONSTAIR_DOWN);
 		}

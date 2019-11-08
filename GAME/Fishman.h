@@ -11,7 +11,7 @@ public:
 	Fishman(float x, float y, int direction);
 	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects);
 	void run();
-	void attack(vector<LPGAMEOBJECT>* coObjects);
+	void attack();
 	bool attacking;
 	~Fishman();
 };

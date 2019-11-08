@@ -31,28 +31,9 @@ void Enemy_bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (!SIMON->timeusingstopwatch)
 	{
-		if (timeshowhiteffect)
-		{
-			timeshowhiteffect -= dt;
-		}
-		x += dx;
+		Enemy::Update(dt, coObjects);
 		CGameObject::Update(dt, coObjects);
-		animation->Update();
-
-		if (isBurn)
-		{
-			vx = vy = 0;
-			if (animation->CheckEndAni())
-			{
-				isDead = true;
-				animation->SetEndAniFalse();
-				animation->currentFrame = -1;
-			}
-		}
-		if (!Camera::GetInstance()->IsContain(this->GetBoundingBox()))
-		{
-			this->isDead = true;
-		}
+		x += dx;
 	}
 }
 Enemy_bullet::~Enemy_bullet()

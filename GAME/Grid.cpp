@@ -8,7 +8,6 @@
 #include"Item.h"
 Grid::Grid(int level)
 {
-	nextid = 200;
 	maplevel = level;
 	camera = Camera::GetInstance();
 }
@@ -89,11 +88,14 @@ void Grid::Loadresources()
 		break;
 		}
 		tempobject->id = id;
-		int top = (int)((tempobject->y - tempobject->height / 2) / GRID_CELL_HEIGHT);
-		int bottom = (int)((tempobject->y + tempobject->height) / GRID_CELL_HEIGHT);
+		// thay vi phai tinh toan thi da dua so lieu vao file text
+	/*	int top = (int)((tempobject->y - tempobject->height / 2) / GRID_CELL_HEIGHT);
+		int bottom = (int)((tempobject->y + tempobject->height / 2) / GRID_CELL_HEIGHT);
 		int left = (int)((tempobject->x - tempobject->width / 2) / GRID_CELL_WIDTH);
-		int right = (int)((tempobject->x + tempobject->width) / GRID_CELL_WIDTH);
+		int right = (int)((tempobject->x + tempobject->width / 2) / GRID_CELL_WIDTH);*/
 
+		int top, bottom, left, right;
+		iFile >> top >> bottom >> left >> right;
 		for (int i = top; i <= bottom; i++)
 			for (int j = left; j <= right; j++)
 				cells[i][j].push_back(tempobject);
@@ -125,6 +127,7 @@ void Grid::GetListObject(vector<CGameObject*>& ListObj)
 				}
 				else
 				{
+					// spawn item khi holder hoac special brick dead
 					if (cells[i][j].at(k)->tag == TAG_HOLDER && dynamic_cast<HoldItemObject*>(cells[i][j].at(k))->check_spawnitem == false)
 					{
 						dynamic_cast<HoldItemObject*>(cells[i][j].at(k))->check_spawnitem = true;
@@ -141,7 +144,6 @@ void Grid::GetListObject(vector<CGameObject*>& ListObj)
 						item->id = ++nextid;
 						insert(item);
 					}
-					cells[i][j].erase(cells[i][j].begin() + k);
 				}
 			}
 
@@ -154,15 +156,11 @@ void Grid::GetListObject(vector<CGameObject*>& ListObj)
 void Grid::insert(CGameObject *object)
 {
 	int top = (int)((object->y - object->height / 2) / GRID_CELL_HEIGHT);
-	int bottom = (int)((object->y + object->height) / GRID_CELL_HEIGHT);
+	int bottom = (int)((object->y + object->height / 2) / GRID_CELL_HEIGHT);
 	int left = (int)((object->x - object->width / 2) / GRID_CELL_WIDTH);
-	int right = (int)((object->x + object->width) / GRID_CELL_WIDTH);
+	int right = (int)((object->x + object->width / 2) / GRID_CELL_WIDTH);
 
 	for (int i = top; i <= bottom; i++)
 		for (int j = left; j <= right; j++)
 			cells[i][j].push_back(object);
-}
-
-void Grid::update()
-{
 }

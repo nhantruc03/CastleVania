@@ -39,6 +39,10 @@ void Panther::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			timeshowhiteffect -= dt;
 		}
+		if (health == 0)
+		{
+			Burn();
+		}
 		if (abs(SIMON->x - this->x) <= 160 && issleeping)
 		{
 			wakeup();

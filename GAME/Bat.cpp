@@ -31,34 +31,14 @@ void Bat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (!SIMON->timeusingstopwatch)
 	{
-		if (timeshowhiteffect)
-		{
-			timeshowhiteffect -= dt;
-		}
+		Enemy::Update(dt, coObjects);
 		if (abs(y - prevY) >= 20)
 		{
 			vy = -vy;
 		}
 		CGameObject::Update(dt, coObjects);
-
 		x += dx;
 		y += dy;
-		animation->Update();
-
-		if (isBurn)
-		{
-			vx = vy = 0;
-			if (animation->CheckEndAni())
-			{
-				isDead = true;
-				animation->SetEndAniFalse();
-				animation->currentFrame = -1;
-			}
-		}
-		if (!Camera::GetInstance()->IsContain(this->GetBoundingBox()))
-		{
-			this->isDead = true;
-		}
 	}
 }
 Bat::~Bat()
