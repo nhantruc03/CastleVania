@@ -345,6 +345,10 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			}
 		}
 	}
+	if (usingholycross)
+	{
+		StartUsingHolyCross();
+	}
 	Update_State(); // de sau doan kiem tra tren de kiem tra va cham voi diem len xuong cau thang
 
 	inoutstair_handle(dt);
@@ -879,13 +883,13 @@ void CSimon::Update_State()
 				if (x - prevX > 16)
 				{
 					x = prevX + 16;
-					prevX = x;
 				}
 				if (prevY - y > 16)
 				{
 					y = prevY - 16;
-					prevY = y;
 				}
+				prevX = x;
+				prevY = y;
 				isWalkingOnStair = false;
 			}
 		}
@@ -899,13 +903,13 @@ void CSimon::Update_State()
 				if (prevX -x > 16)
 				{
 					x = prevX - 16;
-					prevX = x;
 				}
 				if (prevY - y > 16)
 				{
 					y = prevY - 16;
-					prevY = y;
 				}
+				prevX = x;
+				prevY = y;
 				isWalkingOnStair = false;
 			}
 		}
@@ -939,13 +943,13 @@ void CSimon::Update_State()
 				if (prevX - x > 16)
 				{
 					x = prevX - 16;
-					prevX = x;
 				}
 				if (y - prevY > 16)
 				{
 					y = prevY + 16;
-					prevY = y;
 				}
+				prevX = x;
+				prevY = y;
 				isWalkingOnStair = false;
 			}
 		}
@@ -959,13 +963,13 @@ void CSimon::Update_State()
 				if (x-prevX > 16)
 				{
 					x = prevX + 16;
-					prevX = x;
 				}
 				if (y - prevY > 16)
 				{
 					y = prevY + 16;
-					prevY = y;
 				}
+				prevX = x;
+				prevY = y;
 				isWalkingOnStair = false;
 			}
 		}
@@ -982,4 +986,31 @@ void CSimon::Update_State()
 		break;
 	}
 
+}
+
+void CSimon::StartUsingHolyCross()
+{
+	timeuseholycross += dt;
+	if (timeuseholycross >= 1000)
+	{
+		usingholycross = false;
+		D3DCOLOR_BACKGROUND = BACKGROUND_COLOR;
+	}
+	else
+	{
+		timetochangecolorwhileusingholycross += dt;
+		if (timetochangecolorwhileusingholycross >= TIME_TO_CHANGE_COLOR_WHILE_USING_HOLY_CROSS)
+		{
+			timetochangecolorwhileusingholycross = 0;
+
+			if (D3DCOLOR_BACKGROUND == BACKGROUND_COLOR)
+			{
+				D3DCOLOR_BACKGROUND = BACKGROUND_COLOR_WHILE_USING_HOLY_CROSS;
+			}
+			else
+			{
+				D3DCOLOR_BACKGROUND = BACKGROUND_COLOR;
+			}
+		}
+	}
 }

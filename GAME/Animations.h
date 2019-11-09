@@ -10,7 +10,7 @@ class Animations
 public:
 	void Add(int tag, LPANIMATION ani);
 	LPANIMATION Get(int tag, int index);
-	void LoadResources();
+	void LoadResources(int level);
 	static Animations* GetInstance();
 };
 

@@ -67,13 +67,14 @@ LPDIRECT3DTEXTURE9 CTextures::Get(unsigned int i)
 	return textures[i];
 }
 
-void CTextures::LoadResources()
+void CTextures::LoadResources(int level)
 {
+	textures.clear();
 	std::ifstream iFile;
 	int numfile;
 	int numcolumn;
 	char fileName[30];
-	sprintf_s(fileName, "Res\\Text\\textures.txt");
+	sprintf_s(fileName, "Res\\Text\\textures%d.txt",level);
 	iFile.open(fileName);
 	string line;
 	while (!iFile.eof())
@@ -97,13 +98,6 @@ void CTextures::LoadResources()
 	}
 	
 	iFile.close();
-	/*Add(ID_TEX_SIMON, L"Res\\Image\\player.png", D3DCOLOR_XRGB(255, 0, 255));
-	Add(ID_TEX_MORNINGSTAR, L"Res\\Image\\morningstar.png", D3DCOLOR_XRGB(255, 0, 255));
-	Add(ID_TEX_MAP1, L"Res\\Image\\Level1.png", D3DCOLOR_XRGB(245, 245, 245));
-	Add(ID_tex_HOLDER, L"Res\\Image\\fire_pillar.png", D3DCOLOR_XRGB(255, 0, 255));
-	Add(ID_TEX_DAGGER, L"Res\\Image\\dagger.png", D3DCOLOR_XRGB(255, 0, 255));
-	Add(ID_TEX_BIGHEART, L"Res\\Image\\big_heart.png", D3DCOLOR_XRGB(255, 0, 255));
-	Add(ID_TEX_WHIP, L"Res\\Image\\whip.png", D3DCOLOR_XRGB(255, 0, 255));*/
 
 }
 

@@ -12,6 +12,7 @@
 #define SCREEN_HEIGHT 390 // Chiều dài cửa sổ
 #define MAX_FRAME_RATE 120	// FPS
 #define BACKGROUND_COLOR D3DCOLOR_XRGB(0, 0, 0)		// Màu nền BackBuffer
+#define BACKGROUND_COLOR_WHILE_USING_HOLY_CROSS D3DCOLOR_XRGB(188, 188, 188)		
 #define KEYBOARD_BUFFER_SIZE 1024
 
 #define ID_TEX_SIMON 0
@@ -78,6 +79,8 @@
 #define ENEMY_WALKING_SPEED		0.1f 
 #define ENEMY_JUMP_SPEED_Y		0.15f
 //// ===== Các thông số cho PLAYER ====
+#define TIME_TO_CHANGE_COLOR_WHILE_USING_HOLY_CROSS 50
+
 #define SIMON_WALKING_SPEED		0.13f
 #define SIMON_JUMP_SPEED_Y		0.5f
 #define SIMON_GRAVITY			0.0018f
@@ -111,4 +114,4 @@
 
 extern std::unordered_map<int, bool> keyCode;
 
-
+extern D3DCOLOR D3DCOLOR_BACKGROUND;

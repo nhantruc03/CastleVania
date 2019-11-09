@@ -283,7 +283,7 @@ CGame::~CGame()
 void CGame::LoadResources()
 {
 	
-	SceneManager::GetInstance()->ReplaceScene(new PlayScene(1));
+	SceneManager::GetInstance()->ReplaceScene(new PlayScene(2));
 	
 }
 
@@ -333,7 +333,7 @@ void CGame::Render()
 	if (d3ddv->BeginScene())
 	{
 		// Clear back buffer with a color
-		d3ddv->ColorFill(bb, NULL, BACKGROUND_COLOR);
+		d3ddv->ColorFill(bb, NULL, D3DCOLOR_BACKGROUND);
 
 		spritehandler->Begin(D3DXSPRITE_ALPHABLEND);
 

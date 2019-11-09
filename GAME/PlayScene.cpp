@@ -13,7 +13,8 @@
 #include"Special_brick.h"
 PlayScene::PlayScene(int level)
 {
-	LoadResources();
+	grid = new Grid(level);
+	LoadResources(level);
 	srand(time(NULL));
 	keyCode.clear();
 	isgoingthroughdoor = false;
@@ -23,7 +24,7 @@ PlayScene::PlayScene(int level)
 	map = Maps::GetInstance()->GetMap(this->level);
 
 	simon = CSimon::GetInstance();
-	simon->SetPosition(30, 250);//287.0f);
+	simon->SetPosition(1000, 5);//287.0f);
 	simon->Respawn();
 
 	camera = Camera::GetInstance();
@@ -32,14 +33,11 @@ PlayScene::PlayScene(int level)
 
 	objects.clear();
 
-	grid = new Grid(level);
-	grid->Loadresources();
-
 	timetocreateghost = 0;
 	cancreateghost = true;
 	countghost = 0;
 
-	cancreatepanther = true;
+	cancreatepanther = false;
 	countpanther = 0;
 	outofareacreatepanther = true;
 
@@ -72,15 +70,23 @@ void PlayScene::Update(DWORD dt)
 		if (simon->usingholycross || isgoingthroughdoor)
 		{
 			listenemy.clear();
+			countghost = 0;
+			countpanther = 0;
+			countfishman = 0;
+			countbat = 0;
 			cancreatebat = true;
 			cancreateghost = true;
 			cancreatefishman = true;
 			cancreatepanther = true;
-			simon->usingholycross = false;
+		//	simon->usingholycross = false;
 		}
 		for (Enemy* e : listenemy)
 		{
 			objects.push_back(e);
+		}
+		for (Enemy*e : listenemy_tronggrid)
+		{
+				objects.push_back(e);
 		}
 		UpdatePlayer(dt);
 		if (!isgoingthroughdoor)
@@ -229,29 +235,59 @@ void PlayScene::Update(DWORD dt)
 			}
 
 			// tao enemy panther
+			//if (1216 < simon->x && simon->x < 2240)
+			//{
+			//	if (cancreatepanther && !outofareacreatepanther)
+			//	{
+			//		outofareacreatepanther = true;
+			//		if (countpanther == 0)
+			//		{
+			//			int direction = abs(1106 - simon->x) < abs(2240 - simon->x) ? -1 : 1; // panther xoay mat vao simon
+			//			//listenemy.push_back(new Panther(1444.0f, 175.0f, direction));
+			//			//listenemy.push_back(new Panther(1792.0f, 110.0f, direction));
+			//			//listenemy.push_back(new Panther(1920.0f, 175.0f, direction));
+			//		//	grid->insert(new Panther(1444.0f, 175.0f, direction));
+			//			//grid->insert(new Panther(1792.0f, 110.0f, direction));
+			//		//	grid->insert(new Panther(1920.0f, 175.0f, direction));
+			//			countpanther += 3;
+			//		}
+			//		cancreatepanther = false;
+			//	}
+			//}
+			//else
+			//{
+			//	if (countpanther == 0)
+			//	{
+			//		outofareacreatepanther = false;
+			//	}
+			//}
+			/*vector<Enemy*>listenemy_tronggrid;
+			listenemy_tronggrid.clear();
+			grid->GetListPanther(listenemy_tronggrid);
+			if (listenemy_tronggrid.begin()!=listenemy_tronggrid.end() && test==false)
+			{
+				for (CGameObject* e : listenemy_tronggrid)
+				{
+					listenemy.push_back((Enemy*)e);
+					test = true;
+				}
+			}*/
 			if (1216 < simon->x && simon->x < 2240)
 			{
-				if (cancreatepanther && !outofareacreatepanther)
+				if (cancreatepanther)
 				{
-					outofareacreatepanther = true;
-					if (countpanther == 0)
-					{
-						int direction = abs(1106 - simon->x) < abs(2240 - simon->x) ? -1 : 1; // panther xoay mat vao simon
-						listenemy.push_back(new Panther(1444.0f, 175.0f, direction));
-						listenemy.push_back(new Panther(1792.0f, 110.0f, direction));
-						listenemy.push_back(new Panther(1920.0f, 175.0f, direction));
-						countpanther += 3;
-					}
 					cancreatepanther = false;
+					grid->respawnpanther();
 				}
 			}
 			else
 			{
-				if (countpanther == 0)
+				if (grid->countpanther == 0)
 				{
-					outofareacreatepanther = false;
+					cancreatepanther = true;
 				}
 			}
+			
 
 			// tao enemy bat
 			if (!isgoingthroughdoor)
@@ -480,14 +516,14 @@ void PlayScene::UpdateObjects(DWORD dt)
 					cancreateghost = true;
 				}
 			}
-			if (e->type == TYPE_ENEMY_PANTHER)
+			/*if (e->type == TYPE_ENEMY_PANTHER)
 			{
 				countpanther--;
 				if (countpanther == 0)
 				{
 					cancreatepanther = true;
 				}
-			}
+			}*/
 			if (e->type == TYPE_ENEMY_BAT)
 			{
 				countbat--;
@@ -511,14 +547,15 @@ void PlayScene::UpdateObjects(DWORD dt)
 		}
 		else
 		{
-			if (e->type == TYPE_ENEMY_PANTHER)
+			/*if (e->type == TYPE_ENEMY_PANTHER)
 			{
 				if (camera->IsContain(e->GetBoundingBox()))
 				{
 					e->Update(dt, &objects);
+					grid->movepanther((Panther*)e, e->x, e->y);
 				}
-			}
-			else if (e->type == TYPE_ENEMY_FISHMAN && dynamic_cast<Fishman*>(e)->attacking == true && dynamic_cast<Fishman*>(e)->canspawnbullet == true)
+			}*/
+			if (e->type == TYPE_ENEMY_FISHMAN && dynamic_cast<Fishman*>(e)->attacking == true && dynamic_cast<Fishman*>(e)->canspawnbullet == true)
 			{
 
 				dynamic_cast<Fishman*>(e)->canspawnbullet = false;
@@ -529,15 +566,21 @@ void PlayScene::UpdateObjects(DWORD dt)
 				e->Update(dt, &objects);
 		}
 	}
-
+	grid->GetListPanther(listenemy_tronggrid);
+	for (Enemy* e : listenemy_tronggrid)
+	{
+		e->Update(dt, &objects);
+		grid->movepanther(e,e->x,e->y);
+	}
 }
 
-void PlayScene::LoadResources()
+void PlayScene::LoadResources(int level)
 {
-	CTextures::GetInstance()->LoadResources();
-	Sprites::GetInstance()->LoadResources();
-	Animations::GetInstance()->LoadResources();
+	CTextures::GetInstance()->LoadResources(level);
+	Sprites::GetInstance()->LoadResources(level);
+	Animations::GetInstance()->LoadResources(level);
 	Maps::GetInstance()->LoadResources();
+	grid->Loadresources();
 }
 
 void PlayScene::Render()
@@ -549,6 +592,10 @@ void PlayScene::Render()
 
 	}
 	for (Enemy* e : listenemy)
+	{
+		e->Render();
+	}
+	for (Enemy*e : listenemy_tronggrid)
 	{
 		e->Render();
 	}

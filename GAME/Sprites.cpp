@@ -23,12 +23,13 @@ LPSPRITE Sprites::Get(int tag, int index)
 	return sprites[tag][index];
 }
 
-void Sprites::LoadResources()
+void Sprites::LoadResources(int level)
 {
+	sprites.clear();
 	LPDIRECT3DTEXTURE9 texture;
 	std::ifstream iFile;
 	char fileName[30];
-	sprintf_s(fileName, "Res\\Text\\sprites.txt");
+	sprintf_s(fileName, "Res\\Text\\sprites%d.txt",level);
 	iFile.open(fileName);
 	while (!iFile.eof())
 	{

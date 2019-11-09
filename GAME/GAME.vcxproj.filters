@@ -105,9 +105,6 @@
     <ClCompile Include="Maps.cpp">
       <Filter>Game Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="invisibleObject.cpp">
-      <Filter>Game Objects</Filter>
-    </ClCompile>
     <ClCompile Include="Ghost.cpp">
       <Filter>Game Objects\Enemy</Filter>
     </ClCompile>
@@ -131,6 +128,9 @@
     </ClCompile>
     <ClCompile Include="Grid.cpp">
       <Filter>Game Components</Filter>
+    </ClCompile>
+    <ClCompile Include="invisibleObject.cpp">
+      <Filter>Game Objects\OthetObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -203,9 +203,6 @@
     <ClInclude Include="Maps.h">
       <Filter>Game Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="invisibleObject.h">
-      <Filter>Game Objects</Filter>
-    </ClInclude>
     <ClInclude Include="Enemy.h">
       <Filter>Game Objects\Enemy</Filter>
     </ClInclude>
@@ -235,6 +232,9 @@
     </ClInclude>
     <ClInclude Include="Grid.h">
       <Filter>Game Components</Filter>
+    </ClInclude>
+    <ClInclude Include="invisibleObject.h">
+      <Filter>Game Objects\OthetObject</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

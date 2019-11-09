@@ -1,0 +1,8 @@
+0 Res\Image\player.png 255 0 255
+1 Res\Image\morningstar.png 255 0 255
+2 Res\Image\Level1.png 245 245 245
+3 Res\Image\holder.png 255 0 255
+4 Res\Image\dagger.png 255 0 255
+5 Res\Image\item.png 255 0 255
+6 Res\Image\burn.png 255 0 255
+7 Res\Image\hit_effect.png 255 0 255

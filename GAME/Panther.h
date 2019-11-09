@@ -4,6 +4,7 @@
 class Panther :public Enemy
 {
 public:
+	bool check_dead_once = false;
 	RECT brick;
 	bool available;
 	bool issleeping;

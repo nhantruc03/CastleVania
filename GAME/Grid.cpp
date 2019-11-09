@@ -6,10 +6,13 @@
 #include"Door.h"
 #include<fstream>
 #include"Item.h"
+#include"Simon.h"
+#include"Panther.h"
 Grid::Grid(int level)
 {
 	maplevel = level;
 	camera = Camera::GetInstance();
+	countpanther = 3;
 }
 
 
@@ -86,6 +89,14 @@ void Grid::Loadresources()
 			tempobject = door;
 		}
 		break;
+		case 'p':
+		{
+			int x, y, direction;
+			iFile >> x >> y >> direction;
+			Panther* panther = new Panther(x, y, direction);
+			tempobject = panther;
+		}
+		break;
 		}
 		tempobject->id = id;
 		// thay vi phai tinh toan thi da dua so lieu vao file text
@@ -122,8 +133,11 @@ void Grid::GetListObject(vector<CGameObject*>& ListObj)
 			{
 				if (cells[i][j].at(k)->isDead==false)
 				{
-					if (mapObject.find(cells[i][j].at(k)->id) == mapObject.end())
-						mapObject[cells[i][j].at(k)->id] = cells[i][j].at(k);
+					if (cells[i][j].at(k)->tag != TAG_ENEMY)
+					{
+						if (mapObject.find(cells[i][j].at(k)->id) == mapObject.end())
+							mapObject[cells[i][j].at(k)->id] = cells[i][j].at(k);
+					}
 				}
 				else
 				{
@@ -153,6 +167,47 @@ void Grid::GetListObject(vector<CGameObject*>& ListObj)
 	}
 }
 
+void Grid::GetListPanther(vector<Enemy*>& ListObj)
+{
+	ListObj.clear();
+
+	unordered_map<int, Enemy*> mapPanthers;
+
+	int bottom = (int)((camera->GetBound().bottom) / GRID_CELL_HEIGHT);
+	int top = (int)((camera->GetBound().top) / GRID_CELL_HEIGHT);
+
+	int left = (int)(camera->GetBound().left / GRID_CELL_WIDTH);
+	int right = (int)(camera->GetBound().right / GRID_CELL_WIDTH);
+
+	for (int i = top; i <= bottom; i++)
+		for (int j = left; j <= right; j++)
+			for (UINT k = 0; k < cells[i][j].size(); k++)
+			{
+				if (cells[i][j].at(k)->isDead == false  )
+				{
+					if (cells[i][j].at(k)->tag == TAG_ENEMY)
+					{
+						if (mapPanthers.find(cells[i][j].at(k)->id) == mapPanthers.end())
+							mapPanthers[cells[i][j].at(k)->id] = (Enemy*)cells[i][j].at(k);
+					}
+				}
+				else
+				{
+					if (cells[i][j].at(k)->tag == TAG_ENEMY && dynamic_cast<Panther*>(cells[i][j].at(k))->check_dead_once == false)
+					{
+						dynamic_cast<Panther*>(cells[i][j].at(k))->check_dead_once = true;
+						countpanther -= 1;
+					}
+					//removepanther(cells[i][j].at(k));
+				}
+			}
+
+	for (auto& x : mapPanthers)
+	{
+		ListObj.push_back(x.second);
+	}
+}
+
 void Grid::insert(CGameObject *object)
 {
 	int top = (int)((object->y - object->height / 2) / GRID_CELL_HEIGHT);
@@ -163,4 +218,53 @@ void Grid::insert(CGameObject *object)
 	for (int i = top; i <= bottom; i++)
 		for (int j = left; j <= right; j++)
 			cells[i][j].push_back(object);
+}
+
+void Grid::movepanther(Enemy * object, float x, float y)
+{
+	if (!camera->IsContain(object->GetBoundingBox()))
+		return;
+	Panther* temppanther = (Panther*)object;
+
+
+	int top = (int)((temppanther->y - temppanther->height / 2) / GRID_CELL_HEIGHT);
+	int bottom = (int)((temppanther->y + temppanther->height / 2) / GRID_CELL_HEIGHT);
+	int left = (int)((temppanther->x - temppanther->width / 2) / GRID_CELL_WIDTH);
+	int right = (int)((temppanther->x + temppanther->width / 2) / GRID_CELL_WIDTH);
+	for (int i = top; i <= bottom; i++)
+		for (int j = left; j <= right; j++)
+			cells[i][j].push_back(temppanther);
+	
+}
+
+void Grid::respawnpanther()
+{
+
+	unordered_map<int, Enemy*> mapPanthers;
+	for (int i = 0; i < GRID_CELL_MAX_ROW; i++)
+	{
+		for (int j = 0; j < GRID_CELL_MAX_COLUMN; j++)
+		{
+			for (UINT k = 0; k < cells[i][j].size(); k++)
+			{
+				if (cells[i][j].at(k)->tag==TAG_ENEMY)
+				{
+					if (mapPanthers.find(cells[i][j].at(k)->id) == mapPanthers.end())
+					{
+						mapPanthers[cells[i][j].at(k)->id] = (Enemy*)cells[i][j].at(k);
+					}
+					cells[i][j].erase(cells[i][j].begin() + k);
+				}
+			}
+		}
+	}
+	int direction = abs(1106 - SIMON->x) < abs(2240 - SIMON->x) ? -1 : 1; // panther xoay mat vao simon
+	for (auto& x : mapPanthers)
+	{
+		Panther* panther = new Panther(x.second->spawnx, x.second->spawny, direction);
+		panther->id = x.second->id;
+		insert(panther);
+		
+	}
+	countpanther = 3;
 }

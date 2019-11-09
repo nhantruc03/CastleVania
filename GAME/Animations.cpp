@@ -19,12 +19,13 @@ LPANIMATION Animations::Get(int tag, int index)
 	return animations[tag][index];
 }
 
-void Animations::LoadResources()
+void Animations::LoadResources(int level)
 {
+	animations.clear();
 	LPANIMATION ani;
 	std::ifstream iFile;
 	char fileName[30];
-	sprintf_s(fileName, "Res\\Text\\animations.txt");
+	sprintf_s(fileName, "Res\\Text\\animations%d.txt",level);
 	iFile.open(fileName);
 	int DelayTime, numFrames, Tag;
 	while (!iFile.eof())

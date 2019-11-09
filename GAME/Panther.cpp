@@ -28,13 +28,20 @@ Panther::Panther(float x, float y, int direction)
 	this->width = 64;
 	this->height = 32;
 	this->health = 1;
-	animation = animations[0];
+	spawnx = x;
+	spawny = y;
+//	animation = animations[0];
 }
 
 void Panther::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (!SIMON->timeusingstopwatch)
 	{
+		if (issleeping)
+		{
+			vx = 0;
+			animation = animations[0];
+		}
 		if (timeshowhiteffect)
 		{
 			timeshowhiteffect -= dt;
@@ -47,12 +54,14 @@ void Panther::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			wakeup();
 		}
-		if ((x<=brick.left+1 || x>=brick.right-1)&&!issleeping && !isjumping)
+		if ((x <= brick.left + 1 || x >= brick.right - 1) && !issleeping && !isjumping)
 		{
 			jump();
 		}
-		vy += ENEMY_GRAVITY * dt;// Simple fall down
-
+		if (!isBurn)
+		{
+			vy += ENEMY_GRAVITY * dt;// Simple fall down
+		}
 		CGameObject::Update(dt, coObjects);
 
 		vector<LPCOLLISIONEVENT> coEvents;

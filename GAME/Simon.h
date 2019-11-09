@@ -8,7 +8,9 @@ class CSimon : public CGameObject
 {
 	static CSimon * _instance;
 public:
-
+	DWORD timeuseholycross;
+	DWORD timetochangecolorwhileusingholycross;
+	DWORD limittimetochangecolorwhileusingholycross;
 	bool usingholycross;
 
 	float delayforsitting;
@@ -59,6 +61,7 @@ public:
 	void Update_State();
 	bool isinjured;
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
+	void StartUsingHolyCross();
 
 	//virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 

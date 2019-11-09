@@ -13,10 +13,11 @@ class PlayScene : public Scene
 {
 private:
 	CSimon* simon;
-	
-
 public:
+
+	bool test = false;
 	vector<Enemy*>listenemy;
+	vector<Enemy*>listenemy_tronggrid;
 	vector<LPGAMEOBJECT>objects;
 	Grid *grid;
 
@@ -59,7 +60,7 @@ public:
 
 	void UpdatePlayer(DWORD dt);
 	void UpdateObjects(DWORD dt);
-	void LoadResources();
+	void LoadResources(int level);
 	void Render();									// Tải Scene lên màn hình
 	void OnKeyDown(int key);						// Xử lí Scene khi nhấn phím
 	void OnKeyUp(int key);							// Xử lí Scene khi thả phím
