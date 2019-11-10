@@ -1,4 +1,5 @@
 #pragma once
+#include"listeffect_global.h"
 #include"Weapon.h"
 class MorningStar :public Weapon
 {

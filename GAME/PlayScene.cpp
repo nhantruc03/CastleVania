@@ -11,6 +11,7 @@
 #include"Fishman.h"
 #include"Enemy_bullet.h"
 #include"Special_brick.h"
+#include"steam.h"
 PlayScene::PlayScene(int level)
 {
 	grid = new Grid(level);
@@ -24,12 +25,12 @@ PlayScene::PlayScene(int level)
 	map = Maps::GetInstance()->GetMap(this->level);
 
 	simon = CSimon::GetInstance();
-	simon->SetPosition(1000, 5);//287.0f);
+	simon->SetPosition(30, 200);//287.0f);
 	simon->Respawn();
 
 	camera = Camera::GetInstance();
 
-	//camera->inzone1 = false;
+	camera->inzone1 = false;
 
 	objects.clear();
 
@@ -202,224 +203,236 @@ void PlayScene::Update(DWORD dt)
 				
 			}
 
-			// tao enemy ghost
-			if (timetocreateghost > 0)
+			if (simon->timeusingstopwatch <= 0)
 			{
-				timetocreateghost -= dt;
-			}
-			if ((simon->x >= 0.0f&& simon->x <= 832.0f) || (simon->x > 2208 && simon->x < 2784))
-			{
-				if (cancreateghost)
+				// tao enemy ghost
+				if (timetocreateghost > 0)
 				{
-					if (timetocreateghost <= 0)
+					timetocreateghost -= dt;
+				}
+				if ((simon->x >= 0.0f&& simon->x <= 832.0f) || (simon->x > 2208 && simon->x < 2784))
+				{
+					if (cancreateghost)
 					{
-						if (simon->vx >= 0)
+						if (timetocreateghost <= 0)
 						{
-							Ghost* ghost = new Ghost(camera->GetPosition().x + camera->camWidht / 2, 287.0f, -1);
-							listenemy.push_back(ghost);
-						}
-						else
-						{
-							Ghost* ghost = new Ghost(camera->GetPosition().x - camera->camWidht / 2, 287.0f, 1);
-							listenemy.push_back(ghost);
-						}
-						countghost++;
-						timetocreateghost = 500;
-						if (countghost == 3)
-						{
-							cancreateghost = false;
-						}
-					}
-				}
-
-			}
-
-			// tao enemy panther
-			//if (1216 < simon->x && simon->x < 2240)
-			//{
-			//	if (cancreatepanther && !outofareacreatepanther)
-			//	{
-			//		outofareacreatepanther = true;
-			//		if (countpanther == 0)
-			//		{
-			//			int direction = abs(1106 - simon->x) < abs(2240 - simon->x) ? -1 : 1; // panther xoay mat vao simon
-			//			//listenemy.push_back(new Panther(1444.0f, 175.0f, direction));
-			//			//listenemy.push_back(new Panther(1792.0f, 110.0f, direction));
-			//			//listenemy.push_back(new Panther(1920.0f, 175.0f, direction));
-			//		//	grid->insert(new Panther(1444.0f, 175.0f, direction));
-			//			//grid->insert(new Panther(1792.0f, 110.0f, direction));
-			//		//	grid->insert(new Panther(1920.0f, 175.0f, direction));
-			//			countpanther += 3;
-			//		}
-			//		cancreatepanther = false;
-			//	}
-			//}
-			//else
-			//{
-			//	if (countpanther == 0)
-			//	{
-			//		outofareacreatepanther = false;
-			//	}
-			//}
-			/*vector<Enemy*>listenemy_tronggrid;
-			listenemy_tronggrid.clear();
-			grid->GetListPanther(listenemy_tronggrid);
-			if (listenemy_tronggrid.begin()!=listenemy_tronggrid.end() && test==false)
-			{
-				for (CGameObject* e : listenemy_tronggrid)
-				{
-					listenemy.push_back((Enemy*)e);
-					test = true;
-				}
-			}*/
-			if (1216 < simon->x && simon->x < 2240)
-			{
-				if (cancreatepanther)
-				{
-					cancreatepanther = false;
-					grid->respawnpanther();
-				}
-			}
-			else
-			{
-				if (grid->countpanther == 0)
-				{
-					cancreatepanther = true;
-				}
-			}
-			
-
-			// tao enemy bat
-			if (!isgoingthroughdoor)
-			{
-				if (timetocreatebat > 0)
-				{
-					timetocreatebat -= dt;
-				}
-				if (simon->x >= 3072 && simon->y<352)
-				{
-					if (cancreatebat)
-					{
-						if (timetocreatebat <= 0)
-						{
-							if (simon->y < 160)
+							if (simon->vx >= 0)
 							{
-								Bat* bat = new Bat(camera->GetPosition().x + camera->camWidht / 2, 112.0f, -1);
-								listenemy.push_back(bat);
+								Ghost* ghost = new Ghost(camera->GetPosition().x + camera->camWidht / 2, 287.0f, -1);
+								listenemy.push_back(ghost);
 							}
 							else
 							{
-								int random = rand() % 3;
-								if (random == 0)
-								{
-									Bat* bat = new Bat(camera->GetPosition().x + camera->camWidht / 2, 208.0f, -1);
-									listenemy.push_back(bat);
-								}
-								else if (random == 1)
-								{
-									Bat* bat = new Bat(camera->GetPosition().x + camera->camWidht / 2, 304.0f, -1);
-									listenemy.push_back(bat);
-								}
-								else if (random == 2)
-								{
-									Bat* bat = new Bat(camera->GetPosition().x - camera->camWidht / 2, 304.0f, 1);
-									listenemy.push_back(bat);
-								}
-
+								Ghost* ghost = new Ghost(camera->GetPosition().x - camera->camWidht / 2, 287.0f, 1);
+								listenemy.push_back(ghost);
 							}
-							countbat++;
-							timetocreatebat = 3000;
-							if (countbat == 2)
+							countghost++;
+							timetocreateghost = 500;
+							if (countghost == 3)
 							{
-								cancreatebat = false;
+								cancreateghost = false;
 							}
 						}
 					}
-				}
-			}
 
-			// tao enemy fishman
-			if (timetocreatefishman > 0)
-			{
-				timetocreatefishman -= dt;
-			}
-			if (camera->movedownstair)
-			{
-				if (cancreatefishman)
+				}
+
+				// tao enemy panther
+				//if (1216 < simon->x && simon->x < 2240)
+				//{
+				//	if (cancreatepanther && !outofareacreatepanther)
+				//	{
+				//		outofareacreatepanther = true;
+				//		if (countpanther == 0)
+				//		{
+				//			int direction = abs(1106 - simon->x) < abs(2240 - simon->x) ? -1 : 1; // panther xoay mat vao simon
+				//			//listenemy.push_back(new Panther(1444.0f, 175.0f, direction));
+				//			//listenemy.push_back(new Panther(1792.0f, 110.0f, direction));
+				//			//listenemy.push_back(new Panther(1920.0f, 175.0f, direction));
+				//		//	grid->insert(new Panther(1444.0f, 175.0f, direction));
+				//			//grid->insert(new Panther(1792.0f, 110.0f, direction));
+				//		//	grid->insert(new Panther(1920.0f, 175.0f, direction));
+				//			countpanther += 3;
+				//		}
+				//		cancreatepanther = false;
+				//	}
+				//}
+				//else
+				//{
+				//	if (countpanther == 0)
+				//	{
+				//		outofareacreatepanther = false;
+				//	}
+				//}
+				/*vector<Enemy*>listenemy_tronggrid;
+				listenemy_tronggrid.clear();
+				grid->GetListPanther(listenemy_tronggrid);
+				if (listenemy_tronggrid.begin()!=listenemy_tronggrid.end() && test==false)
 				{
-					if (timetocreatefishman <= 0)
+					for (CGameObject* e : listenemy_tronggrid)
 					{
-						if (simon->x > 3360.0f && simon->x<3520)
-						{
-							if (countfishman < 2)
-							{
-								Fishman* fishman = new Fishman(3264, 672, 1);
-								listenemy.push_back(fishman);
-								countfishman++;
-							}
-							if (countfishman < 2)
-							{
-								Fishman* fishman = new Fishman(3520, 672, -1);
-								listenemy.push_back(fishman);
-								countfishman++;
-							}		
-							timetocreatefishman = 3000;
-						}
-						if (simon->vx <= 0 && simon->x < 3264 && simon->x > 3072)
-						{
-							if (countfishman < 2)
-							{
-								Fishman* fishman = new Fishman(3136, 672, 1);
-								listenemy.push_back(fishman);
-								countfishman++;
-							}
-							if (countfishman < 2)
-							{
-								Fishman* fishman = new Fishman(3392, 672, -1);
-								listenemy.push_back(fishman);
-								countfishman++;
-							}							
-							timetocreatefishman = 3000;
-						}
-						if (simon->x > 3520 && simon->x < 3712)
-						{
-							if (countfishman < 2)
-							{
-								Fishman* fishman = new Fishman(3520, 672, 1);
-								listenemy.push_back(fishman);
-								countfishman++;
-							}
-
-							if (countfishman < 2)
-							{
-								Fishman* fishman = new Fishman(3648, 672, simon->x < 3648?-1: 1);
-								listenemy.push_back(fishman);
-								countfishman++;
-							}
-							timetocreatefishman = 3000;
-						}
-						if (simon->x > 3712)
-						{
-							if (countfishman < 2)
-							{
-								Fishman* fishman = new Fishman(3776, 672, simon->x < 3776 ? -1 : 1);
-								listenemy.push_back(fishman);
-								countfishman++;
-							}
-							if (countfishman < 2)
-							{
-								Fishman* fishman = new Fishman(3904, 672, simon->x < 3904 ? -1 : 1);
-								listenemy.push_back(fishman);
-								countfishman++;
-							}
-							timetocreatefishman = 3000;
-						}
-					
+						listenemy.push_back((Enemy*)e);
+						test = true;
+					}
+				}*/
+				if (1216 < simon->x && simon->x < 2240)
+				{
+					if (cancreatepanther)
+					{
+						cancreatepanther = false;
+						grid->respawnpanther();
+					}
+				}
+				else
+				{
+					if (grid->countpanther == 0)
+					{
+						cancreatepanther = true;
 					}
 				}
 
-			}
 
+				// tao enemy bat
+				if (!isgoingthroughdoor)
+				{
+					if (timetocreatebat > 0)
+					{
+						timetocreatebat -= dt;
+					}
+					if (simon->x >= 3072 && simon->y < 352)
+					{
+						if (cancreatebat)
+						{
+							if (timetocreatebat <= 0)
+							{
+								if (simon->y < 160)
+								{
+									Bat* bat = new Bat(camera->GetPosition().x + camera->camWidht / 2, 112.0f, -1);
+									listenemy.push_back(bat);
+								}
+								else
+								{
+									int random = rand() % 3;
+									if (random == 0)
+									{
+										Bat* bat = new Bat(camera->GetPosition().x + camera->camWidht / 2, 208.0f, -1);
+										listenemy.push_back(bat);
+									}
+									else if (random == 1)
+									{
+										Bat* bat = new Bat(camera->GetPosition().x + camera->camWidht / 2, 304.0f, -1);
+										listenemy.push_back(bat);
+									}
+									else if (random == 2)
+									{
+										Bat* bat = new Bat(camera->GetPosition().x - camera->camWidht / 2, 304.0f, 1);
+										listenemy.push_back(bat);
+									}
+
+								}
+								countbat++;
+								timetocreatebat = 3000;
+								if (countbat == 2)
+								{
+									cancreatebat = false;
+								}
+							}
+						}
+					}
+				}
+
+				// tao enemy fishman
+				if (timetocreatefishman > 0)
+				{
+					timetocreatefishman -= dt;
+				}
+				if (camera->movedownstair)
+				{
+					if (cancreatefishman)
+					{
+						if (timetocreatefishman <= 0)
+						{
+							if (simon->x > 3360.0f && simon->x < 3520)
+							{
+								if (countfishman < 2)
+								{
+									Fishman* fishman = new Fishman(3264, 672, 1);
+									listenemy.push_back(fishman);
+									countfishman++;
+									createeffectsteam(fishman->x, fishman->y);
+
+								}
+								if (countfishman < 2)
+								{
+									Fishman* fishman = new Fishman(3520, 672, -1);
+									listenemy.push_back(fishman);
+									countfishman++;
+									createeffectsteam(fishman->x, fishman->y);
+								}
+								timetocreatefishman = 3000;
+							}
+							if (simon->vx <= 0 && simon->x < 3264 && simon->x > 3072)
+							{
+								if (countfishman < 2)
+								{
+									Fishman* fishman = new Fishman(3136, 672, 1);
+									listenemy.push_back(fishman);
+									countfishman++;
+									createeffectsteam(fishman->x, fishman->y);
+
+								}
+								if (countfishman < 2)
+								{
+									Fishman* fishman = new Fishman(3392, 672, -1);
+									listenemy.push_back(fishman);
+									countfishman++;
+									createeffectsteam(fishman->x, fishman->y);
+								}
+								timetocreatefishman = 3000;
+							}
+							if (simon->x > 3520 && simon->x < 3712)
+							{
+								if (countfishman < 2)
+								{
+									Fishman* fishman = new Fishman(3520, 672, 1);
+									listenemy.push_back(fishman);
+									countfishman++;
+									createeffectsteam(fishman->x, fishman->y);
+								}
+
+								if (countfishman < 2)
+								{
+									Fishman* fishman = new Fishman(3648, 672, simon->x < 3648 ? -1 : 1);
+									listenemy.push_back(fishman);
+									countfishman++;
+									createeffectsteam(fishman->x, fishman->y);
+								}
+								timetocreatefishman = 3000;
+							}
+							if (simon->x > 3712)
+							{
+								if (countfishman < 2)
+								{
+									Fishman* fishman = new Fishman(3776, 672, simon->x < 3776 ? -1 : 1);
+									listenemy.push_back(fishman);
+									countfishman++;
+									createeffectsteam(fishman->x, fishman->y);
+								}
+								if (countfishman < 2)
+								{
+									Fishman* fishman = new Fishman(3904, 672, simon->x < 3904 ? -1 : 1);
+									listenemy.push_back(fishman);
+									countfishman++;
+									createeffectsteam(fishman->x, fishman->y);
+								}
+								timetocreatefishman = 3000;
+							}
+
+						}
+					}
+
+				}
+			}
 			// di qua cua 1
 			if (door1 == NULL)
 			{
@@ -485,6 +498,13 @@ void PlayScene::Update(DWORD dt)
 		
 	}
 
+}
+
+void PlayScene::createeffectsteam(float x, float y)
+{
+	listeffect.push_back(new steam(x, y, 1));
+	listeffect.push_back(new steam(x, y, 2));
+	listeffect.push_back(new steam(x, y, 3));
 }
 
 void PlayScene::UpdatePlayer(DWORD dt)
@@ -572,6 +592,19 @@ void PlayScene::UpdateObjects(DWORD dt)
 		e->Update(dt, &objects);
 		grid->movepanther(e,e->x,e->y);
 	}
+
+	for (int i = 0; i < listeffect.size(); i++)
+	{
+		if (listeffect[i]->isDead)
+		{
+			listeffect.erase(listeffect.begin() + i);
+		}
+	}
+
+	for (Effect* e: listeffect)
+	{
+		e->Update(dt);
+	}
 }
 
 void PlayScene::LoadResources(int level)
@@ -596,6 +629,10 @@ void PlayScene::Render()
 		e->Render();
 	}
 	for (Enemy*e : listenemy_tronggrid)
+	{
+		e->Render();
+	}
+	for (Effect*e : listeffect)
 	{
 		e->Render();
 	}

@@ -2,6 +2,7 @@
 #include"Simon.h"
 #include"Special_brick.h"
 #include"Enemy.h"
+#include"brokenbrick.h"
 MorningStar::MorningStar(int level)
 {
 	this->level = level;
@@ -52,6 +53,10 @@ void MorningStar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 				case TAG_SPECIAL_BRICK:
 					coObjects->at(i)->isDead=true;
+					listeffect.push_back(new brokenbrick(coObjects->at(i)->x, coObjects->at(i)->y, 1));
+					listeffect.push_back(new brokenbrick(coObjects->at(i)->x, coObjects->at(i)->y, 2));
+					listeffect.push_back(new brokenbrick(coObjects->at(i)->x, coObjects->at(i)->y, 3));
+					listeffect.push_back(new brokenbrick(coObjects->at(i)->x, coObjects->at(i)->y, 4));
 					break;
 				case TAG_HOLDER:
 					coObjects->at(i)->isHit();

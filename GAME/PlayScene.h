@@ -8,6 +8,7 @@
 #include"Grid.h"
 #include"Enemy.h"
 #include"invisibleObject.h"
+#include"listeffect_global.h"
 using namespace std;
 class PlayScene : public Scene
 {
@@ -19,6 +20,8 @@ public:
 	vector<Enemy*>listenemy;
 	vector<Enemy*>listenemy_tronggrid;
 	vector<LPGAMEOBJECT>objects;
+
+
 	Grid *grid;
 
 	bool cancreateghost;
@@ -57,6 +60,8 @@ public:
 	bool gotoright;
 
 	void Update(DWORD dt);
+
+	void createeffectsteam(float x, float y);
 
 	void UpdatePlayer(DWORD dt);
 	void UpdateObjects(DWORD dt);

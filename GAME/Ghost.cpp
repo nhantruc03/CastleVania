@@ -34,7 +34,10 @@ void Ghost::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (!SIMON->timeusingstopwatch)
 	{	
 		Enemy::Update(dt, coObjects);
-		vy += ENEMY_GRAVITY * dt;
+		if (!isBurn)
+		{
+			vy += ENEMY_GRAVITY * dt;
+		}
 		CGameObject::Update(dt, coObjects);
 		vector<LPCOLLISIONEVENT> coEvents;
 		vector<LPCOLLISIONEVENT> coEventsResult;

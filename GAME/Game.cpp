@@ -283,7 +283,7 @@ CGame::~CGame()
 void CGame::LoadResources()
 {
 	
-	SceneManager::GetInstance()->ReplaceScene(new PlayScene(2));
+	SceneManager::GetInstance()->ReplaceScene(new PlayScene(1));
 	
 }
 

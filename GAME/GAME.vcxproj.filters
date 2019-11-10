@@ -43,6 +43,9 @@
     <Filter Include="Game Objects\Enemy">
       <UniqueIdentifier>{351f5550-9d9d-4e47-81e8-8dea5f2af891}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game Objects\effect">
+      <UniqueIdentifier>{f729b515-6f50-41a7-84f9-ea38478e7906}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="debug.cpp">
@@ -131,6 +134,9 @@
     </ClCompile>
     <ClCompile Include="invisibleObject.cpp">
       <Filter>Game Objects\OthetObject</Filter>
+    </ClCompile>
+    <ClCompile Include="listeffect_global.cpp">
+      <Filter>Game Objects\effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -235,6 +241,24 @@
     </ClInclude>
     <ClInclude Include="invisibleObject.h">
       <Filter>Game Objects\OthetObject</Filter>
+    </ClInclude>
+    <ClInclude Include="effect.h">
+      <Filter>Game Objects\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="steam.h">
+      <Filter>Game Objects\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="listeffect_global.h">
+      <Filter>Game Objects\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="brokenbrick.h">
+      <Filter>Game Objects\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="money_400.h">
+      <Filter>Game Objects\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="money_700.h">
+      <Filter>Game Objects\effect</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

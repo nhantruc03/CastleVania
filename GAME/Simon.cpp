@@ -6,6 +6,8 @@
 #include"Enemy.h"
 #include"Door.h"
 #include"Special_brick.h"
+#include"money_400.h"	
+#include"money_700.h"
 CSimon*CSimon::_instance = NULL;
 CSimon::CSimon()
 {
@@ -122,7 +124,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			LPCOLLISIONEVENT e = coEventsResult[i];
 			if (dynamic_cast<CBrick*>(e->obj) || dynamic_cast<Special_brick*>(e->obj))
 			{
-			
+
 				if (isOnStair)
 				{
 					x += dx;
@@ -147,48 +149,52 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			}
 			if (dynamic_cast<Item *>(e->obj))
 			{
-				if (!dynamic_cast<Item *>(e->obj)->rewarded)
+				e->obj->isDead = true;
+				if (ny == 1)
 				{
-					if (ny ==1)
-					{
-						y -= min_ty * dy + ny * 0.2f;
-					}
-					if (e->obj->type == TYPE_ITEM_BIG_HEART)
-					{
-						heart += 5;
-					}
-					if (e->obj->type == TYPE_ITEM_HEART)
-					{
-						heart += 1;
-					}
-					if (e->obj->type == TYPE_ITEM_DAGGER)
-					{
-						secondweapon = TYPE_WEAPON_DAGGER;
-					}
-					if (e->obj->type == TYPE_ITEM_HOLY_WATER)
-					{
-						secondweapon = TYPE_WEAPON_HOLY_WATER;
-					}
-					if (e->obj->type == TYPE_ITEM_STOP_WATCH)
-					{
-						secondweapon = TYPE_WEAPON_STOP_WATCH;
-					}
-					if (e->obj->type == TYPE_ITEM_HOLY_CROSS)
-					{
-						usingholycross = true;
-					}
-					if (e->obj->type == TYPE_ITEM_WHIP)
-					{
-						upgrade_time = TIME_UPGRADE;
-						morningstarlevel += 1;
-						if (morningstarlevel > 3)
-						{
-							morningstarlevel = 3;
-						}
-					}
-					dynamic_cast<Item*>(e->obj)->GetReward();
+					y -= min_ty * dy + ny * 0.2f;
 				}
-			
+				if (e->obj->type == TYPE_ITEM_BIG_HEART)
+				{
+					heart += 5;
+				}
+				if (e->obj->type == TYPE_ITEM_HEART)
+				{
+					heart += 1;
+				}
+				if (e->obj->type == TYPE_ITEM_DAGGER)
+				{
+					secondweapon = TYPE_WEAPON_DAGGER;
+				}
+				if (e->obj->type == TYPE_ITEM_HOLY_WATER)
+				{
+					secondweapon = TYPE_WEAPON_HOLY_WATER;
+				}
+				if (e->obj->type == TYPE_ITEM_STOP_WATCH)
+				{
+					secondweapon = TYPE_WEAPON_STOP_WATCH;
+				}
+				if (e->obj->type == TYPE_ITEM_HOLY_CROSS)
+				{
+					usingholycross = true;
+				}
+				if (e->obj->type == TYPE_ITEM_WHIP)
+				{
+					upgrade_time = TIME_UPGRADE;
+					morningstarlevel += 1;
+					if (morningstarlevel > 3)
+					{
+						morningstarlevel = 3;
+					}
+				}
+				if (e->obj->type == TYPE_ITEM_MONEY_400)
+				{
+					listeffect.push_back(new money_400(x + 40, y-20));
+				}
+				if (e->obj->type == TYPE_ITEM_MONEY_700)
+				{
+					listeffect.push_back(new money_700(x + 40, y-20));
+				}
 			}
 			if (dynamic_cast<Enemy*> (e->obj))
 			{
@@ -269,39 +275,42 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			switch (coObjects->at(i)->tag)
 			{
 			case TAG_ITEM:
-				if (!dynamic_cast<Item *>(coObjects->at(i))->rewarded)
+				switch (coObjects->at(i)->type)
 				{
-					switch (coObjects->at(i)->type)
+				case TYPE_ITEM_BIG_HEART:
+					heart += 5;
+					break;
+				case TYPE_ITEM_HEART:
+					heart += 1;
+					break;
+				case TYPE_ITEM_DAGGER:
+					secondweapon = TYPE_WEAPON_DAGGER;
+					break;
+				case TYPE_ITEM_HOLY_WATER:
+					secondweapon = TYPE_WEAPON_HOLY_WATER;
+					break;
+				case TYPE_ITEM_STOP_WATCH:
+					secondweapon = TYPE_WEAPON_STOP_WATCH;
+					break;
+				case TYPE_ITEM_HOLY_CROSS:
+					usingholycross = true;
+					break;
+				case TYPE_ITEM_WHIP:
+					upgrade_time = TIME_UPGRADE;
+					morningstarlevel += 1;
+					if (morningstarlevel > 3)
 					{
-					case TYPE_ITEM_BIG_HEART:
-						heart += 5;
-						break;
-					case TYPE_ITEM_HEART:
-						heart += 1;
-						break;
-					case TYPE_ITEM_DAGGER:
-						secondweapon = TYPE_WEAPON_DAGGER;
-						break;
-					case TYPE_ITEM_HOLY_WATER:
-						secondweapon = TYPE_WEAPON_HOLY_WATER;
-						break;
-					case TYPE_ITEM_STOP_WATCH:
-						secondweapon = TYPE_WEAPON_STOP_WATCH;
-						break;
-					case TYPE_ITEM_HOLY_CROSS:
-						usingholycross = true;
-						break;
-					case TYPE_ITEM_WHIP:
-						upgrade_time = TIME_UPGRADE;
-						morningstarlevel += 1;
-						if (morningstarlevel > 3)
-						{
-							morningstarlevel = 3;
-						}
-						break;
+						morningstarlevel = 3;
 					}
-					dynamic_cast<Item*>(coObjects->at(i))->GetReward();
+					break;
+				case TYPE_ITEM_MONEY_400:
+					listeffect.push_back(new money_400(x + 40, y - 20));
+					break;
+				case TYPE_ITEM_MONEY_700:
+					listeffect.push_back(new money_700(x + 40, y - 20));
+					break;
 				}
+				coObjects->at(i)->isDead = true;
 				break;
 			case TAG_INVISIBLE_OBJECT:
 				switch (coObjects->at(i)->type)
@@ -328,19 +337,19 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				stair_collide = coObjects->at(i)->GetBoundingBox();
 				break;
 			case TAG_ENEMY:
-					if (untouchable == 0 && coObjects->at(i)->isBurn==false)
+				if (untouchable == 0 && coObjects->at(i)->isBurn == false)
+				{
+					StartUntouchable();
+					if (coObjects->at(i)->type == TYPE_ENEMY_BAT)
 					{
-						StartUntouchable();
-						if (coObjects->at(i)->type == TYPE_ENEMY_BAT)
-						{
-							coObjects->at(i)->isHit();
-						}
-						if (!isOnStair)
-						{
-							isReverse = false;
-							ChangeState(STATE_INJURED);
-						}
+						coObjects->at(i)->isHit();
 					}
+					if (!isOnStair)
+					{
+						isReverse = false;
+						ChangeState(STATE_INJURED);
+					}
+				}
 				break;
 			}
 		}

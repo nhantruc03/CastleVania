@@ -2,13 +2,11 @@
 
 Item::Item(int type_id)
 {
-	rewarded = false;
 	tag = TAG_ITEM;
 	vx = vy = 0;
 	ExistTime = 2000;
 	isDead = false;
 	type = type_id;
-	timetoshoweffect = 1000;
 	if (type == TYPE_ITEM_BIG_HEART)
 	{
 		animation = Animations::GetInstance()->Get(tag, TYPE_ITEM_BIG_HEART);
@@ -47,7 +45,6 @@ Item::Item(int type_id)
 	}
 	else if (type == TYPE_ITEM_MONEY_700)
 	{
-		effect = Sprites::GetInstance()->Get(TAG_EFFECT, TYPE_EFFECT_700);
 		animation = Animations::GetInstance()->Get(tag, TYPE_ITEM_MONEY_700);
 		width = 30;
 		height = 30;
@@ -55,7 +52,6 @@ Item::Item(int type_id)
 	}
 	else if (type == TYPE_ITEM_MONEY_400)
 	{
-		effect = Sprites::GetInstance()->Get(TAG_EFFECT, TYPE_EFFECT_400);
 		animation = Animations::GetInstance()->Get(tag, TYPE_ITEM_MONEY_400);
 		width = 30;
 		height = 30;
@@ -93,26 +89,10 @@ Item::Item(int type_id)
 
 void Item::Render()
 {
-	if (rewarded)
-	{
-		effect->Draw(x + 32, y);
-	}
-	else
-	{
-		animation->Render(x, y);
-	}
+	animation->Render(x, y);
 }
 void Item::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	//effect->Draw(x + 8, y);
-	if (rewarded)
-	{
-		timetoshoweffect -= dt;
-		if (timetoshoweffect <= 0)
-		{
-			this->isDead = true;
-		}
-	}
 	if (abs(x - prevX) >= 16)
 	{
 		vx = -vx;

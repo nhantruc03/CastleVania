@@ -69,7 +69,10 @@ void Fishman::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				run();
 			}
 		}
-		vy += ENEMY_GRAVITY/2 * dt;
+		if (!isBurn)
+		{
+			vy += ENEMY_GRAVITY / 2 * dt;
+		}
 		CGameObject::Update(dt, coObjects);
 		vector<LPCOLLISIONEVENT> coEvents;
 		vector<LPCOLLISIONEVENT> coEventsResult;

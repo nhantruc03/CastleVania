@@ -4,7 +4,7 @@
 #include <dinput.h>
 #include <WinUser.h>
 #include <unordered_map>
-
+//#include"effect.h"
 // Các thông số và biến tổng dùng cho toàn bộ Game
 #define WINDOW_CLASS_NAME L"CastleVania-17520122"
 #define MAIN_WINDOW_TITLE L"CastleVania-17520122"
@@ -52,6 +52,8 @@
 	#define TYPE_EFFECT_HIT 3
 	#define TYPE_EFFECT_400 4
 	#define TYPE_EFFECT_700 5
+#define TYPE_EFFECT_STEAM 6
+#define TYPE_EFFECT_BROKENBRICK 7
 #define TAG_MAP2 6
 #define TAG_BRICK 7
 #define TAG_ENEMY 8
@@ -113,5 +115,7 @@
 #define SIMON CSimon::GetInstance()
 
 extern std::unordered_map<int, bool> keyCode;
+
+//extern  std::vector<Effect*>listeffect;
 
 extern D3DCOLOR D3DCOLOR_BACKGROUND;
