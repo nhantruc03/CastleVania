@@ -58,7 +58,7 @@ void CGameObject::CalcPotentialCollisions(vector<LPGAMEOBJECT>* coObjects, vecto
 {
 	for (UINT i = 0; i < coObjects->size(); i++)
 	{
-		if (dynamic_cast<CSimon*>(this) && (coObjects->at(i)->tag == TAG_HOLDER || coObjects->at(i)->tag == TAG_INVISIBLE_OBJECT || (dynamic_cast<Item*>(coObjects->at(i))&& dynamic_cast<Item*>(coObjects->at(i))->rewarded)))
+		if (dynamic_cast<CSimon*>(this) && (coObjects->at(i)->tag == TAG_HOLDER || coObjects->at(i)->tag == TAG_INVISIBLE_OBJECT))
 		{
 			continue;
 		}
