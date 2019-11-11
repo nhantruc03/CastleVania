@@ -26,7 +26,7 @@ void Holy_water::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	RECT Holy_water = GetBoundingBox();
 	if (Camera::GetInstance()->IsContain(Holy_water) == false)
 	{
-		SIMON->throwing = false;
+		//SIMON->throwing = false;
 		isDead = true;
 		available = false;
 	}
@@ -34,7 +34,7 @@ void Holy_water::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		animation->SetEndAniFalse();
 		this->isDead = true;
-		SIMON->throwing = false;
+		//SIMON->throwing = false;
 		available = false;
 	}
 	if (available)
@@ -42,7 +42,7 @@ void Holy_water::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		animation->Update();
 		if (animation == animations[0])
 		{
-			vy += ENEMY_GRAVITY * dt;
+			vy += WEAPON_GRAVITY/2 * dt;
 		}
 		CGameObject::Update(dt, coObjects);
 		vector<LPCOLLISIONEVENT> coEvents;
@@ -133,7 +133,7 @@ void Holy_water::Render()
 			{
 				x = SIMON->x;
 				y = SIMON->y - 20;
-				vx = isReverse ? 0.25f : -0.25f;
+				vx = isReverse ? WEAPON_SPEED : -WEAPON_SPEED;
 				available = true;
 			}
 			break;

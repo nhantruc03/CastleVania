@@ -33,6 +33,9 @@ CSimon::CSimon()
 
 	srand(time(NULL));
 
+	numweaponcanthrow = 1;
+	numcurrentweaponthroing = 0;
+
 	ishit = false;
 	untouchable = 0;
 	upgrade_time = 0;
@@ -195,6 +198,18 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				{
 					listeffect.push_back(new money_700(x + 40, y-20));
 				}
+				if (e->obj->type == TYPE_ITEM_AXE)
+				{
+					secondweapon = TYPE_WEAPON_AXE;
+				}
+				if (e->obj->type == TYPE_ITEM_DOUBLE_SHOT)
+				{
+					numweaponcanthrow = 2;
+				}
+				if (e->obj->type == TYPE_ITEM_GOLD_POTION)
+				{
+					StartUntouchable();
+				}
 			}
 			if (dynamic_cast<Enemy*> (e->obj))
 			{
@@ -309,6 +324,12 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				case TYPE_ITEM_MONEY_700:
 					listeffect.push_back(new money_700(x + 40, y - 20));
 					break;
+				case TYPE_ITEM_AXE:
+					secondweapon = TYPE_WEAPON_AXE;
+					break;
+				case TYPE_ITEM_GOLD_POTION:
+					StartUntouchable();
+					break;
 				}
 				coObjects->at(i)->isDead = true;
 				break;
@@ -332,6 +353,9 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					break;
 				case TYPE_INVI_O_GO_DOWN_STAIR_LTR:
 					isCollidewith_DWNLTR = true;
+					break;
+				case TYPE_ITEM_DOUBLE_SHOT:
+					numweaponcanthrow = 2;
 					break;
 				}
 				stair_collide = coObjects->at(i)->GetBoundingBox();
@@ -372,6 +396,10 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			Weapon* w = (Weapon*) o;
 			if (w->isDead)
 			{
+				if (w->type != TYPE_WEAPON_MORNINGSTAR)
+				{
+					numcurrentweaponthroing -= 1;
+				}
 				it = Weapons.erase(it);
 				delete w;
 				continue;
@@ -508,7 +536,7 @@ void CSimon::Render()
 	}
 	else
 	{
-		if (untouchable) alpha = rand() % 255;
+		if (untouchable) alpha = 127;
 	}
 	curAni->Render(x, y, alpha,r,g,b);
 	for (Weapon* o : Weapons)
@@ -548,22 +576,10 @@ void CSimon::OnKeyDown(int key)
 				}
 				else
 				{
-					if (keyCode[DIK_UP] && State != STATE_SITTING && throwing == false && secondweapon ==1 && heart >= 1)
+					if (keyCode[DIK_UP] && State != STATE_SITTING && numcurrentweaponthroing < numweaponcanthrow && (secondweapon ==1 || secondweapon==2 || secondweapon==4) && heart >= 1)
 					{
 						heart -= 1;
-						Weapon* weapon = WeaponsManager::CreateWeapon(secondweapon);
-						weapon->isReverse = isReverse;
-						Weapons.push_back(weapon);
-						throwing = true;
-						if (isWalkingOnStair)
-						{
-							vx = vy = 0;
-						}
-						ChangeState(STATE_ATTACK);
-					}
-					else if (keyCode[DIK_UP] && State != STATE_SITTING && throwing == false && secondweapon == 2 && heart >= 1)
-					{
-						heart -= 1;
+						numcurrentweaponthroing += 1;
 						Weapon* weapon = WeaponsManager::CreateWeapon(secondweapon);
 						weapon->isReverse = isReverse;
 						Weapons.push_back(weapon);
@@ -583,7 +599,7 @@ void CSimon::OnKeyDown(int key)
 			}
 			break;
 		case DIK_M:
-			secondweapon = 2;
+			secondweapon = 4;
 			heart += 5;
 			morningstarlevel += 1;
 			if (morningstarlevel > 3)

@@ -16,22 +16,25 @@ PlayScene::PlayScene(int level)
 {
 	grid = new Grid(level);
 	LoadResources(level);
+
 	srand(time(NULL));
+
 	keyCode.clear();
 	isgoingthroughdoor = false;
+	isgoingthroughdoor2 = false;
 	isgoingthroughendrect = false;
 	this->level = level;
 
 	map = Maps::GetInstance()->GetMap(this->level);
 
 	simon = CSimon::GetInstance();
-	simon->SetPosition(30, 200);//287.0f);
+	simon->SetPosition(3000, 5);//287.0f);
 	simon->Respawn();
 
 	camera = Camera::GetInstance();
 
-	camera->inzone1 = false;
-
+	/*camera->inzone1 = false;
+	camera->inzone2 = true;*/
 	objects.clear();
 
 	timetocreateghost = 0;
@@ -90,7 +93,7 @@ void PlayScene::Update(DWORD dt)
 				objects.push_back(e);
 		}
 		UpdatePlayer(dt);
-		if (!isgoingthroughdoor)
+		if (!isgoingthroughdoor && !isgoingthroughdoor2)
 		{
 			camera->SetPosition(simon->x, camera->GetPosition().y);
 		}
@@ -173,7 +176,7 @@ void PlayScene::Update(DWORD dt)
 						switch (objects[i]->type)
 						{
 						case TYPE_INVI_O_GO_DOWN_BASEMENT:
-							if (simon->State==STATE_WALK_ONSTAIR_DOWN && simon->y>objects[i]->y)
+							if (simon->State == STATE_WALK_ONSTAIR_DOWN && simon->y > objects[i]->y)
 							{
 								camera->movedownstair = true;
 								camera->SetPosition(simon->x, -384);
@@ -181,11 +184,11 @@ void PlayScene::Update(DWORD dt)
 								simon->prevX = simon->prevX;
 								simon->prevY = simon->prevY + 64;
 
-								simon->SetPosition(simon->x, simon->y+64);
+								simon->SetPosition(simon->x, simon->y + 64);
 							}
 							break;
 						case TYPE_INVI_O_GO_UP_BASEMENT:
-							if (simon->State==STATE_WALK_ONSTAIR_UP && simon->y<objects[i]->y)
+							if (simon->State == STATE_WALK_ONSTAIR_UP && simon->y < objects[i]->y)
 							{
 								camera->inzone2 = true;
 								camera->movedownstair = false;
@@ -200,7 +203,7 @@ void PlayScene::Update(DWORD dt)
 						}
 					}
 				}
-				
+
 			}
 
 			if (simon->timeusingstopwatch <= 0)
@@ -227,7 +230,7 @@ void PlayScene::Update(DWORD dt)
 								listenemy.push_back(ghost);
 							}
 							countghost++;
-							timetocreateghost = 500;
+							timetocreateghost = 600;
 							if (countghost == 3)
 							{
 								cancreateghost = false;
@@ -235,6 +238,64 @@ void PlayScene::Update(DWORD dt)
 						}
 					}
 
+				}
+				if (!isgoingthroughdoor2)
+				{
+					if (timetocreateghost > 0)
+					{
+						timetocreateghost -= dt;
+					}
+					if ((simon->x >= 4096.0f&& simon->x <= 5088.0f))
+					{
+						if (cancreateghost)
+						{
+							if (timetocreateghost <= 0)
+							{
+								if (simon->x < 4480)
+								{
+									int random = rand() % 2;
+									if (random == 0)
+									{
+										Ghost* ghost = new Ghost(camera->GetPosition().x + camera->camWidht / 2, 150, -1);
+										listenemy.push_back(ghost);
+									}
+									else
+									{
+										if (simon->vx > 0)
+										{
+											Ghost* ghost = new Ghost(camera->GetPosition().x + camera->camWidht / 2, 287.0f, -1);
+											listenemy.push_back(ghost);
+										}
+										else
+										{
+											Ghost* ghost = new Ghost(camera->GetPosition().x - camera->camWidht / 2, 287.0f, 1);
+											listenemy.push_back(ghost);
+										}
+									}
+								}
+								else
+								{
+									if (simon->vx > 0)
+									{
+										Ghost* ghost = new Ghost(camera->GetPosition().x + camera->camWidht / 2, 287.0f, -1);
+										listenemy.push_back(ghost);
+									}
+									else
+									{
+										Ghost* ghost = new Ghost(camera->GetPosition().x - camera->camWidht / 2, 287.0f, 1);
+										listenemy.push_back(ghost);
+									}
+								}
+								countghost++;
+								timetocreateghost = 600;
+								if (countghost == 3)
+								{
+									cancreateghost = false;
+								}
+							}
+						}
+
+					}
 				}
 
 				// tao enemy panther
@@ -293,13 +354,13 @@ void PlayScene::Update(DWORD dt)
 
 
 				// tao enemy bat
-				if (!isgoingthroughdoor)
+				if (!isgoingthroughdoor && !isgoingthroughdoor2)
 				{
 					if (timetocreatebat > 0)
 					{
 						timetocreatebat -= dt;
 					}
-					if (simon->x >= 3072 && simon->y < 352)
+					if (simon->x >= 3072 && simon->y < 352 && simon->x <= 4111 && !(simon->x>3900&&simon->y<128))
 					{
 						if (cancreatebat)
 						{
@@ -434,19 +495,22 @@ void PlayScene::Update(DWORD dt)
 				}
 			}
 			// di qua cua 1
-			if (door1 == NULL)
+			if (camera->inzone1)
 			{
-				for (int i = 0; i < objects.size(); i++)
+				if (door1 == NULL)
 				{
-					if (dynamic_cast<Door*>(objects[i])&& dynamic_cast<Door*>(objects[i])->type==0)
+					for (int i = 0; i < objects.size(); i++)
 					{
-						door1 = (Door*)objects[i];
+						if (dynamic_cast<Door*>(objects[i]) && dynamic_cast<Door*>(objects[i])->type == 0)
+						{
+							door1 = (Door*)objects[i];
+						}
 					}
 				}
 			}
-			else
+			if (door1 != NULL)
 			{
-				if (simon->IsContain(door1->GetBoundingBox().left, door1->GetBoundingBox().top, door1->GetBoundingBox().right, door1->GetBoundingBox().bottom) && door1->isclosed() )
+				if (simon->IsContain(door1->GetBoundingBox().left, door1->GetBoundingBox().top, door1->GetBoundingBox().right, door1->GetBoundingBox().bottom) && door1->isclosed())
 				{
 					keyCode.clear();
 					isgoingthroughdoor = true;
@@ -488,6 +552,68 @@ void PlayScene::Update(DWORD dt)
 							camera->inzone2 = true;
 							simon->check_auto_move = false;
 							isgoingthroughdoor = false;
+						}
+					}
+				}
+			}
+
+			if (camera->inzone2)
+			{
+				if (door2 == NULL)
+				{
+					for (int i = 0; i < objects.size(); i++)
+					{
+						if (dynamic_cast<Door*>(objects[i]) && dynamic_cast<Door*>(objects[i])->type == 1)
+						{
+							door2 = (Door*)objects[i];
+						}
+					}
+				}
+			}
+			if (door2 != NULL)
+			{
+				if (simon->IsContain(door2->GetBoundingBox().left, door2->GetBoundingBox().top, door2->GetBoundingBox().right, door2->GetBoundingBox().bottom) && door2->isclosed())
+				{
+					keyCode.clear();
+					isgoingthroughdoor2 = true;
+					simon->vx = 0;
+					camera->inzone2 = false;
+
+					simon->check_auto_move = true;
+					if (camera->camPosition.x >= simon->x)
+					{
+						camera->camPosition.x = simon->x;
+
+						door2->open();
+					}
+
+				}
+				if (isgoingthroughdoor2)
+				{
+					if (door2->isopened())
+					{
+						simon->gotoright = true;
+					}
+					if (simon->gotoright)
+					{
+						simon->ChangeState(STATE_WALKING);
+						simon->isReverse = true;
+						simon->vx = 0.05f;
+						if (simon->x - door2->x >= 64)
+						{
+							simon->ChangeState(STATE_STANDING);
+							simon->gotoright = false;
+							door2->close();
+						}
+					}
+					if (door2->isclosed() && simon->check_auto_move == true)
+					{
+						camera->SetPosition(camera->camPosition.x += 2, camera->camPosition.y);
+						if (camera->camPosition.x - camera->camWidht / 2 >= 4096)
+						{
+							camera->inzone3 = true;
+							simon->check_auto_move = false;
+							isgoingthroughdoor2 = false;
 						}
 					}
 				}

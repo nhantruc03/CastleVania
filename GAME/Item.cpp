@@ -7,30 +7,27 @@ Item::Item(int type_id)
 	ExistTime = 2000;
 	isDead = false;
 	type = type_id;
+	animation = Animations::GetInstance()->Get(tag, type);
 	if (type == TYPE_ITEM_BIG_HEART)
 	{
-		animation = Animations::GetInstance()->Get(tag, TYPE_ITEM_BIG_HEART);
 		width = 24;
 		height = 20;
 		vy = 0.2f;
 	}
 	else if (type == TYPE_ITEM_WHIP)
 	{
-		animation = Animations::GetInstance()->Get(tag, TYPE_ITEM_WHIP);
 		width = 32;
 		height = 32;
 		vy = 0.2f;
 	}
 	else if (type == TYPE_ITEM_DAGGER)
 	{
-		animation = Animations::GetInstance()->Get(tag, TYPE_ITEM_DAGGER);
 		width = 32;
 		height = 18;
 		vy = 0.2f;
 	}
 	else if (type == TYPE_ITEM_HEART)
 	{
-		animation = Animations::GetInstance()->Get(tag, TYPE_ITEM_HEART);
 		width = 16;
 		height = 16;
 		vy = 0.05f;
@@ -38,52 +35,63 @@ Item::Item(int type_id)
 	}
 	else if (type == TYPE_ITEM_MONEY_1000)
 	{
-		animation = Animations::GetInstance()->Get(tag, TYPE_ITEM_MONEY_1000);
 		width = 30;
 		height = 30;
 		vy = 0.2f;
 	}
 	else if (type == TYPE_ITEM_MONEY_700)
 	{
-		animation = Animations::GetInstance()->Get(tag, TYPE_ITEM_MONEY_700);
 		width = 30;
 		height = 30;
 		vy = 0.2f;
 	}
 	else if (type == TYPE_ITEM_MONEY_400)
 	{
-		animation = Animations::GetInstance()->Get(tag, TYPE_ITEM_MONEY_400);
 		width = 30;
 		height = 30;
 		vy = 0.2f;
 	}
 	else if (type == TYPE_ITEM_HOLY_WATER)
 	{
-		animation = Animations::GetInstance()->Get(tag, TYPE_ITEM_HOLY_WATER);
 		width = 32;
 		height = 32;
 		vy = 0.2f;
 	}
 	else if (type == TYPE_ITEM_HOLY_CROSS)
 	{
-		animation = Animations::GetInstance()->Get(tag, TYPE_ITEM_HOLY_CROSS);
 		width = 32;
 		height = 32;
 		vy = 0.2f;
 	}
 	else if (type == TYPE_ITEM_STOP_WATCH)
 	{
-		animation = Animations::GetInstance()->Get(tag, TYPE_ITEM_STOP_WATCH);
 		width = 30;
 		height = 32;
 		vy = 0.2f;
 	}
 	else if (type == TYPE_ITEM_CHICKEN)
 	{
-		animation = Animations::GetInstance()->Get(tag, TYPE_ITEM_CHICKEN);
 		width = 32;
 		height = 26;
 		vy = 0.2f;
+	}
+	else if (type == TYPE_ITEM_AXE)
+	{
+		width = 30;
+		height = 32;
+		vy = 0.2f;
+	}
+	else if (type == TYPE_ITEM_DOUBLE_SHOT)
+	{
+		width = 27;
+		height = 28;
+		vy = 0.2f;
+	}
+	else if (type == TYPE_ITEM_GOLD_POTION)
+	{
+		width = 26;
+		height = 32;
+		vy = 0.2;
 	}
 }
 

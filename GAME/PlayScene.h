@@ -25,7 +25,7 @@ public:
 	Grid *grid;
 
 	bool cancreateghost;
-	DWORD timetocreateghost;
+	float timetocreateghost;
 	int countghost;	
 
 	bool cancreatepanther;
@@ -33,11 +33,11 @@ public:
 	int countpanther;
 
 	bool cancreatebat;
-	DWORD timetocreatebat;
+	float timetocreatebat;
 	int countbat;
 
 	bool cancreatefishman;
-	DWORD timetocreatefishman;
+	float timetocreatefishman;
 	int countfishman;
 
 	RECT downstair;
@@ -46,7 +46,9 @@ public:
 	RECT upstair2;
 
 	bool isgoingthroughdoor;
+	bool isgoingthroughdoor2;
 	Door* door1;
+	Door* door2;
 	RECT DOOR1;
 
 	bool isgoingthroughendrect;

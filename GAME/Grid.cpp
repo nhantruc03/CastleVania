@@ -10,6 +10,8 @@
 #include"Panther.h"
 Grid::Grid(int level)
 {
+	nextid = 0;
+	srand(time(NULL));
 	maplevel = level;
 	camera = Camera::GetInstance();
 	countpanther = 3;
@@ -110,7 +112,7 @@ void Grid::Loadresources()
 			for (int i = top; i <= bottom; i++)
 				for (int j = left; j <= right; j++)
 					cells[i][j].push_back(tempobject);
-			nextid = id;
+			nextid = id+1;
 
 		}
 		iFile.close();
@@ -127,7 +129,7 @@ void Grid::Loadresources()
 		{
 			char objects_type;
 			iFile >> objects_type;
-			iFile >> id;
+			//iFile >> id;
 			switch (objects_type)
 			{
 			case 'h':
@@ -187,8 +189,8 @@ void Grid::Loadresources()
 			}
 			break;
 			}
-			tempobject->id = id;
-			// thay vi phai tinh toan thi da dua so lieu vao file text
+			tempobject->id = nextid++;
+
 			int top = (int)((tempobject->y - tempobject->height / 2) / GRID_CELL_HEIGHT);
 			int bottom = (int)((tempobject->y + tempobject->height / 2) / GRID_CELL_HEIGHT);
 			int left = (int)((tempobject->x - tempobject->width / 2) / GRID_CELL_WIDTH);
@@ -204,7 +206,7 @@ void Grid::Loadresources()
 
 			list_temp.push_back(tempobject);
 
-			nextid = id;
+		//	nextid = id;
 
 		}
 		iFile.close();
@@ -234,7 +236,14 @@ void Grid::Loadresources()
 				ofile << "p" << " " << o->id << " " << o->x << " " << o->y << " " << dynamic_cast<Enemy*>(o)->direct;
 				break;
 			}
-			ofile << " " << o->topcell << " " << o->botcell << " " << o->leftcell << " " << o->rightcell << "\n";
+			if (o->id != nextid-1)
+			{
+				ofile << " " << o->topcell << " " << o->botcell << " " << o->leftcell << " " << o->rightcell << "\n";
+			}
+			else
+			{
+				ofile << " " << o->topcell << " " << o->botcell << " " << o->leftcell << " " << o->rightcell;
+			}
 		}
 		ofile.close();
 
@@ -271,9 +280,21 @@ void Grid::GetListObject(vector<CGameObject*>& ListObj)
 					if (cells[i][j].at(k)->tag == TAG_HOLDER && dynamic_cast<HoldItemObject*>(cells[i][j].at(k))->check_spawnitem == false)
 					{
 						dynamic_cast<HoldItemObject*>(cells[i][j].at(k))->check_spawnitem = true;
-						Item* item = new Item(dynamic_cast<HoldItemObject*>(cells[i][j].at(k))->item);
+						int temp_id= dynamic_cast<HoldItemObject*>(cells[i][j].at(k))->item;
+						if (SIMON->morningstarlevel < 3)
+						{
+							if (temp_id == TYPE_ITEM_HEART)
+							{
+								int random = rand() % 2;
+								if (random == 0)
+								{
+									temp_id = 1;
+								}
+							}
+						}
+						Item* item = new Item(temp_id);
 						item->SetPosition(dynamic_cast<HoldItemObject*>(cells[i][j].at(k))->x, dynamic_cast<HoldItemObject*>(cells[i][j].at(k))->y);
-						item->id = ++nextid;
+						item->id = nextid++;
 						insert(item);
 					}
 					else if (cells[i][j].at(k)->tag == TAG_SPECIAL_BRICK && dynamic_cast<Special_brick*>(cells[i][j].at(k))->check_spawnitem == false && dynamic_cast<Special_brick*>(cells[i][j].at(k))->item != -1)
@@ -281,7 +302,7 @@ void Grid::GetListObject(vector<CGameObject*>& ListObj)
 						dynamic_cast<Special_brick*>(cells[i][j].at(k))->check_spawnitem = true;
 						Item* item = new Item(dynamic_cast<Special_brick*>(cells[i][j].at(k))->item);
 						item->SetPosition(dynamic_cast<Special_brick*>(cells[i][j].at(k))->x, dynamic_cast<Special_brick*>(cells[i][j].at(k))->y - 5);
-						item->id = ++nextid;
+						item->id = nextid++;
 						insert(item);
 					}
 				}

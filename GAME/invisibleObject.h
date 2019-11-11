@@ -14,6 +14,6 @@ public:
 	}
 	void Render()
 	{
-		//temp->Draw(x, y);
+		temp->Draw(x, y);
 	}
 };

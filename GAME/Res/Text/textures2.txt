@@ -18,3 +18,4 @@
 17 Res\Image\enemy_bullet.png 255 0 255
 18 Res\Image\steam.png 255 0 255
 19 Res\Image\brokenbrick.png 255 0 255
+20 Res\Image\axe.png 255 0 255

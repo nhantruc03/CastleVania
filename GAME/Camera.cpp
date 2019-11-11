@@ -13,6 +13,7 @@ Camera::Camera(int width, int height)
 {
 	inzone1 = true;
 	inzone2 = false;
+	inzone3 = false;
 	movedownstair = false;
 	camWidht = width;
 	camHeight = height;
@@ -64,6 +65,10 @@ void Camera::Update(int maplevel)
 	}
 	else
 	{
+		/*if (camPosition.x + camWidht / 2 > 5648)
+		{
+			camPosition = D3DXVECTOR3(5648 - camWidht / 2, 0, 0);
+		}*/
 		if (inzone1)
 		{
 			if (camPosition.x + camWidht / 2 > 3088)
@@ -77,6 +82,10 @@ void Camera::Update(int maplevel)
 			{
 				camPosition = D3DXVECTOR3(3072 + camWidht / 2, 0, 0);
 			}
+			if (camPosition.x + camWidht / 2 > 4111)
+			{
+				camPosition= D3DXVECTOR3(4111 - camWidht / 2, 0, 0);
+			}
 		}
 		if (movedownstair)
 		{
@@ -88,6 +97,17 @@ void Camera::Update(int maplevel)
 			if (camPosition.x + camWidht / 2 > 4112)
 			{
 				camPosition = D3DXVECTOR3(4112 - camWidht / 2, -384, 0);
+			}
+		}
+		if (inzone3)
+		{
+			if (camPosition.x - camWidht / 2 < 4096)
+			{
+				camPosition = D3DXVECTOR3(4096 + camWidht / 2, 0, 0);
+			}
+			if (camPosition.x + camWidht / 2 > 5648)
+			{
+				camPosition = D3DXVECTOR3(5648 - camWidht / 2, 0, 0);
 			}
 		}
 	}

@@ -13,6 +13,7 @@ class Grid
 public:
 	int countpanther;
 	int nextid;
+	int lastid;
 	int maplevel;
 	Camera* camera;
 	vector<CGameObject*> cells[GRID_CELL_MAX_ROW][GRID_CELL_MAX_COLUMN];

@@ -138,6 +138,9 @@
     <ClCompile Include="listeffect_global.cpp">
       <Filter>Game Objects\effect</Filter>
     </ClCompile>
+    <ClCompile Include="Axe.cpp">
+      <Filter>Game Objects\Weapon</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="debug.h">
@@ -259,6 +262,9 @@
     </ClInclude>
     <ClInclude Include="money_700.h">
       <Filter>Game Objects\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Axe.h">
+      <Filter>Game Objects\Weapon</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

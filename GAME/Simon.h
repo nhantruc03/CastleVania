@@ -44,8 +44,12 @@ public:
 	bool attacking;
 	bool jumping;
 	int heart;
+
 	int secondweapon;
 	bool throwing;
+	int numweaponcanthrow;
+	int numcurrentweaponthroing;
+
 	vector<Weapon*>Weapons;
 	int morningstarlevel;
 	CSimon();

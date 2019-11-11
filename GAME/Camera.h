@@ -11,6 +11,7 @@ private:
 public:
 	bool inzone1;
 	bool inzone2;
+	bool inzone3;
 	int camWidht, camHeight;
 	D3DXVECTOR3 camPosition;
 	static Camera* GetInstance();

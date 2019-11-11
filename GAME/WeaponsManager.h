@@ -2,7 +2,7 @@
 #include"MorningStar.h"
 #include"Dagger.h"
 #include"Holy_water.h"
-
+#include"Axe.h"
 class WeaponsManager
 {
 public:
@@ -16,6 +16,8 @@ public:
 			return new Dagger();
 		case TYPE_WEAPON_HOLY_WATER:
 			return new Holy_water();
+		case TYPE_WEAPON_AXE:
+			return new Axe();
 		default:
 			return NULL;
 		}
