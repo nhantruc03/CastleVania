@@ -18,7 +18,6 @@ Bat::Bat(float x, float y, int direction)
 	this->isDead = false;
 	this->ishit = false;
 	animation = Animations::GetInstance()->Get(tag, 4);
-	hit_effect = Sprites::GetInstance()->Get(TAG_EFFECT, TYPE_EFFECT_HIT);
 	this->vx = ENEMY_WALKING_SPEED  * direct;
 	this->vy = 0.03f;
 	this->width = 32;

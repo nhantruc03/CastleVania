@@ -8,13 +8,12 @@ protected:
 	LPSPRITE hit_effect;
 	
 public:
+	bool isBurn;
 	bool check_spawnitem;
-	bool ishit;
 	int item;
 	HoldItemObject(int type_id, int itemid);
 	void Render();
 	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects);
 	void Burn();
-	void isHit();
 };
 

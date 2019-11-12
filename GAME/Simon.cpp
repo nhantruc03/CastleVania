@@ -67,10 +67,11 @@ CSimon::CSimon()
 }
 void CSimon::Respawn()
 {
-	Camera::GetInstance()->inzone1 = true;
-	Camera::GetInstance()->inzone2 = false;
+	Camera::GetInstance()->inzone1 = false;
+	Camera::GetInstance()->inzone2 = true;
 	Camera::GetInstance()->movedownstair = false;
-	x = 30;
+	Camera::GetInstance()->SetPosition(x, 0);
+	x = 3400;
 	y = 5;
 	isDead = false;
 	health = 4;
@@ -229,12 +230,12 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					}
 					e->obj->isDead = true;
 				}
-				if (dynamic_cast<Enemy*> (e->obj))
+				if (dynamic_cast<Enemy*> (e->obj)||(dynamic_cast<Weapon*>(e->obj)&&e->obj->type==TYPE_ENEMY_BULLET))
 				{
 					if (untouchable == 0)
 					{
 						StartUntouchable();
-						if (dynamic_cast<Enemy*> (e->obj)->type == TYPE_ENEMY_BAT)
+						if (dynamic_cast<Enemy*> (e->obj) &&dynamic_cast<Enemy*> (e->obj)->type == TYPE_ENEMY_BAT)
 						{
 							e->obj->isHit();
 						}
@@ -421,8 +422,8 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					}
 					stair_collide = coObjects->at(i)->GetBoundingBox();
 					break;
-				case TAG_ENEMY:
-					if (untouchable == 0 && coObjects->at(i)->isBurn == false)
+				case TAG_ENEMY:case TAG_WEAPON:
+					if (untouchable == 0)
 					{
 						StartUntouchable();
 						if (coObjects->at(i)->type == TYPE_ENEMY_BAT)

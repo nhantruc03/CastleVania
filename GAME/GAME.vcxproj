@@ -35,7 +35,6 @@
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="HoldItemObject.cpp" />
     <ClCompile Include="Holy_water.cpp" />
-    <ClCompile Include="invisibleObject.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="listeffect_global.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -58,6 +57,7 @@
     <ClInclude Include="Bat.h" />
     <ClInclude Include="Brick.h" />
     <ClInclude Include="brokenbrick.h" />
+    <ClInclude Include="burn.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Dagger.h" />
     <ClInclude Include="debug.h" />
@@ -71,6 +71,7 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Ghost.h" />
     <ClInclude Include="Grid.h" />
+    <ClInclude Include="hit.h" />
     <ClInclude Include="HoldItemObject.h" />
     <ClInclude Include="Holy_water.h" />
     <ClInclude Include="invisibleObject.h" />

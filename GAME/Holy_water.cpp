@@ -87,10 +87,14 @@ void Holy_water::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 				if (dynamic_cast<Enemy*>(e->obj))
 				{
-					if (dynamic_cast<Enemy*>(e->obj)->timeshowhiteffect <= 0)
+					if (dynamic_cast<Enemy*>(e->obj)->timedelaytogetdmg <= 0)
 					{
 						e->obj->isHit();
 					}
+				}
+				if (dynamic_cast<Weapon*>(e->obj))
+				{
+					e->obj->isHit();
 				}
 			}
 		}
@@ -106,10 +110,13 @@ void Holy_water::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					coObjects->at(i)->isHit();
 					break;
 				case TAG_ENEMY:
-					if (dynamic_cast<Enemy*>(coObjects->at(i))->timeshowhiteffect <= 0)
+					if (dynamic_cast<Enemy*>(coObjects->at(i))->timedelaytogetdmg <= 0)
 					{
 						coObjects->at(i)->isHit();
 					}
+					break;
+				case TAG_WEAPON:
+					coObjects->at(i)->isHit();
 					break;
 				}
 

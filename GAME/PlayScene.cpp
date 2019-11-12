@@ -102,6 +102,10 @@ void PlayScene::Update(DWORD dt)
 		{
 			objects.push_back(e);
 		}
+		for (Weapon*w : list_enemy_weapon)
+		{
+			objects.push_back(w);
+		}
 		for (Enemy*e : listenemy_tronggrid)
 		{
 				objects.push_back(e);
@@ -724,7 +728,7 @@ void PlayScene::UpdateObjects(DWORD dt)
 
 				dynamic_cast<Fishman*>(e)->canspawnbullet = false;
 				Enemy_bullet * bullet = new Enemy_bullet(e->x, e->y - 20, e->direct);
-				listenemy.push_back(bullet);
+				list_enemy_weapon.push_back(bullet);
 			}
 			else
 				e->Update(dt, &objects);
@@ -735,6 +739,19 @@ void PlayScene::UpdateObjects(DWORD dt)
 	{
 		e->Update(dt, &objects);
 		grid->movepanther(e,e->x,e->y);
+	}
+
+	for (int i = 0; i < list_enemy_weapon.size(); i++)
+	{
+		if (list_enemy_weapon[i]->isDead)
+		{
+			list_enemy_weapon.erase(list_enemy_weapon.begin() + i);
+		}
+	}
+
+	for (Weapon* w : list_enemy_weapon)
+	{
+		w->Update(dt, &objects);
 	}
 
 	for (int i = 0; i < listeffect.size(); i++)
@@ -787,6 +804,10 @@ void PlayScene::Render()
 	for (Enemy*e : listenemy_tronggrid)
 	{
 		e->Render();
+	}
+	for (Weapon* w : list_enemy_weapon)
+	{
+		w->Render();
 	}
 	for (Effect*e : listeffect)
 	{

@@ -9,6 +9,7 @@
 #include"Enemy.h"
 #include"invisibleObject.h"
 #include"listeffect_global.h"
+#include"Weapon.h"
 using namespace std;
 class PlayScene : public Scene
 {
@@ -17,6 +18,7 @@ private:
 public:
 
 	bool test = false;
+	vector<Weapon*>list_enemy_weapon;
 	vector<Enemy*>listenemy;
 	vector<Enemy*>listenemy_tronggrid;
 	vector<LPGAMEOBJECT>objects;

@@ -22,7 +22,7 @@ Panther::Panther(float x, float y, int direction)
 	}
 	else
 		isReverse = true;
-	hit_effect = Sprites::GetInstance()->Get(TAG_EFFECT, TYPE_EFFECT_HIT);
+
 	this->vx = 0;
 	this->vy = 0;
 	this->width = 64;
@@ -42,13 +42,21 @@ void Panther::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			vx = 0;
 			animation = animations[0];
 		}
-		if (timeshowhiteffect)
+		if (timedelaytogetdmg)
 		{
-			timeshowhiteffect -= dt;
+			timedelaytogetdmg -= dt;
 		}
-		if (health == 0)
+		if (ishit && timedelaytogetdmg <= 0)
 		{
-			Burn();
+			timedelaytogetdmg = 200;
+			health -= 1;
+			ishit = false;
+			listeffect.push_back(new hit(x - 8, y - 8));
+			if (health == 0)
+			{
+				this->isDead = true;
+				listeffect.push_back(new burn(x, y));
+			}
 		}
 		if (abs(SIMON->x - this->x) <= 160 && issleeping)
 		{
@@ -58,10 +66,9 @@ void Panther::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			jump();
 		}
-		if (!isBurn)
-		{
-			vy += ENEMY_GRAVITY * dt;// Simple fall down
-		}
+		
+		vy += ENEMY_GRAVITY * dt;// Simple fall down
+		
 		CGameObject::Update(dt, coObjects);
 
 		vector<LPCOLLISIONEVENT> coEvents;
@@ -108,17 +115,6 @@ void Panther::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 		}
 		animation->Update();
-		if (isBurn)
-		{
-			vx = vy = 0;
-			if (animation->CheckEndAni())
-			{
-				isDead = true;
-				animation->SetEndAniFalse();
-				animation->currentFrame = -1;
-
-			}
-		}
 		if (!Camera::GetInstance()->IsContain(this->GetBoundingBox()) && !issleeping)
 		{
 			this->isDead = true;

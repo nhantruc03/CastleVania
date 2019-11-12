@@ -57,8 +57,3 @@ void HoldItemObject::Burn()
 	animation->isreverse = false;
 	isBurn = true;
 }
-
-void HoldItemObject::isHit()
-{
-	ishit = true;
-}

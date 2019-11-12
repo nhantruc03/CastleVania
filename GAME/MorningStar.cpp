@@ -62,10 +62,13 @@ void MorningStar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					coObjects->at(i)->isHit();
 					break;
 				case TAG_ENEMY:
-					if (dynamic_cast<Enemy*>(coObjects->at(i))->timeshowhiteffect<=0)
+					if (dynamic_cast<Enemy*>(coObjects->at(i))->timedelaytogetdmg <= 0)
 					{
 						coObjects->at(i)->isHit();
 					}
+					break;
+				case TAG_WEAPON:
+					coObjects->at(i)->isHit();
 					break;
 				default:
 					break;

@@ -42,8 +42,8 @@ public:
 
 	int tag;
 	int type;
+	bool ishit;
 	bool isDead;
-	bool isBurn;
 	bool isReverse;
 
 	float dx;	// dx = vx*dt
@@ -100,7 +100,7 @@ public:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 	virtual void Render() {}
 	virtual void Burn() {};
-	virtual void isHit() {};
+	virtual void isHit() { ishit = true; };
 	~CGameObject();
 
 };

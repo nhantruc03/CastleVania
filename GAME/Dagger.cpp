@@ -72,9 +72,14 @@ void Dagger::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 				if (dynamic_cast<Enemy*>(e->obj))
 				{
-					dynamic_cast<Enemy*>(e->obj)->isHit();
+					e->obj->isHit();
 					isDead = true;
 					//SIMON->throwing = false;
+				}
+				if (dynamic_cast<Weapon*>(e->obj))
+				{
+					e->obj->isHit();
+					isDead = true;
 				}
 			}
 		}
@@ -92,12 +97,16 @@ void Dagger::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					//SIMON->throwing = false;
 					break;
 				case TAG_ENEMY:
-					if (dynamic_cast<Enemy*>(coObjects->at(i))->timeshowhiteffect <= 0)
+					if (dynamic_cast<Enemy*>(coObjects->at(i))->timedelaytogetdmg <= 0)
 					{
 						isDead = true;
 					//	SIMON->throwing = false;
 						coObjects->at(i)->isHit();
 					}
+					break;
+				case TAG_WEAPON:
+					isDead = true;
+					coObjects->at(i)->isHit();
 					break;
 				}
 

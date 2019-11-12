@@ -27,7 +27,6 @@ Fishman::Fishman(float x, float y, int direction)
 	AddAnimation(tag, 6);
 	AddAnimation(tag, 7);
 	animation = animations[0];
-	hit_effect = Sprites::GetInstance()->Get(TAG_EFFECT, TYPE_EFFECT_HIT);
 	this->vx = 0;
 	this->vy = -0.5f;
 	this->width = 32;
@@ -44,38 +43,37 @@ void Fishman::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (!SIMON->timeusingstopwatch)
 	{
 		Enemy::Update(dt, coObjects);
-		if ((vx > 0 && x > SIMON->x +64) || (vx < 0 && x < SIMON->x-64))
+		if ((vx > 0 && x > SIMON->x + 64) || (vx < 0 && x < SIMON->x - 64))
 		{
 			vx = -vx;
 			isReverse = !isReverse;
 			direct = -direct;
 		}
-		if (!isBurn)
+
+		if (timetoattack > 0)
 		{
-			if (timetoattack > 0)
+			timetoattack -= dt;
+		}
+		else
+		{
+			if (!attacking)
 			{
-				timetoattack -= dt;
-			}
-			else
-			{
-				if (!attacking)
-				{
-					attack();
-				}
-			}
-			if (attacking && animation->CheckEndAni())
-			{
-				animation->SetEndAniFalse();
-				animation->currentFrame = -1;
-				attacking = false;
-				timetoattack = 5000 + (rand() % 3000);
-				run();
+				attack();
 			}
 		}
-		if (!isBurn)
+		if (attacking && animation->CheckEndAni())
 		{
-			vy += ENEMY_GRAVITY / 2 * dt;
+			animation->SetEndAniFalse();
+			animation->currentFrame = -1;
+			attacking = false;
+			timetoattack = 5000 + (rand() % 3000);
+			run();
 		}
+
+
+
+		vy += ENEMY_GRAVITY / 2 * dt;
+
 		CGameObject::Update(dt, coObjects);
 		vector<LPCOLLISIONEVENT> coEvents;
 		vector<LPCOLLISIONEVENT> coEventsResult;

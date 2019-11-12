@@ -66,15 +66,15 @@ void Axe::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				LPCOLLISIONEVENT e = coEventsResult[i];
 				if (dynamic_cast<HoldItemObject*>(e->obj))
 				{
-					dynamic_cast<HoldItemObject*>(e->obj)->isHit();
-				}
-				if (dynamic_cast<CBrick*>(e->obj))
-				{
-					
+					e->obj->isHit();
 				}
 				if (dynamic_cast<Enemy*>(e->obj))
 				{
-					dynamic_cast<Enemy*>(e->obj)->isHit();
+					e->obj->isHit();
+				}
+				if (dynamic_cast<Weapon*>(e->obj))
+				{
+					e->obj->isHit();
 				}
 			}
 		}
@@ -90,10 +90,13 @@ void Axe::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					coObjects->at(i)->isHit();
 					break;
 				case TAG_ENEMY:
-					if (dynamic_cast<Enemy*>(coObjects->at(i))->timeshowhiteffect <= 0)
+					if (dynamic_cast<Enemy*>(coObjects->at(i))->timedelaytogetdmg <= 0)
 					{
 						coObjects->at(i)->isHit();
 					}
+					break;
+				case TAG_WEAPON:
+					coObjects->at(i)->isHit();
 					break;
 				}
 

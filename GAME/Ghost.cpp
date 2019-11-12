@@ -18,10 +18,8 @@ Ghost::Ghost(float x, float y, int direction)
 	turn = false;
 	this->isDead = false;
 	this->ishit = false;
-	this->isBurn = false;
 	animation = Animations::GetInstance()->Get(tag, 0);
 
-	hit_effect = Sprites::GetInstance()->Get(TAG_EFFECT, TYPE_EFFECT_HIT);
 	this->vx = ENEMY_WALKING_SPEED * direct;
 	this->vy = 0;
 	this->width = 32;
@@ -34,10 +32,9 @@ void Ghost::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (!SIMON->timeusingstopwatch)
 	{	
 		Enemy::Update(dt, coObjects);
-		if (!isBurn)
-		{
-			vy += ENEMY_GRAVITY * dt;
-		}
+		
+		vy += ENEMY_GRAVITY * dt;
+		
 		CGameObject::Update(dt, coObjects);
 		vector<LPCOLLISIONEVENT> coEvents;
 		vector<LPCOLLISIONEVENT> coEventsResult;

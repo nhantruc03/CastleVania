@@ -12,7 +12,6 @@ CGameObject::CGameObject()
 	vx = vy = 0;
 	nx = 1;
 	isDead = false;
-	isBurn = false;
 	isReverse = false;
 }
 
@@ -76,7 +75,7 @@ void CGameObject::CalcPotentialCollisions(vector<LPGAMEOBJECT>* coObjects, vecto
 		}
 		LPCOLLISIONEVENT e = SweptAABBEx(coObjects->at(i));
 
-		if (e->t > 0 && e->t <= 1.0f  && !e->obj->isBurn )
+		if (e->t > 0 && e->t <= 1.0f )
 			coEvents.push_back(e);
 		else
 			delete e;
