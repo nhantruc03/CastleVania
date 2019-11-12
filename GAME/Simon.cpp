@@ -8,6 +8,8 @@
 #include"Special_brick.h"
 #include"money_400.h"	
 #include"money_700.h"
+#include"steam.h"
+#include"invisibleObject.h"
 CSimon*CSimon::_instance = NULL;
 CSimon::CSimon()
 {
@@ -26,6 +28,7 @@ CSimon::CSimon()
 	AddAnimation(tag, 11); // injured
 	AddAnimation(tag, 12); // attack on stair down
 	AddAnimation(tag, 13);	// attack on stair up
+	AddAnimation(tag, 14); // dead
 	morningstarlevel = 1;
 	width = SIMON_WIDTH;
 	height = SIMON_HEIGHT;
@@ -59,9 +62,18 @@ CSimon::CSimon()
 
 
 	check_auto_move = false;
+
+	health = 16;
 }
 void CSimon::Respawn()
 {
+	Camera::GetInstance()->inzone1 = true;
+	Camera::GetInstance()->inzone2 = false;
+	Camera::GetInstance()->movedownstair = false;
+	x = 30;
+	y = 5;
+	isDead = false;
+	health = 4;
 	isWalkingOnStair = false;
 	isOnStair = false;
 	check_auto_move = false;
@@ -70,6 +82,8 @@ void CSimon::Respawn()
 	jumping = false;
 	attacking = false;
 	isReverse = true;
+	numweaponcanthrow = 1;
+	secondweapon = NULL;
 	goup = gotoleft = gotoright = godown = false;
 	ChangeState(STATE_STANDING);
 }
@@ -82,6 +96,10 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	if (delayforsitting > 0)
 	{
 		delayforsitting -= dt;
+	}
+	if (timetorespawn > 0)
+	{
+		timetorespawn -= dt;
 	}
 	isCollidewith_DWNLTR = false;
 	isCollidewith_DWNRTL = false;
@@ -121,6 +139,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 		// block 
 		x += min_tx * dx + nx * 0.2f;		// nx*0.2f : need to push out a bit to avoid overlapping next frame
+
 		y += min_ty * dy + ny * 0.2f;
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
@@ -133,124 +152,149 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					x += dx;
 					y += dy;
 				}
-				if (ny == 1)
+				else
 				{
-					y += dy;
-					vx = 0;
-				}
-				if (ny == -1)
-				{
-					vy = 0;
-				}
-			}
-			if (dynamic_cast<Door*>(e->obj))
-			{
-				if (nx < 0)
-				{
-					x += dx;
-				}
-			}
-			if (dynamic_cast<Item *>(e->obj))
-			{
-				e->obj->isDead = true;
-				if (ny == 1)
-				{
-					y -= min_ty * dy + ny * 0.2f;
-				}
-				if (e->obj->type == TYPE_ITEM_BIG_HEART)
-				{
-					heart += 5;
-				}
-				if (e->obj->type == TYPE_ITEM_HEART)
-				{
-					heart += 1;
-				}
-				if (e->obj->type == TYPE_ITEM_DAGGER)
-				{
-					secondweapon = TYPE_WEAPON_DAGGER;
-				}
-				if (e->obj->type == TYPE_ITEM_HOLY_WATER)
-				{
-					secondweapon = TYPE_WEAPON_HOLY_WATER;
-				}
-				if (e->obj->type == TYPE_ITEM_STOP_WATCH)
-				{
-					secondweapon = TYPE_WEAPON_STOP_WATCH;
-				}
-				if (e->obj->type == TYPE_ITEM_HOLY_CROSS)
-				{
-					usingholycross = true;
-				}
-				if (e->obj->type == TYPE_ITEM_WHIP)
-				{
-					upgrade_time = TIME_UPGRADE;
-					morningstarlevel += 1;
-					if (morningstarlevel > 3)
+					if (ny == 1)
 					{
-						morningstarlevel = 3;
+						y += dy;
+						vx = 0;
+					}
+					if (ny == -1)
+					{
+						vy = 0;
 					}
 				}
-				if (e->obj->type == TYPE_ITEM_MONEY_400)
-				{
-					listeffect.push_back(new money_400(x + 40, y-20));
-				}
-				if (e->obj->type == TYPE_ITEM_MONEY_700)
-				{
-					listeffect.push_back(new money_700(x + 40, y-20));
-				}
-				if (e->obj->type == TYPE_ITEM_AXE)
-				{
-					secondweapon = TYPE_WEAPON_AXE;
-				}
-				if (e->obj->type == TYPE_ITEM_DOUBLE_SHOT)
-				{
-					numweaponcanthrow = 2;
-				}
-				if (e->obj->type == TYPE_ITEM_GOLD_POTION)
-				{
-					StartUntouchable();
-				}
 			}
-			if (dynamic_cast<Enemy*> (e->obj))
+			if (!isDead)
 			{
-				if (untouchable == 0)
+				if (dynamic_cast<Door*>(e->obj))
 				{
-					StartUntouchable();
-					if (dynamic_cast<Enemy*> (e->obj)->type == TYPE_ENEMY_BAT)
+					if (nx < 0)
 					{
-						e->obj->isHit();
+						x += dx;
 					}
-
-					if (!isOnStair) // khi khong tren cau thang thi bi vang
+				}
+				if (dynamic_cast<Item *>(e->obj))
+				{
+					if (ny == 1)
 					{
-						if (nx <= 0)
+						y -= min_ty * dy + ny * 0.2f;
+					}
+					switch (e->obj->type)
+					{
+					case TYPE_ITEM_BIG_HEART:
+						heart += 5;
+						break;
+					case TYPE_ITEM_HEART:
+						heart += 1;
+						break;
+					case TYPE_ITEM_DAGGER:
+						secondweapon = TYPE_WEAPON_DAGGER;
+						break;
+					case TYPE_ITEM_HOLY_WATER:
+						secondweapon = TYPE_WEAPON_HOLY_WATER;
+						break;
+					case TYPE_ITEM_STOP_WATCH:
+						secondweapon = TYPE_WEAPON_STOP_WATCH;
+						break;
+					case TYPE_ITEM_HOLY_CROSS:
+						usingholycross = true;
+						break;
+					case TYPE_ITEM_WHIP:
+						upgrade_time = TIME_UPGRADE;
+						morningstarlevel += 1;
+						if (morningstarlevel > 3)
 						{
-							isReverse = false;
+							morningstarlevel = 3;
+						}
+						break;
+					case TYPE_ITEM_MONEY_400:
+						listeffect.push_back(new money_400(x + 40, y - 20));
+						break;
+					case TYPE_ITEM_MONEY_700:
+						listeffect.push_back(new money_700(x + 40, y - 20));
+						break;
+					case TYPE_ITEM_AXE:
+						secondweapon = TYPE_WEAPON_AXE;
+						break;
+					case TYPE_ITEM_GOLD_POTION:
+						StartUntouchable();
+						break;
+					case TYPE_ITEM_CHICKEN:
+						health += 4;
+						break;
+					case TYPE_ITEM_DOUBLE_SHOT:
+						numweaponcanthrow = 2;
+						break;
+					}
+					e->obj->isDead = true;
+				}
+				if (dynamic_cast<Enemy*> (e->obj))
+				{
+					if (untouchable == 0)
+					{
+						StartUntouchable();
+						if (dynamic_cast<Enemy*> (e->obj)->type == TYPE_ENEMY_BAT)
+						{
+							e->obj->isHit();
+						}
+
+						if (!isOnStair) // khi khong tren cau thang thi bi vang
+						{
+							if (nx <= 0)
+							{
+								isReverse = false;
+							}
+							else
+							{
+								isReverse = true;
+							}
+							ishit = true;
 						}
 						else
 						{
-							isReverse = true;
+							x -= min_tx * dx + nx * 0.2f; // tranh bi day di khi tren cau thang
+							y -= min_ty * dy + ny * 0.2f;
 						}
-						ishit = true;
+
 					}
 					else
 					{
 						x -= min_tx * dx + nx * 0.2f;
-						y -= min_ty * dy + ny * 0.2f;
+						if (e->ny == -1)
+						{
+							y += dy;
+						}
+						else if (e->ny == 1)
+						{
+							y -= min_ty * dy + ny * 0.2f;
+						}
+					}
+				}
+				if (dynamic_cast<invisibleObject*>(e->obj))
+				{
+					x += dx;
+					y += dy;
+
+					if (e->obj->type == TYPE_INVI_O_WATER)
+					{
+						if (!isDead)
+						{
+
+							listeffect.push_back(new steam(x, e->obj->GetBoundingBox().top, 1));
+							listeffect.push_back(new steam(x, e->obj->GetBoundingBox().top, 2));
+							listeffect.push_back(new steam(x, e->obj->GetBoundingBox().top, 3));
+							ChangeState(STATE_DEAD);
+						}
 					}
 
 				}
-				else
-				{
-					if (e->ny == -1)
-					{
-						y += dy;
-					}
-					else if (e->ny == 1)
-					{
-						y -= min_ty * dy + ny * 0.2f;
-					}
-				}
+			}
+			else
+			{
+				x -= min_tx * dx + nx * 0.2f;
+				y -= min_ty * dy + ny * 0.2f;
+
 			}
 		}
 	}
@@ -281,100 +325,118 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		ishit = false;
 	}
 	// xu ly va nhan vat va cham voi object khi object xuat hien ben trong nhan vat
-	for (UINT i = 0; i < coObjects->size(); i++)
+	if (!isDead)
 	{
-		float l, t, r, b;
-		coObjects->at(i)->GetBoundingBox(l, t, r, b);
-		if (this->IsContain(l, t, r, b) == true)
+		for (UINT i = 0; i < coObjects->size(); i++)
 		{
-			switch (coObjects->at(i)->tag)
+			float l, t, r, b;
+			coObjects->at(i)->GetBoundingBox(l, t, r, b);
+			if (this->IsContain(l, t, r, b) == true)
 			{
-			case TAG_ITEM:
-				switch (coObjects->at(i)->type)
+				switch (coObjects->at(i)->tag)
 				{
-				case TYPE_ITEM_BIG_HEART:
-					heart += 5;
-					break;
-				case TYPE_ITEM_HEART:
-					heart += 1;
-					break;
-				case TYPE_ITEM_DAGGER:
-					secondweapon = TYPE_WEAPON_DAGGER;
-					break;
-				case TYPE_ITEM_HOLY_WATER:
-					secondweapon = TYPE_WEAPON_HOLY_WATER;
-					break;
-				case TYPE_ITEM_STOP_WATCH:
-					secondweapon = TYPE_WEAPON_STOP_WATCH;
-					break;
-				case TYPE_ITEM_HOLY_CROSS:
-					usingholycross = true;
-					break;
-				case TYPE_ITEM_WHIP:
-					upgrade_time = TIME_UPGRADE;
-					morningstarlevel += 1;
-					if (morningstarlevel > 3)
+				case TAG_ITEM:
+					switch (coObjects->at(i)->type)
 					{
-						morningstarlevel = 3;
+					case TYPE_ITEM_BIG_HEART:
+						heart += 5;
+						break;
+					case TYPE_ITEM_HEART:
+						heart += 1;
+						break;
+					case TYPE_ITEM_DAGGER:
+						secondweapon = TYPE_WEAPON_DAGGER;
+						break;
+					case TYPE_ITEM_HOLY_WATER:
+						secondweapon = TYPE_WEAPON_HOLY_WATER;
+						break;
+					case TYPE_ITEM_STOP_WATCH:
+						secondweapon = TYPE_WEAPON_STOP_WATCH;
+						break;
+					case TYPE_ITEM_HOLY_CROSS:
+						usingholycross = true;
+						break;
+					case TYPE_ITEM_WHIP:
+						upgrade_time = TIME_UPGRADE;
+						morningstarlevel += 1;
+						if (morningstarlevel > 3)
+						{
+							morningstarlevel = 3;
+						}
+						break;
+					case TYPE_ITEM_MONEY_400:
+						listeffect.push_back(new money_400(x + 40, y - 20));
+						break;
+					case TYPE_ITEM_MONEY_700:
+						listeffect.push_back(new money_700(x + 40, y - 20));
+						break;
+					case TYPE_ITEM_AXE:
+						secondweapon = TYPE_WEAPON_AXE;
+						break;
+					case TYPE_ITEM_GOLD_POTION:
+						StartUntouchable();
+						break;
+					case TYPE_ITEM_CHICKEN:
+						health += 4;
+						break;
+					case TYPE_ITEM_DOUBLE_SHOT:
+						numweaponcanthrow = 2;
+						break;
 					}
+					coObjects->at(i)->isDead = true;
 					break;
-				case TYPE_ITEM_MONEY_400:
-					listeffect.push_back(new money_400(x + 40, y - 20));
+				case TAG_INVISIBLE_OBJECT:
+					switch (coObjects->at(i)->type)
+					{
+					case TYPE_INVI_O_GO_UP_STAIR_LTR:
+						if (y < coObjects->at(i)->y)
+						{
+							isCollidewith_UPLTR = true;
+						}
+						break;
+					case TYPE_INVI_O_GO_UP_STAIR_RTL:
+						if (y < coObjects->at(i)->y)
+						{
+							isCollidewith_UPRTL = true;
+						}
+						break;
+					case TYPE_INVI_O_GO_DOWN_STAIR_RTL:
+						isCollidewith_DWNRTL = true;
+						break;
+					case TYPE_INVI_O_GO_DOWN_STAIR_LTR:
+						isCollidewith_DWNLTR = true;
+						break;
+					case TYPE_ITEM_DOUBLE_SHOT:
+						numweaponcanthrow = 2;
+						break;
+					case TYPE_INVI_O_WATER:
+						if (!isDead)
+						{
+							isDead = true;
+							listeffect.push_back(new steam(x , coObjects->at(i)->GetBoundingBox().top, 1));
+							listeffect.push_back(new steam(x, coObjects->at(i)->GetBoundingBox().top, 2));
+							listeffect.push_back(new steam(x, coObjects->at(i)->GetBoundingBox().top, 3));
+						}
+						break;
+					}
+					stair_collide = coObjects->at(i)->GetBoundingBox();
 					break;
-				case TYPE_ITEM_MONEY_700:
-					listeffect.push_back(new money_700(x + 40, y - 20));
-					break;
-				case TYPE_ITEM_AXE:
-					secondweapon = TYPE_WEAPON_AXE;
-					break;
-				case TYPE_ITEM_GOLD_POTION:
-					StartUntouchable();
+				case TAG_ENEMY:
+					if (untouchable == 0 && coObjects->at(i)->isBurn == false)
+					{
+						StartUntouchable();
+						if (coObjects->at(i)->type == TYPE_ENEMY_BAT)
+						{
+							coObjects->at(i)->isHit();
+						}
+						if (!isOnStair)
+						{
+							isReverse = false;
+							ChangeState(STATE_INJURED);
+						}
+					}
 					break;
 				}
-				coObjects->at(i)->isDead = true;
-				break;
-			case TAG_INVISIBLE_OBJECT:
-				switch (coObjects->at(i)->type)
-				{
-				case TYPE_INVI_O_GO_UP_STAIR_LTR:
-					if (y < coObjects->at(i)->y)
-					{
-						isCollidewith_UPLTR = true;
-					}
-					break;
-				case TYPE_INVI_O_GO_UP_STAIR_RTL:
-					if (y < coObjects->at(i)->y)
-					{
-						isCollidewith_UPRTL = true;
-					}
-					break;
-				case TYPE_INVI_O_GO_DOWN_STAIR_RTL:
-					isCollidewith_DWNRTL = true;
-					break;
-				case TYPE_INVI_O_GO_DOWN_STAIR_LTR:
-					isCollidewith_DWNLTR = true;
-					break;
-				case TYPE_ITEM_DOUBLE_SHOT:
-					numweaponcanthrow = 2;
-					break;
-				}
-				stair_collide = coObjects->at(i)->GetBoundingBox();
-				break;
-			case TAG_ENEMY:
-				if (untouchable == 0 && coObjects->at(i)->isBurn == false)
-				{
-					StartUntouchable();
-					if (coObjects->at(i)->type == TYPE_ENEMY_BAT)
-					{
-						coObjects->at(i)->isHit();
-					}
-					if (!isOnStair)
-					{
-						isReverse = false;
-						ChangeState(STATE_INJURED);
-					}
-				}
-				break;
 			}
 		}
 	}
@@ -714,6 +776,7 @@ void CSimon::ChangeState(int newState)
 		height = SIMON_HEIGHT;
 		break;
 	case STATE_INJURED:
+		health -= 2;
 		height = SIMON_HEIGHT;
 		isinjured = true;
 		if (isReverse)
@@ -739,6 +802,12 @@ void CSimon::ChangeState(int newState)
 				animations[prevState]->currentFrame = -1;
 			}
 		}
+		break;
+	case STATE_DEAD:
+		timetorespawn = 5000;
+		untouchable = 0;
+		vx = 0;
+		isDead = true;
 		break;
 	}
 	curAni = animations[State];
@@ -1006,9 +1075,20 @@ void CSimon::Update_State()
 	case STATE_INJURED:
 		if (vy == 0)
 		{
-			ChangeState(STATE_STANDING);
+			if (health <= 0)
+			{
+				ChangeState(STATE_DEAD);
+			}
+			else
+				ChangeState(STATE_STANDING);
 		}
 		break;
+	//case STATE_DEAD:
+	//	if (timetorespawn <= 0)
+	//	{
+	//		Respawn();
+	//	}
+	//	break;
 	}
 
 }
@@ -1020,6 +1100,7 @@ void CSimon::StartUsingHolyCross()
 	{
 		usingholycross = false;
 		D3DCOLOR_BACKGROUND = BACKGROUND_COLOR;
+		timeuseholycross = 0;
 	}
 	else
 	{

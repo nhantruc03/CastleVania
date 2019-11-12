@@ -3,6 +3,9 @@
 #include"Simon.h"
 #include"Enemy_bullet.h"
 #include"Special_brick.h"
+#include"listeffect_global.h"
+#include"invisibleObject.h"
+#include"steam.h"
 Fishman::Fishman(float x, float y, int direction)
 {
 	srand(time(NULL));
@@ -110,6 +113,29 @@ void Fishman::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							run();
 						}
 					}
+				}
+				if (dynamic_cast<invisibleObject*>(e->obj))
+				{
+					if (nx != 0)
+					{
+						x += dx;
+					}
+					if (ny != 0)
+					{
+						y += dy;
+					}
+					if (e->obj->type == TYPE_INVI_O_WATER)
+					{
+						if (!isDead)
+						{
+
+							listeffect.push_back(new steam(x, e->obj->GetBoundingBox().top, 1));
+							listeffect.push_back(new steam(x, e->obj->GetBoundingBox().top, 2));
+							listeffect.push_back(new steam(x, e->obj->GetBoundingBox().top, 3));
+							this->isDead = true;
+						}
+					}
+
 				}
 			}
 		}

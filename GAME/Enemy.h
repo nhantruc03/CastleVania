@@ -9,7 +9,7 @@ protected:
 
 public:
 	float timeshowhiteffect;
-	int health;
+
 	bool ishit;
 	int item;
 	int direct;

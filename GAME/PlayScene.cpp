@@ -84,6 +84,20 @@ void PlayScene::Update(DWORD dt)
 			cancreatepanther = true;
 		//	simon->usingholycross = false;
 		}
+		if (simon->isDead && simon->timetorespawn<=0)
+		{
+			listenemy.clear();
+			countghost = 0;
+			countpanther = 0;
+			countfishman = 0;
+			countbat = 0;
+			cancreatebat = true;
+			cancreateghost = true;
+			cancreatefishman = true;
+			cancreatepanther = false;
+			grid->Loadresources();
+			simon->Respawn();
+		}
 		for (Enemy* e : listenemy)
 		{
 			objects.push_back(e);
@@ -160,7 +174,10 @@ void PlayScene::Update(DWORD dt)
 		{
 			// gioi han bien trai cua map 2
 			if (simon->vx < 0 && simon->x < 16) simon->x = 16;
-
+			if (camera->inzone2)
+			{
+				if (simon->vx < 0 && simon->x < 3072) simon->x = 3072;
+			}
 			if (camera->movedownstair)
 			{
 				// gioi han 2 bien duoi ham
@@ -230,7 +247,7 @@ void PlayScene::Update(DWORD dt)
 								listenemy.push_back(ghost);
 							}
 							countghost++;
-							timetocreateghost = 600;
+							timetocreateghost = 700;
 							if (countghost == 3)
 							{
 								cancreateghost = false;
@@ -287,7 +304,7 @@ void PlayScene::Update(DWORD dt)
 									}
 								}
 								countghost++;
-								timetocreateghost = 600;
+								timetocreateghost = 700;
 								if (countghost == 3)
 								{
 									cancreateghost = false;
@@ -392,7 +409,7 @@ void PlayScene::Update(DWORD dt)
 
 								}
 								countbat++;
-								timetocreatebat = 3000;
+								timetocreatebat = 4000;
 								if (countbat == 2)
 								{
 									cancreatebat = false;
@@ -552,6 +569,7 @@ void PlayScene::Update(DWORD dt)
 							camera->inzone2 = true;
 							simon->check_auto_move = false;
 							isgoingthroughdoor = false;
+							door1 = NULL;
 						}
 					}
 				}
@@ -675,7 +693,7 @@ void PlayScene::UpdateObjects(DWORD dt)
 				countbat--;
 				if (countbat == 0)
 				{
-					timetocreatebat = 1000;
+					timetocreatebat = 3000;
 					cancreatebat = true;
 				}
 			}
@@ -745,10 +763,22 @@ void PlayScene::LoadResources(int level)
 void PlayScene::Render()
 {
 	map->Render();
-	for (CGameObject* o : objects)
+	if (!isgoingthroughdoor && !isgoingthroughdoor2)
 	{
-		o->Render();
-
+		for (CGameObject* o : objects)
+		{
+			o->Render();
+		}
+	}
+	else
+	{
+		for (CGameObject* o : objects)
+		{
+			if (o->tag == TAG_DOOR)
+			{
+				o->Render();
+			}
+		}
 	}
 	for (Enemy* e : listenemy)
 	{

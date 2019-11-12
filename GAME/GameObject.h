@@ -54,6 +54,8 @@ public:
 	int topcell, botcell, leftcell, rightcell;
 	int spawnx, spawny;
 
+	int health;
+
 public:
 	virtual void SetPosition(float x, float y) { this->x = x, this->y = y; }
 	void GetSpeed(float &vx, float &vy) { vx = this->vx; vy = this->vy; }

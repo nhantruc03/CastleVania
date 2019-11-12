@@ -8,6 +8,9 @@ class CSimon : public CGameObject
 {
 	static CSimon * _instance;
 public:
+
+	float timetorespawn;
+
 	DWORD timeuseholycross;
 	DWORD timetochangecolorwhileusingholycross;
 	DWORD limittimetochangecolorwhileusingholycross;

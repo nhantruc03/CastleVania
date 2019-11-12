@@ -8,10 +8,12 @@ public:
 	void open()
 	{
 		animation = animations[1];
+		animation->currentFrame = 0;
 	}
 	void close()
 	{
 		animation = animations[3];
+		animation->currentFrame = 0;
 	}
 	bool isclosed()
 	{
@@ -19,7 +21,7 @@ public:
 		{
 			return true;
 		}
-		if (animation == animations[3] && animation->CheckEndAni())
+		if (animation == animations[3] && animation->currentFrame==2)
 		{
 			return true;
 		}
@@ -28,7 +30,7 @@ public:
 
 	bool isopened()
 	{
-		if (animation == animations[1] && animation->CheckEndAni())
+		if (animation == animations[1] && animation->currentFrame==2)
 		{
 			return true;
 		}
@@ -49,19 +51,20 @@ public:
 	}
 	void Render()
 	{
-		if((animation == animations[1] && animation->CheckEndAni())|| (animation == animations[3] && animation->CheckEndAni())){}
-		else
-			animation->Render(x, y);
+		
+		animation->Render(x, y);
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	{
 		if (isopened())
 		{
 			animation = animations[2];
+			animation->currentFrame = 0;
 		}
 		if (isclosed())
 		{
 			animation = animations[0];
+			animation->currentFrame = 0;
 		}
 		animation->Update();
 	}

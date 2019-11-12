@@ -24,6 +24,7 @@ Grid::~Grid()
 
 void Grid::Loadresources()
 {
+	countpanther = 3;
 	for (int i = 0; i < GRID_CELL_MAX_ROW; i++)
 		for (int j = 0; j < GRID_CELL_MAX_COLUMN; j++)
 		{
@@ -58,7 +59,15 @@ void Grid::Loadresources()
 			{
 				int type, x, y, width, height;
 				iFile >> type >> x >> y;
-				invisibleObject* invisibleO = new invisibleObject();
+				invisibleObject* invisibleO= new invisibleObject();;
+				if (type == TYPE_INVI_O_WATER)
+				{
+					iFile >> width >> height;
+					invisibleO = new invisibleObject(width,height);
+				}
+				else
+					invisibleO = new invisibleObject();
+				
 				invisibleO->type = type;
 				invisibleO->SetPosition(x, y);
 				tempobject = invisibleO;
@@ -143,9 +152,16 @@ void Grid::Loadresources()
 			break;
 			case 'i':
 			{
-				int type, x, y;
+				int type, x, y, width, height;
 				iFile >> type >> x >> y;
-				invisibleObject* invisibleO = new invisibleObject();
+				invisibleObject* invisibleO= new invisibleObject();;
+				if (type == TYPE_INVI_O_WATER)
+				{
+					iFile >> width >> height;
+					invisibleO = new invisibleObject(width, height);
+				}
+				else
+					invisibleO = new invisibleObject();
 				invisibleO->type = type;
 				invisibleO->SetPosition(x, y);
 				tempobject = invisibleO;
@@ -221,7 +237,14 @@ void Grid::Loadresources()
 				ofile << "h" << " " << o->id << " " << o->type << " " << dynamic_cast<HoldItemObject*>(o)->item << " " << o->x << " " << o->y ;
 				break;
 			case TAG_INVISIBLE_OBJECT:
-				ofile << "i" << " " << o->id << " " << o->type << " " << o->x << " " << o->y;
+				if (o->type != TYPE_INVI_O_WATER)
+				{
+					ofile << "i" << " " << o->id << " " << o->type << " " << o->x << " " << o->y;
+				}
+				else
+				{
+					ofile << "i" << " " << o->id << " " << o->type << " " << o->x << " " << o->y << " " << o->width << " " << o->height;
+				}
 				break;
 			case TAG_BRICK:
 				ofile << "b" << " " << o->id << " " << o->x << " " << o->y << " " << o->width << " " << o->height;

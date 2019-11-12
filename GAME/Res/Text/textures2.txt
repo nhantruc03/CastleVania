@@ -19,3 +19,4 @@
 18 Res\Image\steam.png 255 0 255
 19 Res\Image\brokenbrick.png 255 0 255
 20 Res\Image\axe.png 255 0 255
+21 Res\Image\simondeath.png 255 0 255
