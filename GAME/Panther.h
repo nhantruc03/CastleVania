@@ -7,7 +7,6 @@ public:
 	bool check_dead_once = false;
 	RECT brick;
 	bool available;
-	bool issleeping;
 	bool isjumping;
 	bool isrunning;
 	float prevX;

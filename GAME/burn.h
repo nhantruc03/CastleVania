@@ -3,7 +3,8 @@ class burn :public Effect
 {
 
 public:
-	burn(float x, float y)
+	int model;
+	burn(float x, float y, int model)
 	{
 		tag = TAG_EFFECT;
 		type = TYPE_EFFECT_BURN;
@@ -12,7 +13,14 @@ public:
 		width = 32;
 		height = 18;
 		isDead = false;
-		animation = Animations::GetInstance()->Get(tag, type);
+		this->model = model;
+		if (model == 0)
+		{
+			animation = Animations::GetInstance()->Get(tag, 0);
+		}
+		else
+			animation = Animations::GetInstance()->Get(tag, 1);
+
 	}
 	void Update(DWORD dt)
 	{

@@ -15,27 +15,27 @@ public:
 		effect = Sprites::GetInstance()->Get(tag, type);
 		switch (model)
 		{
-		case 1: // trai
+		case 1:
 		{
 			vx =  -0.07f;
 			vy = -0.15f;
 			break;
 		}
 
-		case 2:// phải
+		case 2:
 		{
 			vx = 0.07f;
 			vy = -0.1f;
 			break;
 		}
 
-		case 3:// trai
+		case 3:
 		{
 			vx = -0.03f;
 			vy = -0.12f;
 			break;	}
 
-		case 4:// phải
+		case 4:
 		{
 			vx = 0.07f;
 			vy = -0.2f;

@@ -20,8 +20,6 @@ public:
 	void Render();
 	void Setcam(Camera* cam) { camera = cam; };
 
-	vector<LPGAMEOBJECT> get_objectlist();
-
 	~Map();
 };
 

@@ -10,29 +10,16 @@
 #include"money_700.h"
 #include"steam.h"
 #include"invisibleObject.h"
+#include"Board.h"
 CSimon*CSimon::_instance = NULL;
 CSimon::CSimon()
 {
+
 	tag = TAG_SIMON;
-	AddAnimation(tag, 0); // stand
-	AddAnimation(tag, 1); // walk
-	AddAnimation(tag, 2); // jumo
-	AddAnimation(tag, 3); // fall
-	AddAnimation(tag, 4); // attacking
-	AddAnimation(tag, 5); // sit
-	AddAnimation(tag, 6); // sit attack
-	AddAnimation(tag, 7); // stand on stair_up
-	AddAnimation(tag, 8); // walk up stair_up
-	AddAnimation(tag, 9); // stand on stair_down
-	AddAnimation(tag, 10);// walk on stair_down
-	AddAnimation(tag, 11); // injured
-	AddAnimation(tag, 12); // attack on stair down
-	AddAnimation(tag, 13);	// attack on stair up
-	AddAnimation(tag, 14); // dead
+	LoadAnimation();
 	morningstarlevel = 1;
 	width = SIMON_WIDTH;
 	height = SIMON_HEIGHT;
-
 
 	srand(time(NULL));
 
@@ -50,7 +37,7 @@ CSimon::CSimon()
 	
 	sitting = false;
 	secondweapon = NULL;
-	throwing = false;
+//	throwing = false;
 	jumping = false;
 	heart = 5;
 	attacking = false;
@@ -59,33 +46,44 @@ CSimon::CSimon()
 	isWalkingOnStair = false;
 	isOnStair = false;
 	goup = gotoleft = gotoright = godown = false;
-
+	usinggoldpotion = false;
 
 	check_auto_move = false;
-
+	instages = 1;
+	lives = 4;
 	health = 16;
 }
 void CSimon::Respawn()
 {
-	Camera::GetInstance()->inzone1 = false;
-	Camera::GetInstance()->inzone2 = true;
+	lives -= 1;
+	Camera::GetInstance()->inzone1 = true;
+	Camera::GetInstance()->inzone2 = false;
+	Camera::GetInstance()->inzone3 = false;
+	Camera::GetInstance()->inzoneBoss = false;
 	Camera::GetInstance()->movedownstair = false;
 	Camera::GetInstance()->SetPosition(x, 0);
-	x = 3400;
+	x = 30;//5200;
 	y = 5;
-	isDead = false;
-	health = 4;
+
+	health = 16;
 	isWalkingOnStair = false;
 	isOnStair = false;
 	check_auto_move = false;
 	sitting = false;
-	throwing = false;
+//	throwing = false;
 	jumping = false;
 	attacking = false;
 	isReverse = true;
 	numweaponcanthrow = 1;
-	secondweapon = NULL;
+	if (isDead)
+	{
+		secondweapon = NULL;
+	}
+	isDead = false;
 	goup = gotoleft = gotoright = godown = false;
+	checkkillboss = false;
+	count_attack_after_kill_boss = 0;
+	globle_time = 300000;
 	ChangeState(STATE_STANDING);
 }
 void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
@@ -126,6 +124,12 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	{
 		untouchable_start = 0;
 		untouchable = 0;
+		if (usinggoldpotion)
+		{
+			usinggoldpotion = false;
+			ChangeTexture(1);
+		}
+
 	}
 	// No collision occured, proceed normally
 	if (coEvents.size() == 0)
@@ -177,7 +181,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				}
 				if (dynamic_cast<Item *>(e->obj))
 				{
-					if (ny == 1)
+					if (ny != 0)
 					{
 						y -= min_ty * dy + ny * 0.2f;
 					}
@@ -210,66 +214,63 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 						}
 						break;
 					case TYPE_ITEM_MONEY_400:
+						score += 400;
 						listeffect.push_back(new money_400(x + 40, y - 20));
 						break;
 					case TYPE_ITEM_MONEY_700:
+						score += 700;
 						listeffect.push_back(new money_700(x + 40, y - 20));
 						break;
 					case TYPE_ITEM_AXE:
 						secondweapon = TYPE_WEAPON_AXE;
 						break;
 					case TYPE_ITEM_GOLD_POTION:
+						usinggoldpotion = true;
+						ChangeTexture(2);
 						StartUntouchable();
 						break;
 					case TYPE_ITEM_CHICKEN:
 						health += 4;
+						if (health > 16)
+						{
+							health = 16;
+						}
 						break;
 					case TYPE_ITEM_DOUBLE_SHOT:
 						numweaponcanthrow = 2;
 						break;
+					case TYPE_ITEM_CRYSTAL:
+						health = 16;
+						checkkillboss = true;
+						break;
 					}
 					e->obj->isDead = true;
 				}
-				if (dynamic_cast<Enemy*> (e->obj)||(dynamic_cast<Weapon*>(e->obj)&&e->obj->type==TYPE_ENEMY_BULLET))
+				if (dynamic_cast<Enemy*> (e->obj) || (dynamic_cast<Weapon*>(e->obj) && e->obj->type == TYPE_ENEMY_BULLET))
 				{
-					if (untouchable == 0)
+					StartUntouchable();
+					if (dynamic_cast<Enemy*> (e->obj) && dynamic_cast<Enemy*> (e->obj)->type == TYPE_ENEMY_BAT)
 					{
-						StartUntouchable();
-						if (dynamic_cast<Enemy*> (e->obj) &&dynamic_cast<Enemy*> (e->obj)->type == TYPE_ENEMY_BAT)
-						{
-							e->obj->isHit();
-						}
+						e->obj->isHit();
+					}
 
-						if (!isOnStair) // khi khong tren cau thang thi bi vang
+					if (!isOnStair) // khi khong tren cau thang thi bi vang
+					{
+						if (nx <= 0)
 						{
-							if (nx <= 0)
-							{
-								isReverse = false;
-							}
-							else
-							{
-								isReverse = true;
-							}
-							ishit = true;
+							isReverse = false;
 						}
 						else
 						{
-							x -= min_tx * dx + nx * 0.2f; // tranh bi day di khi tren cau thang
-							y -= min_ty * dy + ny * 0.2f;
+							isReverse = true;
 						}
-
+						ishit = true;
 					}
 					else
 					{
-						x -= min_tx * dx + nx * 0.2f;
-						if (e->ny == -1)
-						{
-							y += dy;
-						}
-						else if (e->ny == 1)
-						{
-							y -= min_ty * dy + ny * 0.2f;
-						}
+						x -= min_tx * dx + nx * 0.2f; // tranh bi day di khi tren cau thang
+						y -= min_ty * dy + ny * 0.2f;
+						health -= 2;
 					}
 				}
 				if (dynamic_cast<invisibleObject*>(e->obj))
@@ -301,7 +302,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	}
 
 	// cho roi nhanh hon khi roi tu cau thang xuong
-	if (vy > 0 && vy<999 &&!jumping && !isinjured && !isOnStair)
+	if (vy > 0 && vy<999 &&!jumping && !isinjured && !isOnStair && !sitting)
 	{
 		falling = true;
 	}
@@ -366,22 +367,35 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 						}
 						break;
 					case TYPE_ITEM_MONEY_400:
+						score += 400;
 						listeffect.push_back(new money_400(x + 40, y - 20));
 						break;
 					case TYPE_ITEM_MONEY_700:
+						score += 700;
 						listeffect.push_back(new money_700(x + 40, y - 20));
 						break;
 					case TYPE_ITEM_AXE:
 						secondweapon = TYPE_WEAPON_AXE;
 						break;
 					case TYPE_ITEM_GOLD_POTION:
+						usinggoldpotion = true;
+						ChangeTexture(2);
 						StartUntouchable();
+						
 						break;
 					case TYPE_ITEM_CHICKEN:
 						health += 4;
+						if (health > 16)
+						{
+							health = 16;
+						}
 						break;
 					case TYPE_ITEM_DOUBLE_SHOT:
 						numweaponcanthrow = 2;
+						break;
+					case TYPE_ITEM_CRYSTAL:
+						health = 16;
+						checkkillboss = true;
 						break;
 					}
 					coObjects->at(i)->isDead = true;
@@ -441,38 +455,42 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			}
 		}
 	}
-	if (usingholycross)
+
+	if (checkkillboss) // dong tac danh 3 lan sau khi lum item crystal
+	{
+		check_auto_move = true;
+		keyCode.clear();
+		if (!attacking && count_attack_after_kill_boss < 3)
+		{
+			Weapon* weapon = WeaponsManager::CreateWeapon(TYPE_WEAPON_MORNINGSTAR);
+			weapon->isReverse = isReverse;
+			Weapons.push_back(weapon);
+			ChangeState(STATE_ATTACK);
+		}
+	}
+	if (usingholycross)  // hieu ung holycross
 	{
 		StartUsingHolyCross();
 	}
-	Update_State(); // de sau doan kiem tra tren de kiem tra va cham voi diem len xuong cau thang
+	Update_State(); // de sau doan kiem tra AABB de kiem tra va cham voi diem len xuong cau thang
 
-	inoutstair_handle(dt);
-	vector<Weapon*>::iterator it = Weapons.begin(); // iterator: con tro chi den 1 phan tu ben trong container, khong can biet thu tu phan tu ben trong mang
-	while (it != Weapons.end())
+	inoutstair_handle(dt); // xu ly buoc dau tien len xuong cau thang
+
+
+	for (int i = 0; i < Weapons.size(); i++)
 	{
-		Weapon* o = *it;
-		switch (o->tag)
+		if (Weapons[i]->isDead)
 		{
-		case TAG_WEAPON:
-		{
-			Weapon* w = (Weapon*) o;
-			if (w->isDead)
+			if (Weapons[i]->type != TYPE_WEAPON_MORNINGSTAR)
 			{
-				if (w->type != TYPE_WEAPON_MORNINGSTAR)
-				{
-					numcurrentweaponthroing -= 1;
-				}
-				it = Weapons.erase(it);
-				delete w;
-				continue;
+				numcurrentweaponthroing -= 1;
 			}
-			else
-				w->Update(dt, coObjects);
-			break;
+			Weapons.erase(Weapons.begin() + i);
 		}
+		else
+		{
+			Weapons[i]->Update(dt, coObjects);
 		}
-		++it;
 	}
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 
@@ -599,7 +617,17 @@ void CSimon::Render()
 	}
 	else
 	{
-		if (untouchable) alpha = 127;
+		if (untouchable)
+		{
+			if (usinggoldpotion)
+			{
+				alpha = 255;
+			}
+			else
+			{
+				alpha = 127;
+			}
+		}
 	}
 	curAni->Render(x, y, alpha,r,g,b);
 	for (Weapon* o : Weapons)
@@ -610,7 +638,7 @@ void CSimon::Render()
 
 void CSimon::OnKeyDown(int key)
 {
-	if (!upgrade_time)
+	if (!upgrade_time && !isDead)
 	{
 		switch (key)
 		{
@@ -646,7 +674,7 @@ void CSimon::OnKeyDown(int key)
 						Weapon* weapon = WeaponsManager::CreateWeapon(secondweapon);
 						weapon->isReverse = isReverse;
 						Weapons.push_back(weapon);
-						throwing = true;
+						//throwing = true;
 						if (isWalkingOnStair)
 						{
 							vx = vy = 0;
@@ -662,13 +690,14 @@ void CSimon::OnKeyDown(int key)
 			}
 			break;
 		case DIK_M:
-			secondweapon = 4;
+			secondweapon = 1;
 			heart += 5;
 			morningstarlevel += 1;
 			if (morningstarlevel > 3)
 			{
 				morningstarlevel = 1;
 			}
+			numweaponcanthrow = 2;
 			break;
 		}
 	}
@@ -698,7 +727,6 @@ void CSimon::ChangeState(int newState)
 		attacking = false;
 		sitting = false;
 		jumping = false;
-		//vy = 0;
 		height = SIMON_HEIGHT;
 		break;
 	case STATE_SITTING:
@@ -903,6 +931,10 @@ void CSimon::Update_State()
 
 		if (curAni->CheckEndAni())
 		{
+			if (checkkillboss)
+			{
+				count_attack_after_kill_boss += 1;
+			}
 			attacking = false;
 			curAni->SetEndAniFalse();
 			switch (prevState)
@@ -1084,12 +1116,6 @@ void CSimon::Update_State()
 				ChangeState(STATE_STANDING);
 		}
 		break;
-	//case STATE_DEAD:
-	//	if (timetorespawn <= 0)
-	//	{
-	//		Respawn();
-	//	}
-	//	break;
 	}
 
 }
@@ -1119,5 +1145,48 @@ void CSimon::StartUsingHolyCross()
 				D3DCOLOR_BACKGROUND = BACKGROUND_COLOR;
 			}
 		}
+	}
+}
+
+void CSimon::LoadAnimation()
+{
+	animations.clear();
+	AddAnimation(tag, 0); // stand
+	AddAnimation(tag, 1); // walk
+	AddAnimation(tag, 2); // jumo
+	AddAnimation(tag, 3); // fall
+	AddAnimation(tag, 4); // attacking
+	AddAnimation(tag, 5); // sit
+	AddAnimation(tag, 6); // sit attack
+	AddAnimation(tag, 7); // stand on stair_up
+	AddAnimation(tag, 8); // walk up stair_up
+	AddAnimation(tag, 9); // stand on stair_down
+	AddAnimation(tag, 10);// walk on stair_down
+	AddAnimation(tag, 11); // injured
+	AddAnimation(tag, 12); // attack on stair down
+	AddAnimation(tag, 13);	// attack on stair up
+	AddAnimation(tag, 14); // dead
+}
+
+void CSimon::ChangeTexture(int temp)
+{
+	switch (temp)
+	{
+	case 1:
+		CTextures::GetInstance()->Add(TAG_SIMON, L"Res\\Image\\player.png", D3DCOLOR_XRGB(255, 0, 255));
+		Sprites::GetInstance()->LoadResources(2);
+		Animations::GetInstance()->LoadResources(2);
+		LoadAnimation();
+		Board::GetInstance()->LoadResources();
+		break;
+	case 2:
+		CTextures::GetInstance()->Add(TAG_SIMON, L"Res\\Image\\player_2.png", D3DCOLOR_XRGB(255, 0, 255));
+		Sprites::GetInstance()->LoadResources(2);
+		Animations::GetInstance()->LoadResources(2);
+		LoadAnimation();
+		Board::GetInstance()->LoadResources();
+		break;
+	default:
+		break;
 	}
 }

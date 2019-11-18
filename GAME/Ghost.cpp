@@ -18,7 +18,7 @@ Ghost::Ghost(float x, float y, int direction)
 	turn = false;
 	this->isDead = false;
 	this->ishit = false;
-	animation = Animations::GetInstance()->Get(tag, 0);
+	animation = Animations::GetInstance()->Get(tag, 0); // animation moving
 
 	this->vx = ENEMY_WALKING_SPEED * direct;
 	this->vy = 0;
@@ -29,10 +29,9 @@ Ghost::Ghost(float x, float y, int direction)
 
 void Ghost::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	Enemy::Update(dt, coObjects);
 	if (!SIMON->timeusingstopwatch)
 	{	
-		Enemy::Update(dt, coObjects);
-		
 		vy += ENEMY_GRAVITY * dt;
 		
 		CGameObject::Update(dt, coObjects);

@@ -9,6 +9,7 @@ class Sprites
 
 public:
 	void Add(int tag, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex);
+	void Add(int tag, CSprite * sprite);
 	LPSPRITE Get(int tag, int index);
 	void LoadResources(int level);
 	static Sprites* GetInstance();

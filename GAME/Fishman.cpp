@@ -23,9 +23,9 @@ Fishman::Fishman(float x, float y, int direction)
 
 	this->isDead = false;
 	this->ishit = false;
-	AddAnimation(tag, 5);
-	AddAnimation(tag, 6);
-	AddAnimation(tag, 7);
+	AddAnimation(tag, 5); // animation jumping
+	AddAnimation(tag, 6); // animation moving
+	AddAnimation(tag, 7); // animation shootting
 	animation = animations[0];
 	this->vx = 0;
 	this->vy = -0.5f;
@@ -40,9 +40,9 @@ Fishman::Fishman(float x, float y, int direction)
 
 void Fishman::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	Enemy::Update(dt, coObjects);
 	if (!SIMON->timeusingstopwatch)
 	{
-		Enemy::Update(dt, coObjects);
 		if ((vx > 0 && x > SIMON->x + 64) || (vx < 0 && x < SIMON->x - 64))
 		{
 			vx = -vx;

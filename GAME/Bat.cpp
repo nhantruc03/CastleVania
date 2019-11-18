@@ -28,13 +28,14 @@ Bat::Bat(float x, float y, int direction)
 
 void Bat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+
+	Enemy::Update(dt, coObjects);
+	if (abs(y - prevY) >= 20)
+	{
+		vy = -vy;
+	}
 	if (!SIMON->timeusingstopwatch)
 	{
-		Enemy::Update(dt, coObjects);
-		if (abs(y - prevY) >= 20)
-		{
-			vy = -vy;
-		}
 		CGameObject::Update(dt, coObjects);
 		x += dx;
 		y += dy;

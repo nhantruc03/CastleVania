@@ -69,7 +69,7 @@ void Grid::Loadresources()
 					invisibleO = new invisibleObject();
 				
 				invisibleO->type = type;
-				invisibleO->SetPosition(x, y);
+				invisibleO->SetPosition(x, y );
 				tempobject = invisibleO;
 			}
 			break;
@@ -98,7 +98,7 @@ void Grid::Loadresources()
 				int door_type, x, y;
 				iFile >> door_type >> x >> y;
 				Door * door = new Door(door_type);
-				door->SetPosition(x, y);
+				door->SetPosition(x, y );
 				tempobject = door;
 			}
 			break;
@@ -106,7 +106,7 @@ void Grid::Loadresources()
 			{
 				int x, y, direction;
 				iFile >> x >> y >> direction;
-				Panther* panther = new Panther(x, y, direction);
+				Panther* panther = new Panther(x, y , direction);
 				tempobject = panther;
 			}
 			break;
@@ -146,7 +146,7 @@ void Grid::Loadresources()
 				int holder_id, item_id, x, y;
 				iFile >> holder_id >> item_id >> x >> y;
 				HoldItemObject * HoldObject = new HoldItemObject(holder_id, item_id);
-				HoldObject->SetPosition(x, y);
+				HoldObject->SetPosition(x, y+BOARD_HEIGHT);
 				tempobject = HoldObject;
 			}
 			break;
@@ -163,7 +163,7 @@ void Grid::Loadresources()
 				else
 					invisibleO = new invisibleObject();
 				invisibleO->type = type;
-				invisibleO->SetPosition(x, y);
+				invisibleO->SetPosition(x, y + BOARD_HEIGHT);
 				tempobject = invisibleO;
 			}
 			break;
@@ -172,7 +172,7 @@ void Grid::Loadresources()
 				float x, y, width, height;
 				iFile >> x >> y >> width >> height;
 				CBrick* brick = new CBrick();
-				brick->SetPosition(x, y);
+				brick->SetPosition(x, y + BOARD_HEIGHT);
 				brick->width = width;
 				brick->height = height;
 				tempobject = brick;
@@ -183,7 +183,7 @@ void Grid::Loadresources()
 				int sb_id, item_id, x, y;
 				iFile >> sb_id >> item_id >> x >> y;
 				Special_brick * sb = new Special_brick(sb_id, item_id);
-				sb->SetPosition(x, y);
+				sb->SetPosition(x, y + BOARD_HEIGHT);
 				tempobject = sb;
 			}
 			break;
@@ -192,7 +192,7 @@ void Grid::Loadresources()
 				int door_type, x, y;
 				iFile >> door_type >> x >> y;
 				Door * door = new Door(door_type);
-				door->SetPosition(x, y);
+				door->SetPosition(x, y + BOARD_HEIGHT);
 				tempobject = door;
 			}
 			break;
@@ -200,7 +200,7 @@ void Grid::Loadresources()
 			{
 				int x, y, direction;
 				iFile >> x >> y >> direction;
-				Panther* panther = new Panther(x, y, direction);
+				Panther* panther = new Panther(x, y + BOARD_HEIGHT, direction);
 				tempobject = panther;
 			}
 			break;
@@ -221,9 +221,6 @@ void Grid::Loadresources()
 					cells[i][j].push_back(tempobject);
 
 			list_temp.push_back(tempobject);
-
-		//	nextid = id;
-
 		}
 		iFile.close();
 		std::ofstream ofile;
@@ -299,7 +296,7 @@ void Grid::GetListObject(vector<CGameObject*>& ListObj)
 				}
 				else
 				{
-					// spawn item khi holder hoac special brick dead
+					// insert item khi holder hoac special brick break
 					if (cells[i][j].at(k)->tag == TAG_HOLDER && dynamic_cast<HoldItemObject*>(cells[i][j].at(k))->check_spawnitem == false)
 					{
 						dynamic_cast<HoldItemObject*>(cells[i][j].at(k))->check_spawnitem = true;
@@ -311,21 +308,19 @@ void Grid::GetListObject(vector<CGameObject*>& ListObj)
 								int random = rand() % 2;
 								if (random == 0)
 								{
-									temp_id = 1;
+									temp_id = TYPE_ITEM_WHIP;
 								}
 							}
 						}
 						Item* item = new Item(temp_id);
 						item->SetPosition(dynamic_cast<HoldItemObject*>(cells[i][j].at(k))->x, dynamic_cast<HoldItemObject*>(cells[i][j].at(k))->y);
-						item->id = nextid++;
 						insert(item);
 					}
 					else if (cells[i][j].at(k)->tag == TAG_SPECIAL_BRICK && dynamic_cast<Special_brick*>(cells[i][j].at(k))->check_spawnitem == false && dynamic_cast<Special_brick*>(cells[i][j].at(k))->item != -1)
 					{
-						dynamic_cast<Special_brick*>(cells[i][j].at(k))->check_spawnitem = true;
+						dynamic_cast<Special_brick*>(cells[i][j].at(k))->check_spawnitem = true; // moi item chi duoc spawn 1 lan
 						Item* item = new Item(dynamic_cast<Special_brick*>(cells[i][j].at(k))->item);
 						item->SetPosition(dynamic_cast<Special_brick*>(cells[i][j].at(k))->x, dynamic_cast<Special_brick*>(cells[i][j].at(k))->y - 5);
-						item->id = nextid++;
 						insert(item);
 					}
 				}
@@ -368,7 +363,6 @@ void Grid::GetListPanther(vector<Enemy*>& ListObj)
 						dynamic_cast<Panther*>(cells[i][j].at(k))->check_dead_once = true;
 						countpanther -= 1;
 					}
-					//removepanther(cells[i][j].at(k));
 				}
 			}
 
@@ -384,7 +378,7 @@ void Grid::insert(CGameObject *object)
 	int bottom = (int)((object->y + object->height / 2) / GRID_CELL_HEIGHT);
 	int left = (int)((object->x - object->width / 2) / GRID_CELL_WIDTH);
 	int right = (int)((object->x + object->width / 2) / GRID_CELL_WIDTH);
-
+	object->id = nextid++;
 	for (int i = top; i <= bottom; i++)
 		for (int j = left; j <= right; j++)
 			cells[i][j].push_back(object);
@@ -396,6 +390,19 @@ void Grid::movepanther(Enemy * object, float x, float y)
 		return;
 	Panther* temppanther = (Panther*)object;
 
+	for (int i = 0; i < GRID_CELL_MAX_ROW; i++)
+	{
+		for (int j = 0; j < GRID_CELL_MAX_COLUMN; j++)
+		{
+			for (UINT k = 0; k < cells[i][j].size(); k++)
+			{
+				if (cells[i][j].at(k)->tag == TAG_ENEMY && cells[i][j].at(k)->id==temppanther->id)
+				{
+					cells[i][j].erase(cells[i][j].begin() + k); // xoa het tat ca cac grid cu chua panther
+				}
+			}
+		}
+	}
 
 	int top = (int)((temppanther->y - temppanther->height / 2) / GRID_CELL_HEIGHT);
 	int bottom = (int)((temppanther->y + temppanther->height / 2) / GRID_CELL_HEIGHT);
@@ -403,14 +410,13 @@ void Grid::movepanther(Enemy * object, float x, float y)
 	int right = (int)((temppanther->x + temppanther->width / 2) / GRID_CELL_WIDTH);
 	for (int i = top; i <= bottom; i++)
 		for (int j = left; j <= right; j++)
-			cells[i][j].push_back(temppanther);
+			cells[i][j].push_back(temppanther); // cap nhat lai grid moi cho panther
 
 }
 
 void Grid::respawnpanther()
 {
-
-	unordered_map<int, Enemy*> mapPanthers;
+	unordered_map<int, Enemy*> mapPanthers; // can luu lai panther truoc khi xoa de co so lieu de respawn
 	for (int i = 0; i < GRID_CELL_MAX_ROW; i++)
 	{
 		for (int j = 0; j < GRID_CELL_MAX_COLUMN; j++)

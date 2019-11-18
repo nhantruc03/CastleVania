@@ -93,6 +93,12 @@ Item::Item(int type_id)
 		height = 32;
 		vy = 0.2;
 	}
+	else if (type == TYPE_ITEM_CRYSTAL)
+	{
+		width = 28;
+		height = 32;
+		vy = 0.2;
+	}
 }
 
 void Item::Render()
@@ -140,6 +146,9 @@ void Item::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	ExistTime -= dt;
 	if (ExistTime <= 0)
 	{
-		this->isDead = true;
+		if (type != TYPE_ITEM_CRYSTAL)
+		{
+			this->isDead = true;
+		}
 	}
 }

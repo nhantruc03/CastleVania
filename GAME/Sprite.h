@@ -8,7 +8,7 @@ using namespace std;
 
 class CSprite
 {
-
+public:
 	RECT rect;			// thay rectangle cho left top right bottom
 	D3DXVECTOR3 center;
 

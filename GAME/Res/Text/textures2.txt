@@ -20,3 +20,8 @@
 19 Res\Image\brokenbrick.png 255 0 255
 20 Res\Image\axe.png 255 0 255
 21 Res\Image\simondeath.png 255 0 255
+22 Res\Image\boss.png 255 0 255
+23 Res\Image\big_burn.png 255 0 255
+24 Res\Image\board.png 255 0 255
+25 Res\Image\font.png 255 0 255
+26 Res\Image\heal.png 255 0 255

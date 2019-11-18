@@ -26,7 +26,6 @@ void Dagger::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	RECT dagger = GetBoundingBox();
 	if (Camera::GetInstance()->IsContain(dagger) == false)
 	{
-		//SIMON->throwing = false;
 		isDead = true;
 		available = false;
 	}
@@ -39,9 +38,7 @@ void Dagger::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 		coEvents.clear();
 
-		// turn off collision when die 
 		CalcPotentialCollisions(coObjects, coEvents);
-		// No collision occured, proceed normally
 
 		if (coEvents.size() == 0)
 		{
@@ -56,7 +53,7 @@ void Dagger::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			// block 
 			x += min_tx * dx + nx * 0.2f;		// nx*0.2f : need to push out a bit to avoid overlapping next frame
-			//y += min_ty * dy + ny * 0.2f;
+			
 			for (UINT i = 0; i < coEventsResult.size(); i++)
 			{
 				LPCOLLISIONEVENT e = coEventsResult[i];
@@ -64,7 +61,6 @@ void Dagger::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					dynamic_cast<HoldItemObject*>(e->obj)->isHit();
 					isDead = true;
-				//	SIMON->throwing = false;
 				}
 				if (dynamic_cast<CBrick*>(e->obj))
 				{
@@ -72,12 +68,20 @@ void Dagger::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 				if (dynamic_cast<Enemy*>(e->obj))
 				{
-					e->obj->isHit();
+					if(e->obj->type==TYPE_ENEMY_BOSS_1)
+					{
+						e->obj->isHit(2);
+					}
+					else
+					{
+						e->obj->isHit();
+						SIMON->score += 100;
+					}
 					isDead = true;
-					//SIMON->throwing = false;
 				}
 				if (dynamic_cast<Weapon*>(e->obj))
 				{
+					SIMON->score += 100;
 					e->obj->isHit();
 					isDead = true;
 				}
@@ -99,12 +103,22 @@ void Dagger::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				case TAG_ENEMY:
 					if (dynamic_cast<Enemy*>(coObjects->at(i))->timedelaytogetdmg <= 0)
 					{
+					
 						isDead = true;
 					//	SIMON->throwing = false;
-						coObjects->at(i)->isHit();
+						if (coObjects->at(i)->type == TYPE_ENEMY_BOSS_1)
+						{
+							coObjects->at(i)->isHit(2);
+						}
+						else
+						{
+							SIMON->score += 100;
+							coObjects->at(i)->isHit();
+						}
 					}
 					break;
 				case TAG_WEAPON:
+					SIMON->score += 100;
 					isDead = true;
 					coObjects->at(i)->isHit();
 					break;

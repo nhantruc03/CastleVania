@@ -12,11 +12,13 @@
 #include"Enemy_bullet.h"
 #include"Special_brick.h"
 #include"steam.h"
+#include"Phantom_bat.h"
 PlayScene::PlayScene(int level)
 {
 	grid = new Grid(level);
 	LoadResources(level);
-
+	checkBossDead = false;
+	timetospawnCrystal = 0;
 	srand(time(NULL));
 
 	keyCode.clear();
@@ -28,13 +30,10 @@ PlayScene::PlayScene(int level)
 	map = Maps::GetInstance()->GetMap(this->level);
 
 	simon = CSimon::GetInstance();
-	simon->SetPosition(3000, 5);//287.0f);
 	simon->Respawn();
 
 	camera = Camera::GetInstance();
 
-	/*camera->inzone1 = false;
-	camera->inzone2 = true;*/
 	objects.clear();
 
 	timetocreateghost = 0;
@@ -55,6 +54,8 @@ PlayScene::PlayScene(int level)
 
 	gotoleft = false;
 	gotoright = false;
+
+	board = new Board();
 }
 
 
@@ -65,37 +66,58 @@ PlayScene::~PlayScene()
 
 void PlayScene::Update(DWORD dt)
 {
+	board->update(boss,dt);
 	if (simon->upgrade_time>0)
 	{
 		simon->upgrade_time -= dt;
 	}
 	else if(simon->upgrade_time<=0)
 	{
+		if (!SIMON->checkkillboss)
+		{
+			if (globle_time > 0)
+			{
+				globle_time -= dt;
+			}
+			if (globle_time <= 0 && !simon->isDead)
+			{
+				//simon->health = 0;
+				simon->ChangeState(STATE_DEAD);
+			}
+		}
 		if (simon->usingholycross || isgoingthroughdoor)
 		{
-			listenemy.clear();
-			countghost = 0;
-			countpanther = 0;
-			countfishman = 0;
-			countbat = 0;
-			cancreatebat = true;
-			cancreateghost = true;
-			cancreatefishman = true;
-			cancreatepanther = true;
+			//listenemy.clear();
+			for (int i = 0; i < listenemy.size(); i++)
+			{
+				if (listenemy[i]->type != TYPE_ENEMY_BOSS_1)
+				{
+					listenemy[i]->isDead = true;
+				}
+			}
+
+			for (int i = 0; i < listenemy_tronggrid.size(); i++)
+			{
+				listenemy_tronggrid[i]->isDead = true;
+			}
 		//	simon->usingholycross = false;
 		}
-		if (simon->isDead && simon->timetorespawn<=0)
+		if (simon->isDead && simon->timetorespawn<=0 && simon->lives>=1)
 		{
-			listenemy.clear();
-			countghost = 0;
-			countpanther = 0;
-			countfishman = 0;
-			countbat = 0;
-			cancreatebat = true;
-			cancreateghost = true;
-			cancreatefishman = true;
-			cancreatepanther = false;
+			for (int i = 0; i < listenemy.size(); i++)
+			{
+				if (listenemy[i]->type != TYPE_ENEMY_BOSS_1)
+				{
+					listenemy[i]->isDead = true;
+				}
+			}
+			for (int i = 0; i < listenemy_tronggrid.size(); i++)
+			{
+				listenemy_tronggrid[i]->isDead = true;
+			}
 			grid->Loadresources();
+			door1 = door2 = NULL;
+			boss = NULL;
 			simon->Respawn();
 		}
 		for (Enemy* e : listenemy)
@@ -134,11 +156,11 @@ void PlayScene::Update(DWORD dt)
 			}
 			else
 			{
-				if (simon->IsContain(endrectmap1->GetBoundingBox().left, endrectmap1->GetBoundingBox().top, endrectmap1->GetBoundingBox().right, endrectmap1->GetBoundingBox().bottom))
+				if (simon->IsContain(endrectmap1->GetBoundingBox().left, endrectmap1->GetBoundingBox().top, endrectmap1->GetBoundingBox().right, endrectmap1->GetBoundingBox().bottom) && !simon->jumping)
 				{
 					isgoingthroughendrect = true;
 					simon->check_auto_move = true;
-					if (simon->x >= endrectmap1->GetBoundingBox().right && !simon->jumping)
+					if (simon->x >= endrectmap1->GetBoundingBox().left && !simon->jumping)
 					{
 
 						simon->gotoleft = true;
@@ -178,14 +200,13 @@ void PlayScene::Update(DWORD dt)
 		{
 			// gioi han bien trai cua map 2
 			if (simon->vx < 0 && simon->x < 16) simon->x = 16;
-			if (camera->inzone2)
+			if (camera->inzone2 || camera->movedownstair)
 			{
-				if (simon->vx < 0 && simon->x < 3072) simon->x = 3072;
-			}
-			if (camera->movedownstair)
-			{
-				// gioi han 2 bien duoi ham
 				if (simon->vx < 0 && simon->x < 3088) simon->x = 3088;
+			}
+			if (camera->inzoneBoss)
+			{
+				if (simon->vx < 0 && simon->x < 5152)simon->x = 5152;
 			}
 			// di xuong ham
 			for (int i = 0; i < objects.size(); i++)
@@ -200,11 +221,10 @@ void PlayScene::Update(DWORD dt)
 							if (simon->State == STATE_WALK_ONSTAIR_DOWN && simon->y > objects[i]->y)
 							{
 								camera->movedownstair = true;
-								camera->SetPosition(simon->x, -384);
+								camera->SetPosition(simon->x, SCREEN_HEIGHT-6);
 
 								simon->prevX = simon->prevX;
 								simon->prevY = simon->prevY + 64;
-
 								simon->SetPosition(simon->x, simon->y + 64);
 							}
 							break;
@@ -217,6 +237,7 @@ void PlayScene::Update(DWORD dt)
 								simon->prevX = simon->prevX - 16;
 								simon->prevY = simon->prevY - 80;
 								simon->SetPosition(simon->x, simon->y - 64);
+
 							}
 							break;
 						default:
@@ -242,12 +263,12 @@ void PlayScene::Update(DWORD dt)
 						{
 							if (simon->vx >= 0)
 							{
-								Ghost* ghost = new Ghost(camera->GetPosition().x + camera->camWidht / 2, 287.0f, -1);
+								Ghost* ghost = new Ghost(camera->GetPosition().x + camera->camWidht / 2, 287.0f+BOARD_HEIGHT, -1);
 								listenemy.push_back(ghost);
 							}
 							else
 							{
-								Ghost* ghost = new Ghost(camera->GetPosition().x - camera->camWidht / 2, 287.0f, 1);
+								Ghost* ghost = new Ghost(camera->GetPosition().x - camera->camWidht / 2, 287.0f + BOARD_HEIGHT, 1);
 								listenemy.push_back(ghost);
 							}
 							countghost++;
@@ -277,19 +298,19 @@ void PlayScene::Update(DWORD dt)
 									int random = rand() % 2;
 									if (random == 0)
 									{
-										Ghost* ghost = new Ghost(camera->GetPosition().x + camera->camWidht / 2, 150, -1);
+										Ghost* ghost = new Ghost(camera->GetPosition().x + camera->camWidht / 2, 150 + BOARD_HEIGHT, -1);
 										listenemy.push_back(ghost);
 									}
 									else
 									{
 										if (simon->vx > 0)
 										{
-											Ghost* ghost = new Ghost(camera->GetPosition().x + camera->camWidht / 2, 287.0f, -1);
+											Ghost* ghost = new Ghost(camera->GetPosition().x + camera->camWidht / 2, 287.0f + BOARD_HEIGHT, -1);
 											listenemy.push_back(ghost);
 										}
 										else
 										{
-											Ghost* ghost = new Ghost(camera->GetPosition().x - camera->camWidht / 2, 287.0f, 1);
+											Ghost* ghost = new Ghost(camera->GetPosition().x - camera->camWidht / 2, 287.0f + BOARD_HEIGHT, 1);
 											listenemy.push_back(ghost);
 										}
 									}
@@ -298,12 +319,12 @@ void PlayScene::Update(DWORD dt)
 								{
 									if (simon->vx > 0)
 									{
-										Ghost* ghost = new Ghost(camera->GetPosition().x + camera->camWidht / 2, 287.0f, -1);
+										Ghost* ghost = new Ghost(camera->GetPosition().x + camera->camWidht / 2, 287.0f + BOARD_HEIGHT, -1);
 										listenemy.push_back(ghost);
 									}
 									else
 									{
-										Ghost* ghost = new Ghost(camera->GetPosition().x - camera->camWidht / 2, 287.0f, 1);
+										Ghost* ghost = new Ghost(camera->GetPosition().x - camera->camWidht / 2, 287.0f + BOARD_HEIGHT, 1);
 										listenemy.push_back(ghost);
 									}
 								}
@@ -318,45 +339,6 @@ void PlayScene::Update(DWORD dt)
 
 					}
 				}
-
-				// tao enemy panther
-				//if (1216 < simon->x && simon->x < 2240)
-				//{
-				//	if (cancreatepanther && !outofareacreatepanther)
-				//	{
-				//		outofareacreatepanther = true;
-				//		if (countpanther == 0)
-				//		{
-				//			int direction = abs(1106 - simon->x) < abs(2240 - simon->x) ? -1 : 1; // panther xoay mat vao simon
-				//			//listenemy.push_back(new Panther(1444.0f, 175.0f, direction));
-				//			//listenemy.push_back(new Panther(1792.0f, 110.0f, direction));
-				//			//listenemy.push_back(new Panther(1920.0f, 175.0f, direction));
-				//		//	grid->insert(new Panther(1444.0f, 175.0f, direction));
-				//			//grid->insert(new Panther(1792.0f, 110.0f, direction));
-				//		//	grid->insert(new Panther(1920.0f, 175.0f, direction));
-				//			countpanther += 3;
-				//		}
-				//		cancreatepanther = false;
-				//	}
-				//}
-				//else
-				//{
-				//	if (countpanther == 0)
-				//	{
-				//		outofareacreatepanther = false;
-				//	}
-				//}
-				/*vector<Enemy*>listenemy_tronggrid;
-				listenemy_tronggrid.clear();
-				grid->GetListPanther(listenemy_tronggrid);
-				if (listenemy_tronggrid.begin()!=listenemy_tronggrid.end() && test==false)
-				{
-					for (CGameObject* e : listenemy_tronggrid)
-					{
-						listenemy.push_back((Enemy*)e);
-						test = true;
-					}
-				}*/
 				if (1216 < simon->x && simon->x < 2240)
 				{
 					if (cancreatepanther)
@@ -381,15 +363,15 @@ void PlayScene::Update(DWORD dt)
 					{
 						timetocreatebat -= dt;
 					}
-					if (simon->x >= 3072 && simon->y < 352 && simon->x <= 4111 && !(simon->x>3900&&simon->y<128))
+					if (simon->x >= 3072 && simon->y < 352 && simon->x <= 4111 && !(simon->x>3900&&simon->y<128 + BOARD_HEIGHT))
 					{
 						if (cancreatebat)
 						{
 							if (timetocreatebat <= 0)
 							{
-								if (simon->y < 160)
+								if (simon->y < 160 + BOARD_HEIGHT)
 								{
-									Bat* bat = new Bat(camera->GetPosition().x + camera->camWidht / 2, 112.0f, -1);
+									Bat* bat = new Bat(camera->GetPosition().x + camera->camWidht / 2, 112.0f + BOARD_HEIGHT, -1);
 									listenemy.push_back(bat);
 								}
 								else
@@ -397,17 +379,17 @@ void PlayScene::Update(DWORD dt)
 									int random = rand() % 3;
 									if (random == 0)
 									{
-										Bat* bat = new Bat(camera->GetPosition().x + camera->camWidht / 2, 208.0f, -1);
+										Bat* bat = new Bat(camera->GetPosition().x + camera->camWidht / 2, 208.0f + BOARD_HEIGHT, -1);
 										listenemy.push_back(bat);
 									}
 									else if (random == 1)
 									{
-										Bat* bat = new Bat(camera->GetPosition().x + camera->camWidht / 2, 304.0f, -1);
+										Bat* bat = new Bat(camera->GetPosition().x + camera->camWidht / 2, 304.0f + BOARD_HEIGHT, -1);
 										listenemy.push_back(bat);
 									}
 									else if (random == 2)
 									{
-										Bat* bat = new Bat(camera->GetPosition().x - camera->camWidht / 2, 304.0f, 1);
+										Bat* bat = new Bat(camera->GetPosition().x - camera->camWidht / 2, 304.0f + BOARD_HEIGHT, 1);
 										listenemy.push_back(bat);
 									}
 
@@ -430,7 +412,7 @@ void PlayScene::Update(DWORD dt)
 				}
 				if (camera->movedownstair)
 				{
-					if (cancreatefishman)
+					if (cancreatefishman && !simon->isOnStair)
 					{
 						if (timetocreatefishman <= 0)
 						{
@@ -438,7 +420,7 @@ void PlayScene::Update(DWORD dt)
 							{
 								if (countfishman < 2)
 								{
-									Fishman* fishman = new Fishman(3264, 672, 1);
+									Fishman* fishman = new Fishman(3264, 672 + BOARD_HEIGHT, 1);
 									listenemy.push_back(fishman);
 									countfishman++;
 									createeffectsteam(fishman->x, fishman->y);
@@ -446,18 +428,18 @@ void PlayScene::Update(DWORD dt)
 								}
 								if (countfishman < 2)
 								{
-									Fishman* fishman = new Fishman(3520, 672, -1);
+									Fishman* fishman = new Fishman(3520, 672 + BOARD_HEIGHT, -1);
 									listenemy.push_back(fishman);
 									countfishman++;
 									createeffectsteam(fishman->x, fishman->y);
 								}
 								timetocreatefishman = 3000;
 							}
-							if (simon->vx <= 0 && simon->x < 3264 && simon->x > 3072)
+							if (simon->vx <= 0 && simon->x < 3260 && simon->x > 3072)
 							{
 								if (countfishman < 2)
 								{
-									Fishman* fishman = new Fishman(3136, 672, 1);
+									Fishman* fishman = new Fishman(3136, 672 + BOARD_HEIGHT, 1);
 									listenemy.push_back(fishman);
 									countfishman++;
 									createeffectsteam(fishman->x, fishman->y);
@@ -465,7 +447,7 @@ void PlayScene::Update(DWORD dt)
 								}
 								if (countfishman < 2)
 								{
-									Fishman* fishman = new Fishman(3392, 672, -1);
+									Fishman* fishman = new Fishman(3392, 672 + BOARD_HEIGHT, -1);
 									listenemy.push_back(fishman);
 									countfishman++;
 									createeffectsteam(fishman->x, fishman->y);
@@ -476,7 +458,7 @@ void PlayScene::Update(DWORD dt)
 							{
 								if (countfishman < 2)
 								{
-									Fishman* fishman = new Fishman(3520, 672, 1);
+									Fishman* fishman = new Fishman(3520, 672 + BOARD_HEIGHT, 1);
 									listenemy.push_back(fishman);
 									countfishman++;
 									createeffectsteam(fishman->x, fishman->y);
@@ -484,7 +466,7 @@ void PlayScene::Update(DWORD dt)
 
 								if (countfishman < 2)
 								{
-									Fishman* fishman = new Fishman(3648, 672, simon->x < 3648 ? -1 : 1);
+									Fishman* fishman = new Fishman(3648, 672 + BOARD_HEIGHT, simon->x < 3648 ? -1 : 1);
 									listenemy.push_back(fishman);
 									countfishman++;
 									createeffectsteam(fishman->x, fishman->y);
@@ -495,14 +477,14 @@ void PlayScene::Update(DWORD dt)
 							{
 								if (countfishman < 2)
 								{
-									Fishman* fishman = new Fishman(3776, 672, simon->x < 3776 ? -1 : 1);
+									Fishman* fishman = new Fishman(3776, 672 + BOARD_HEIGHT, simon->x < 3776 ? -1 : 1);
 									listenemy.push_back(fishman);
 									countfishman++;
 									createeffectsteam(fishman->x, fishman->y);
 								}
 								if (countfishman < 2)
 								{
-									Fishman* fishman = new Fishman(3904, 672, simon->x < 3904 ? -1 : 1);
+									Fishman* fishman = new Fishman(3904, 672 + BOARD_HEIGHT, simon->x < 3904 ? -1 : 1);
 									listenemy.push_back(fishman);
 									countfishman++;
 									createeffectsteam(fishman->x, fishman->y);
@@ -515,6 +497,13 @@ void PlayScene::Update(DWORD dt)
 
 				}
 			}
+
+			if (simon->x > 5152 && boss == NULL)
+			{
+				boss = new Phantom_bat();
+				listenemy.push_back(boss);
+			}
+
 			// di qua cua 1
 			if (camera->inzone1)
 			{
@@ -529,6 +518,7 @@ void PlayScene::Update(DWORD dt)
 					}
 				}
 			}
+			
 			if (door1 != NULL)
 			{
 				if (simon->IsContain(door1->GetBoundingBox().left, door1->GetBoundingBox().top, door1->GetBoundingBox().right, door1->GetBoundingBox().bottom) && door1->isclosed())
@@ -573,6 +563,8 @@ void PlayScene::Update(DWORD dt)
 							camera->inzone2 = true;
 							simon->check_auto_move = false;
 							isgoingthroughdoor = false;
+							simon->instages = 2;
+							door1->isDead = true;
 							door1 = NULL;
 						}
 					}
@@ -636,6 +628,9 @@ void PlayScene::Update(DWORD dt)
 							camera->inzone3 = true;
 							simon->check_auto_move = false;
 							isgoingthroughdoor2 = false;
+							simon->instages = 3;
+							door2->isDead = true;
+							door2 = NULL;
 						}
 					}
 				}
@@ -663,6 +658,17 @@ void PlayScene::UpdatePlayer(DWORD dt)
 void PlayScene::UpdateObjects(DWORD dt)
 {
 	grid->GetListObject(objects);
+	if (checkBossDead)
+	{
+		timetospawnCrystal += dt;
+	}
+	if (timetospawnCrystal >= 1000 && checkBossDead)
+	{
+		Item* item = new Item(TYPE_ITEM_CRYSTAL);
+		item->SetPosition(5343, 120+BOARD_HEIGHT);
+		grid->insert(item);
+		checkBossDead = false;
+	}
 
 	for (CGameObject* o : objects)
 	{
@@ -675,6 +681,11 @@ void PlayScene::UpdateObjects(DWORD dt)
 		if (e->isDead)
 		{
 			listenemy.erase(listenemy.begin()+i);
+			if (e->type == TYPE_ENEMY_BOSS_1)
+			{
+				checkBossDead = true;
+				
+			}
 			if (e->type == TYPE_ENEMY_GHOST)
 			{
 				countghost--;
@@ -684,14 +695,6 @@ void PlayScene::UpdateObjects(DWORD dt)
 					cancreateghost = true;
 				}
 			}
-			/*if (e->type == TYPE_ENEMY_PANTHER)
-			{
-				countpanther--;
-				if (countpanther == 0)
-				{
-					cancreatepanther = true;
-				}
-			}*/
 			if (e->type == TYPE_ENEMY_BAT)
 			{
 				countbat--;
@@ -715,20 +718,20 @@ void PlayScene::UpdateObjects(DWORD dt)
 		}
 		else
 		{
-			/*if (e->type == TYPE_ENEMY_PANTHER)
-			{
-				if (camera->IsContain(e->GetBoundingBox()))
-				{
-					e->Update(dt, &objects);
-					grid->movepanther((Panther*)e, e->x, e->y);
-				}
-			}*/
 			if (e->type == TYPE_ENEMY_FISHMAN && dynamic_cast<Fishman*>(e)->attacking == true && dynamic_cast<Fishman*>(e)->canspawnbullet == true)
 			{
 
 				dynamic_cast<Fishman*>(e)->canspawnbullet = false;
 				Enemy_bullet * bullet = new Enemy_bullet(e->x, e->y - 20, e->direct);
 				list_enemy_weapon.push_back(bullet);
+			}
+			else if (e->type == TYPE_ENEMY_BOSS_1 && dynamic_cast<Phantom_bat*>(e)->canshoot == true)
+			{
+				dynamic_cast<Phantom_bat*>(e)->canshoot = false;
+				Enemy_bullet * bullet = new Enemy_bullet(e->x, e->y, 1
+					,dynamic_cast<Phantom_bat*>(e)->bulletvx, dynamic_cast<Phantom_bat*>(e)->bulletvy);
+				list_enemy_weapon.push_back(bullet);
+
 			}
 			else
 				e->Update(dt, &objects);
@@ -747,24 +750,26 @@ void PlayScene::UpdateObjects(DWORD dt)
 		{
 			list_enemy_weapon.erase(list_enemy_weapon.begin() + i);
 		}
-	}
-
-	for (Weapon* w : list_enemy_weapon)
-	{
-		w->Update(dt, &objects);
+		else
+		{
+			list_enemy_weapon[i]->Update(dt, &objects);
+		}
 	}
 
 	for (int i = 0; i < listeffect.size(); i++)
 	{
 		if (listeffect[i]->isDead)
 		{
+			if (dynamic_cast<burn*>(listeffect[i]) && dynamic_cast<burn*>(listeffect[i])->model==0) // small burn
+			{
+				RandomSpawnItem(listeffect[i]->x, listeffect[i]->y);
+			}
 			listeffect.erase(listeffect.begin() + i);
 		}
-	}
-
-	for (Effect* e: listeffect)
-	{
-		e->Update(dt);
+		else
+		{
+			listeffect[i]->Update(dt);
+		}
 	}
 }
 
@@ -814,6 +819,7 @@ void PlayScene::Render()
 		e->Render();
 	}
 	simon->Render();
+	board->render();
 }
 
 void PlayScene::OnKeyDown(int key)
@@ -833,5 +839,60 @@ void PlayScene::OnKeyUp(int key)
 		simon->OnKeyUp(key);
 	}
 
+}
+
+void PlayScene::RandomSpawnItem(float x, float y)
+{
+	int rand1 = rand() % 5;
+	if (rand1 <1) //20% 
+	{
+		int itemid;
+		int rand2 = rand() % 20;
+		if (rand2 <=6)
+		{
+			if (SIMON->morningstarlevel < 3)
+			{
+				itemid = TYPE_ITEM_WHIP;
+			}
+			else
+				itemid = TYPE_ITEM_HEART;
+		}
+		else if (rand2 > 6 && rand2 <= 8)
+		{
+			itemid = TYPE_ITEM_MONEY_400;
+		}
+		else if (rand2 > 8 && rand2 <= 10)
+		{
+			itemid = TYPE_ITEM_DAGGER;
+		}
+		else if (rand2 > 10 && rand2 <= 12)
+		{
+			itemid = TYPE_ITEM_HOLY_WATER;
+		}
+		else if (rand2 > 12 && rand2 <= 14)
+		{
+			itemid = TYPE_ITEM_HOLY_CROSS;
+		}
+		else if (rand2 > 14 && rand2 <= 16)
+		{
+			itemid = TYPE_ITEM_STOP_WATCH;
+		}
+		else if (rand2 > 16 && rand2 <= 18)
+		{
+
+			itemid = TYPE_ITEM_AXE;
+		}
+		else if (rand2 > 18 && rand2 < 20)
+		{
+			itemid =TYPE_ITEM_DOUBLE_SHOT;
+		}
+		Item*item = new Item(itemid);
+		item->SetPosition(x, y);
+		grid->insert(item);
+	}
+	else
+	{
+		return;
+	}
 }
 

@@ -46,7 +46,7 @@ void Map::Render()
 	{
 		lastcolumn += 1;
 	}
-	int firstrow = camera->GetBound().top / 32;
+	int firstrow = (camera->GetBound().top - BOARD_HEIGHT) / 32;
 	int lastrow;
 	if (templevel == 1)
 	{
@@ -64,76 +64,9 @@ void Map::Render()
 	{
 		for (int j = firstcolumn; j < lastcolumn; j++)
 		{
-			Sprites::GetInstance()->Get(maplevel, MapMatrix[i][j] -1)->Draw((j * 32) + 16, (i * 32) + 16);
+			Sprites::GetInstance()->Get(maplevel, MapMatrix[i][j] -1)->Draw((j * 32) + 16, (i * 32) + 16+BOARD_HEIGHT);
 		}
 	}
-}
-
-
-vector<LPGAMEOBJECT> Map::get_objectlist()
-{
-	objects.clear();
-
-	std::ifstream iFile;
-	char fileName[30];
-	sprintf_s(fileName, "Res\\Text\\objects%d.txt", templevel);
-	iFile.open(fileName);
-	while (!iFile.eof())
-	{
-		char objects_type;
-		iFile >> objects_type;
-		switch (objects_type)
-		{
-		case 'h':
-		{
-			int holder_id, item_id, x, y;
-			iFile >> holder_id >> item_id >> x >> y;
-			HoldItemObject * HoldObject = new HoldItemObject(holder_id, item_id);
-			HoldObject->SetPosition(x, y);
-			objects.push_back(HoldObject);
-		}
-		break;
-		case 'i':
-		{
-			int type, x, y, width, height;
-			iFile >> type >> x >> y;
-			invisibleObject* invisibleO = new invisibleObject();
-			invisibleO->type = type;
-			invisibleO->SetPosition(x, y);
-			objects.push_back(invisibleO);
-		}
-		break;
-		case 'b':
-		{
-			float x, y, width, height;
-			iFile >> x >> y >> width >> height;
-			CBrick* brick = new CBrick();
-			brick->SetPosition(x, y);
-			brick->width = width;
-			brick->height = height;
-			objects.push_back(brick); }
-		break;
-		case 's':
-		{
-			int sb_id, item_id, x, y;
-			iFile >> sb_id >> item_id >> x >> y;
-			Special_brick * sb = new Special_brick(sb_id, item_id);
-			sb->SetPosition(x, y);
-			objects.push_back(sb);
-		}
-		break;
-		case 'd':
-		{
-			int door_type, x, y;
-			iFile >> door_type >> x >> y;
-			Door * door = new Door(door_type);
-			door->SetPosition(x, y);
-			objects.push_back(door);
-		}
-		break;
-		}
-	}
-	return objects;
 }
 
 Map::~Map()

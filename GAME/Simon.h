@@ -8,23 +8,37 @@ class CSimon : public CGameObject
 {
 	static CSimon * _instance;
 public:
+	// score board
+	int instages;
+	int lives;
+	int score;
+	bool checkkillboss;
+	int count_attack_after_kill_boss;
+	int heart;
+
+
+
 
 	float timetorespawn;
 
-	DWORD timeuseholycross;
-	DWORD timetochangecolorwhileusingholycross;
-	DWORD limittimetochangecolorwhileusingholycross;
+	// about holy cross
+	float timeuseholycross;
+	float timetochangecolorwhileusingholycross;
+	float limittimetochangecolorwhileusingholycross;
 	bool usingholycross;
 
-	float delayforsitting;
+	
+	//about item gold potion
+	bool usinggoldpotion;
 
-	bool isgoingtostair;
-
+	//about item stop watch
 	float timeusingstopwatch;
-	bool falling;
-	bool ishit;
-	int untouchable;
-	DWORD untouchable_start;
+
+	// about item whip
+	float upgrade_time;
+
+	// about stair
+	bool isgoingtostair;
 	int stair_type;
 	bool gotoleft;
 	bool goup;
@@ -40,37 +54,53 @@ public:
 	float prevY;
 	float prevX;
 	bool isOnStair;
+
+
 	bool check_auto_move;
-	float upgrade_time;
+
+
+	// about state
+	int State;
 	int prevState;
 	bool sitting;
 	bool attacking;
 	bool jumping;
-	int heart;
+	bool falling;
+	bool ishit;
+	int untouchable;
+	float delayforsitting;
+	float untouchable_start;
 
+
+
+	// about weapon
 	int secondweapon;
-	bool throwing;
 	int numweaponcanthrow;
 	int numcurrentweaponthroing;
-
 	vector<Weapon*>Weapons;
 	int morningstarlevel;
+
+
+	CAnimation *curAni;
+	
 	CSimon();
+
 	void Respawn();
 	void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 	void Render();
 	void OnKeyDown(int keyCode);
 	void OnKeyUp(int keyCode);
-	int State;
-	CAnimation *curAni;
+
+	
+
 	void ChangeState(int newState);
 	static CSimon* GetInstance();
 	void Update_State();
 	bool isinjured;
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
 	void StartUsingHolyCross();
-
-	//virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
+	void LoadAnimation();
+	void ChangeTexture(int temp);
 
 };
 

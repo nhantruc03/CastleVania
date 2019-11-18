@@ -138,6 +138,15 @@
     <ClCompile Include="Enemy_bullet.cpp">
       <Filter>Game Objects\Weapon</Filter>
     </ClCompile>
+    <ClCompile Include="Phantom_bat.cpp">
+      <Filter>Game Objects\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Board.cpp">
+      <Filter>Game Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Font.cpp">
+      <Filter>Game Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="debug.h">
@@ -268,6 +277,15 @@
     </ClInclude>
     <ClInclude Include="Enemy_bullet.h">
       <Filter>Game Objects\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="Phantom_bat.h">
+      <Filter>Game Objects\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Board.h">
+      <Filter>Game Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Font.h">
+      <Filter>Game Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

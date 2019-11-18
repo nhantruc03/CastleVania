@@ -6,10 +6,10 @@ Panther::Panther(float x, float y, int direction)
 	this->ishit = false;
 	this->tag = TAG_ENEMY;
 	this->type = 1;
-	AddAnimation(tag, 1);
-	AddAnimation(tag, 2);
-	AddAnimation(tag, 3);
-	issleeping = true;
+	AddAnimation(tag, 1); // animation sleeping
+	AddAnimation(tag, 2); // animation moving
+	AddAnimation(tag, 3); // animation jumping
+	isSleeping = true;
 	isjumping = false;
 	isrunning = false;
 	this->x = x;
@@ -30,39 +30,24 @@ Panther::Panther(float x, float y, int direction)
 	this->health = 1;
 	spawnx = x;
 	spawny = y;
-//	animation = animations[0];
+	animation = animations[0];
 }
 
 void Panther::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	Enemy::Update(dt, coObjects);
 	if (!SIMON->timeusingstopwatch)
 	{
-		if (issleeping)
+		if (isSleeping)
 		{
 			vx = 0;
-			animation = animations[0];
 		}
-		if (timedelaytogetdmg)
-		{
-			timedelaytogetdmg -= dt;
-		}
-		if (ishit && timedelaytogetdmg <= 0)
-		{
-			timedelaytogetdmg = 200;
-			health -= 1;
-			ishit = false;
-			listeffect.push_back(new hit(x - 8, y - 8));
-			if (health == 0)
-			{
-				this->isDead = true;
-				listeffect.push_back(new burn(x, y));
-			}
-		}
-		if (abs(SIMON->x - this->x) <= 160 && issleeping)
+
+		if (abs(SIMON->x - this->x) <= 160 && isSleeping)
 		{
 			wakeup();
 		}
-		if ((x <= brick.left + 1 || x >= brick.right - 1) && !issleeping && !isjumping)
+		if ((x <= brick.left + 1 || x >= brick.right - 1) && !isSleeping && !isjumping)
 		{
 			jump();
 		}
@@ -114,11 +99,6 @@ void Panther::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 			}
 		}
-		animation->Update();
-		if (!Camera::GetInstance()->IsContain(this->GetBoundingBox()) && !issleeping)
-		{
-			this->isDead = true;
-		}
 	}
 }
 
@@ -133,7 +113,7 @@ void Panther::jump()
 void Panther::wakeup()
 {
 	isrunning = true;
-	issleeping = false;
+	isSleeping = false;
 	vx = ENEMY_WALKING_SPEED * 2 * direct;
 	animation = animations[1];
 }

@@ -10,6 +10,7 @@
 #include"invisibleObject.h"
 #include"listeffect_global.h"
 #include"Weapon.h"
+#include"Board.h"
 using namespace std;
 class PlayScene : public Scene
 {
@@ -17,12 +18,19 @@ private:
 	CSimon* simon;
 public:
 
+	Board* board;
+
+	float timetospawnCrystal;
+	bool checkBossDead;
+
 	bool test = false;
 	vector<Weapon*>list_enemy_weapon;
 	vector<Enemy*>listenemy;
 	vector<Enemy*>listenemy_tronggrid;
 	vector<LPGAMEOBJECT>objects;
 
+
+	Enemy* boss;
 
 	Grid *grid;
 
@@ -51,7 +59,7 @@ public:
 	bool isgoingthroughdoor2;
 	Door* door1;
 	Door* door2;
-	RECT DOOR1;
+	
 
 	bool isgoingthroughendrect;
 	invisibleObject* endrectmap1;
@@ -73,4 +81,5 @@ public:
 	void Render();									// Tải Scene lên màn hình
 	void OnKeyDown(int key);						// Xử lí Scene khi nhấn phím
 	void OnKeyUp(int key);							// Xử lí Scene khi thả phím
+	void RandomSpawnItem(float x, float y);
 };

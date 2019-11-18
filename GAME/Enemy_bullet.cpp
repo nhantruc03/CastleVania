@@ -2,7 +2,7 @@
 #include"Camera.h"
 #include"Simon.h"
 
-Enemy_bullet::Enemy_bullet(float x, float y, int direction)
+Enemy_bullet::Enemy_bullet(float x, float y, int direction, float vx , float vy )
 {
 	this->tag = TAG_WEAPON;
 	this->type = TYPE_ENEMY_BULLET;
@@ -19,26 +19,26 @@ Enemy_bullet::Enemy_bullet(float x, float y, int direction)
 	this->isDead = false;
 	this->ishit = false;
 	animation = Animations::GetInstance()->Get(tag, 7);
-	this->vx = ENEMY_WALKING_SPEED*1.5 * direct;
-	this->vy = 0;
+	this->vx = vx * direct;
+	this->vy = vy;
 	this->width = 10;
 	this->height = 12;
 }
 
 void Enemy_bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (ishit)
+	{
+		listeffect.push_back(new hit(x - 8, y - 8));
+		listeffect.push_back(new burn(x, y, 0));
+		this->isDead = true;
+	}
 	if (!SIMON->timeusingstopwatch)
 	{
 		CGameObject::Update(dt, coObjects);
 		x += dx;
-		if (ishit)
-		{
-
-			listeffect.push_back(new hit(x - 8, y - 8));
-			listeffect.push_back(new burn(x, y));
-			this->isDead = true;
-
-		}
+		y += dy;
+		
 		animation->Update();
 		if (!Camera::GetInstance()->IsContain(this->GetBoundingBox()))
 		{

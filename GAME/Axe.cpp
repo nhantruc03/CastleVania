@@ -70,10 +70,19 @@ void Axe::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 				if (dynamic_cast<Enemy*>(e->obj))
 				{
-					e->obj->isHit();
+					if (e->obj->type == TYPE_ENEMY_BOSS_1)
+					{
+						e->obj->isHit(2);
+					}
+					else
+					{
+						e->obj->isHit();
+						SIMON->score += 100;
+					}
 				}
 				if (dynamic_cast<Weapon*>(e->obj))
 				{
+					SIMON->score += 100;
 					e->obj->isHit();
 				}
 			}
@@ -92,10 +101,20 @@ void Axe::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				case TAG_ENEMY:
 					if (dynamic_cast<Enemy*>(coObjects->at(i))->timedelaytogetdmg <= 0)
 					{
-						coObjects->at(i)->isHit();
+						
+						if (coObjects->at(i)->type == TYPE_ENEMY_BOSS_1)
+						{
+							coObjects->at(i)->isHit(2);
+						}
+						else
+						{
+							coObjects->at(i)->isHit();
+							SIMON->score += 100;
+						}
 					}
 					break;
 				case TAG_WEAPON:
+					SIMON->score += 100;
 					coObjects->at(i)->isHit();
 					break;
 				}

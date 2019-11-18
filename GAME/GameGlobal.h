@@ -8,7 +8,8 @@
 // Các thông số và biến tổng dùng cho toàn bộ Game
 #define WINDOW_CLASS_NAME L"CastleVania-17520122"
 #define MAIN_WINDOW_TITLE L"CastleVania-17520122"
-#define SCREEN_WIDTH 512//365//1536
+#define BOARD_HEIGHT 80
+#define SCREEN_WIDTH 520//365//1536
 #define SCREEN_HEIGHT 390 // Chiều dài cửa sổ
 #define MAX_FRAME_RATE 120	// FPS
 #define BACKGROUND_COLOR D3DCOLOR_XRGB(0, 0, 0)		// Màu nền BackBuffer
@@ -52,11 +53,13 @@
 	#define TYPE_ITEM_AXE 11
 	#define TYPE_ITEM_DOUBLE_SHOT 12
 	#define TYPE_ITEM_GOLD_POTION 13
+	#define TYPE_ITEM_CRYSTAL 14
 #define TAG_EFFECT 5
 	#define TYPE_EFFECT_BURN 0 // Burn gom 3 sprite 0 1 2 
 	#define TYPE_EFFECT_HIT 3
 	#define TYPE_EFFECT_400 4
 	#define TYPE_EFFECT_700 5
+	#define TYPE_EFFECT_BIG_BURN 6
 #define TYPE_EFFECT_STEAM 6
 #define TYPE_EFFECT_BROKENBRICK 7
 #define TAG_MAP2 6
@@ -66,10 +69,14 @@
 	#define TYPE_ENEMY_PANTHER 1
 	#define TYPE_ENEMY_BAT 2
 	#define TYPE_ENEMY_FISHMAN 3
+#define TYPE_ENEMY_BOSS_1 4
 #define TAG_DOOR 9
 #define TAG_SPECIAL_BRICK 10
 	#define TYPE_SPECIAL_BRICK1 0
 	#define TYPE_SPECIAL_BRICK2	1
+#define TAG_BOARD 11
+#define TAG_FONT 12
+
 #define TAG_INVISIBLE_OBJECT 999
 	#define TYPE_INVI_O_ENDRECT_MAP1	0
 	#define TYPE_INVI_O_GO_UP_STAIR_LTR 1
@@ -124,6 +131,8 @@
 #define SIMON CSimon::GetInstance()
 
 extern std::unordered_map<int, bool> keyCode;
+
+extern float globle_time;
 
 //extern  std::vector<Effect*>listeffect;
 

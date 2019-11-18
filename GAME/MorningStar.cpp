@@ -64,7 +64,22 @@ void MorningStar::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				case TAG_ENEMY:
 					if (dynamic_cast<Enemy*>(coObjects->at(i))->timedelaytogetdmg <= 0)
 					{
-						coObjects->at(i)->isHit();
+						if (coObjects->at(i)->type == TYPE_ENEMY_BOSS_1)
+						{
+							if(level==1)
+							{
+								coObjects->at(i)->isHit();
+							}
+							else
+							{
+								coObjects->at(i)->isHit(2);
+							}
+						}
+						else
+						{
+							coObjects->at(i)->isHit();
+							SIMON->score += 100;
+						}
 					}
 					break;
 				case TAG_WEAPON:
