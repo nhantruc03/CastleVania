@@ -14,6 +14,8 @@ Map::Map(int level)
 	iFile.open(fileName);
 	iFile >> rows;
 	iFile >> columns;
+
+
 	// ma tran 2 chieu de luu vi tri cua tileset
 	MapMatrix = new int*[rows];
 	for (int i = 0; i < rows; i++)

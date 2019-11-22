@@ -18,7 +18,8 @@ public:
 	Camera* camera;
 	vector<CGameObject*> cells[GRID_CELL_MAX_ROW][GRID_CELL_MAX_COLUMN];
 	vector<LPGAMEOBJECT>objects;
-	//vector<LPGAMEOBJECT>panthers;
+
+
 	Grid(int level);
 	~Grid();
 	void Loadresources();
@@ -27,6 +28,5 @@ public:
 	void insert(CGameObject* object);
 	void movepanther(Enemy* object, float x, float y);
 	void respawnpanther();
-	//void removepanther(CGameObject* object);
 };
 

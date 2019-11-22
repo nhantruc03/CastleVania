@@ -50,6 +50,7 @@ void Board::update(CGameObject * boss,float dt)
 		icon_weapon = Sprites::GetInstance()->Get(TAG_BOARD, 6);
 		break;
 	default:
+		icon_weapon = NULL;
 		break;
 	}
 
@@ -122,23 +123,23 @@ void Board::Health_draw()
 	sprite_health = Sprites::GetInstance()->Get(TAG_BOARD, 1); // sprite mau cua simon
 	for (i = 0; i < SIMON->health; i++)
 	{
-		sprite_health->Draw(x - 150 + i * 11, y);
+		sprite_health->Draw(x - 150 + i * HEALTH_WIDTH, y);
 	}
 	sprite_health = Sprites::GetInstance()->Get(TAG_BOARD, 2); // sprite mat mau
 	for (j=i;j<16;j++)
 	{
-		sprite_health->Draw(x - 150 + j * 11, y);
+		sprite_health->Draw(x - 150 + j * HEALTH_WIDTH, y);
 	}
 
 	sprite_health = Sprites::GetInstance()->Get(TAG_BOARD, 3); // prite mau con Boss
 	for (i = 0; i < boss_health; i++)
 	{
-		sprite_health->Draw(x - 150 + i * 11, y+20);
+		sprite_health->Draw(x - 150 + i * HEALTH_WIDTH, y+20);
 	}
 	sprite_health = Sprites::GetInstance()->Get(TAG_BOARD, 2);
 	for (j = i; j < 16; j++)
 	{
-		sprite_health->Draw(x - 150 + j * 11, y+20);
+		sprite_health->Draw(x - 150 + j * HEALTH_WIDTH, y+20);
 	}
 }
 

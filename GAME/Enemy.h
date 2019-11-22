@@ -57,10 +57,7 @@ public:
 		{
 			if (type == TYPE_ENEMY_BOSS_1)
 			{
-				if (!isSleeping)
-				{
-					this->isDead = true;
-				}
+				// khong lam gi ca
 			}
 			else if (type == TYPE_ENEMY_PANTHER)
 			{

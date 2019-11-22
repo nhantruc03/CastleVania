@@ -23,7 +23,6 @@ public:
 	float timetospawnCrystal;
 	bool checkBossDead;
 
-	bool test = false;
 	vector<Weapon*>list_enemy_weapon;
 	vector<Enemy*>listenemy;
 	vector<Enemy*>listenemy_tronggrid;
@@ -39,7 +38,6 @@ public:
 	int countghost;	
 
 	bool cancreatepanther;
-	bool outofareacreatepanther;
 	int countpanther;
 
 	bool cancreatebat;
@@ -68,8 +66,6 @@ public:
 	~PlayScene();
 	int level;
 	Map *map;
-	bool gotoleft;
-	bool gotoright;
 
 	void Update(DWORD dt);
 
@@ -78,8 +74,8 @@ public:
 	void UpdatePlayer(DWORD dt);
 	void UpdateObjects(DWORD dt);
 	void LoadResources(int level);
-	void Render();									// Tải Scene lên màn hình
-	void OnKeyDown(int key);						// Xử lí Scene khi nhấn phím
-	void OnKeyUp(int key);							// Xử lí Scene khi thả phím
+	void Render();
+	void OnKeyDown(int key);
+	void OnKeyUp(int key);
 	void RandomSpawnItem(float x, float y);
 };

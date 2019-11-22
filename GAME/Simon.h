@@ -76,7 +76,7 @@ public:
 	// about weapon
 	int secondweapon;
 	int numweaponcanthrow;
-	int numcurrentweaponthroing;
+	int numcurrentweaponthrowing;
 	vector<Weapon*>Weapons;
 	int morningstarlevel;
 

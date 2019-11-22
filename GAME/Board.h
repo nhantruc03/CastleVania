@@ -3,6 +3,8 @@
 #include"Camera.h"
 #include"Font.h"
 #include"GameObject.h"
+
+#define HEALTH_WIDTH 11
 class Board
 {
 	static Board * _instance;

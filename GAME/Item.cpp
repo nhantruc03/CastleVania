@@ -8,23 +8,21 @@ Item::Item(int type_id)
 	isDead = false;
 	type = type_id;
 	animation = Animations::GetInstance()->Get(tag, type);
+	vy = 0.2f;
 	if (type == TYPE_ITEM_BIG_HEART)
 	{
 		width = 24;
 		height = 20;
-		vy = 0.2f;
 	}
 	else if (type == TYPE_ITEM_WHIP)
 	{
 		width = 32;
 		height = 32;
-		vy = 0.2f;
 	}
 	else if (type == TYPE_ITEM_DAGGER)
 	{
 		width = 32;
 		height = 18;
-		vy = 0.2f;
 	}
 	else if (type == TYPE_ITEM_HEART)
 	{
@@ -37,67 +35,56 @@ Item::Item(int type_id)
 	{
 		width = 30;
 		height = 30;
-		vy = 0.2f;
 	}
 	else if (type == TYPE_ITEM_MONEY_700)
 	{
 		width = 30;
 		height = 30;
-		vy = 0.2f;
 	}
 	else if (type == TYPE_ITEM_MONEY_400)
 	{
 		width = 30;
 		height = 30;
-		vy = 0.2f;
 	}
 	else if (type == TYPE_ITEM_HOLY_WATER)
 	{
 		width = 32;
 		height = 32;
-		vy = 0.2f;
 	}
 	else if (type == TYPE_ITEM_HOLY_CROSS)
 	{
 		width = 32;
 		height = 32;
-		vy = 0.2f;
 	}
 	else if (type == TYPE_ITEM_STOP_WATCH)
 	{
 		width = 30;
 		height = 32;
-		vy = 0.2f;
 	}
 	else if (type == TYPE_ITEM_CHICKEN)
 	{
 		width = 32;
 		height = 26;
-		vy = 0.2f;
 	}
 	else if (type == TYPE_ITEM_AXE)
 	{
 		width = 30;
 		height = 32;
-		vy = 0.2f;
 	}
 	else if (type == TYPE_ITEM_DOUBLE_SHOT)
 	{
 		width = 27;
 		height = 28;
-		vy = 0.2f;
 	}
 	else if (type == TYPE_ITEM_GOLD_POTION)
 	{
 		width = 26;
 		height = 32;
-		vy = 0.2;
 	}
 	else if (type == TYPE_ITEM_CRYSTAL)
 	{
 		width = 28;
 		height = 32;
-		vy = 0.2;
 	}
 }
 
@@ -118,7 +105,6 @@ void Item::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	coEvents.clear();
 
-	// turn off collision when die 
 	CalcPotentialCollisions(coObjects, coEvents);
 	// No collision occured, proceed normally
 	if (coEvents.size() == 0)

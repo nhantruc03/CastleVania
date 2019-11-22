@@ -66,10 +66,6 @@ void Camera::Update(int maplevel)
 	}
 	else
 	{
-		/*if (camPosition.x + camWidht / 2 > 5648)
-		{
-			camPosition = D3DXVECTOR3(5648 - camWidht / 2, 0, 0);
-		}*/
 		if (inzone1)
 		{
 			if (camPosition.x + camWidht / 2 > 3088)

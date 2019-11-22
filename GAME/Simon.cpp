@@ -24,7 +24,7 @@ CSimon::CSimon()
 	srand(time(NULL));
 
 	numweaponcanthrow = 1;
-	numcurrentweaponthroing = 0;
+	numcurrentweaponthrowing = 0;
 
 	ishit = false;
 	untouchable = 0;
@@ -56,13 +56,13 @@ CSimon::CSimon()
 void CSimon::Respawn()
 {
 	lives -= 1;
-	Camera::GetInstance()->inzone1 = true;
-	Camera::GetInstance()->inzone2 = false;
+	Camera::GetInstance()->inzone1 = false;
+	Camera::GetInstance()->inzone2 = true;
 	Camera::GetInstance()->inzone3 = false;
 	Camera::GetInstance()->inzoneBoss = false;
 	Camera::GetInstance()->movedownstair = false;
 	Camera::GetInstance()->SetPosition(x, 0);
-	x = 30;//5200;
+	x = 4000;//5200;
 	y = 5;
 
 	health = 16;
@@ -70,7 +70,6 @@ void CSimon::Respawn()
 	isOnStair = false;
 	check_auto_move = false;
 	sitting = false;
-//	throwing = false;
 	jumping = false;
 	attacking = false;
 	isReverse = true;
@@ -78,6 +77,7 @@ void CSimon::Respawn()
 	if (isDead)
 	{
 		secondweapon = NULL;
+		heart = 5;
 	}
 	isDead = false;
 	goup = gotoleft = gotoright = godown = false;
@@ -118,7 +118,6 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 	coEvents.clear();
 
-	// turn off collision when die 
 	CalcPotentialCollisions(coObjects, coEvents);
 	if (GetTickCount() - untouchable_start > UNTOUCHABLE_TIME)
 	{
@@ -144,8 +143,8 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 		// block 
 		x += min_tx * dx + nx * 0.2f;		// nx*0.2f : need to push out a bit to avoid overlapping next frame
-
 		y += min_ty * dy + ny * 0.2f;
+
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
@@ -483,7 +482,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		{
 			if (Weapons[i]->type != TYPE_WEAPON_MORNINGSTAR)
 			{
-				numcurrentweaponthroing -= 1;
+				numcurrentweaponthrowing -= 1;
 			}
 			Weapons.erase(Weapons.begin() + i);
 		}
@@ -667,14 +666,14 @@ void CSimon::OnKeyDown(int key)
 				}
 				else
 				{
-					if (keyCode[DIK_UP] && State != STATE_SITTING && numcurrentweaponthroing < numweaponcanthrow && (secondweapon ==1 || secondweapon==2 || secondweapon==4) && heart >= 1)
+					if (keyCode[DIK_UP] && State != STATE_SITTING && numcurrentweaponthrowing < numweaponcanthrow && (secondweapon ==1 || secondweapon==2 || secondweapon==4) && heart >= 1)
 					{
 						heart -= 1;
-						numcurrentweaponthroing += 1;
+						numcurrentweaponthrowing += 1;
 						Weapon* weapon = WeaponsManager::CreateWeapon(secondweapon);
 						weapon->isReverse = isReverse;
 						Weapons.push_back(weapon);
-						//throwing = true;
+
 						if (isWalkingOnStair)
 						{
 							vx = vy = 0;

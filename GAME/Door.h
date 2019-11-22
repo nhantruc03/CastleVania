@@ -43,10 +43,10 @@ public:
 		width = 48;
 		height = 96;
 		isDead = false;
-		AddAnimation(tag, 0); // dong
-		AddAnimation(tag, 1); // dang mo
-		AddAnimation(tag, 2); // mo
-		AddAnimation(tag, 3); // dang dong
+		AddAnimation(tag, 0); // da dong
+		AddAnimation(tag, 1); // mo
+		AddAnimation(tag, 2); // da mo
+		AddAnimation(tag, 3); // dong
 		animation = animations[0];
 	}
 	void Render()

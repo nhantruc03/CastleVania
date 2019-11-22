@@ -1,6 +1,8 @@
 #pragma once
 #include"Sprites.h"
 #include"Camera.h"
+
+#define FONT_WIDTH 15
 class Font
 {
 public:

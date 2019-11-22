@@ -50,7 +50,6 @@ void Holy_water::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 		coEvents.clear();
 
-		// turn off collision when die 
 		CalcPotentialCollisions(coObjects, coEvents);
 		// No collision occured, proceed normally
 

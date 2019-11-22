@@ -49,6 +49,7 @@ void Phantom_bat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 		if (!isSleeping)
 		{
+			// khi di ra khoi khung man hinh
 			if (GetBoundingBox().right > Camera::GetInstance()->GetBound().right || GetBoundingBox().left < Camera::GetInstance()->GetBound().left || GetBoundingBox().top < Camera::GetInstance()->GetBound().top || GetBoundingBox().bottom > Camera::GetInstance()->GetBound().bottom - 32)
 			{
 				int ran = rand() % 4;
@@ -58,7 +59,7 @@ void Phantom_bat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 				else if (ran == 1)
 				{
-					if (SIMON->x < 5392)
+					if (SIMON->x >= 5392) // giua khung man hinh zone boss
 					{
 						ChangeState(STATE_GO_POS_2);
 					}
@@ -80,11 +81,11 @@ void Phantom_bat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			if (attackstraigt == true)
 			{
-				vy -= 0.00001f*dt;
+				vy -= 0.00001f*dt; // cho Vy tru` mot it de giong nhu dang bay
 			}
 			if (attackcurve == true && timewait <= 0)
 			{
-				vy -= 0.0003f *dt;
+				vy -= 0.0003f *dt; // gia lap luc hut nhu cua SIMON khi nhay, nhung nguoc lai
 			}
 		}
 		Update_State();
@@ -102,21 +103,21 @@ void Phantom_bat::ChangeState(int newState)
 	state = newState;
 	switch (state)
 	{
-	case STATE_BODY_ATTACK_1:
+	case STATE_BODY_ATTACK_1: // attack kieu truc dien
 		attackstraigt = true;
 		targetX = SIMON->x;
 		targetY = SIMON->y;
 		timewait = 1500;
 		break;
-	case STATE_BODY_ATTACK_2:
+	case STATE_BODY_ATTACK_2: // attack kieu bay cau vong
 		attackcurve = true;
 		if (prevState == STATE_GO_POS_2)
 		{
-			targetX = 5552;
+			targetX = TAGGETX_POS5; // chon toa do x cua POS 5 lam target
 		}
 		else if (prevState == STATE_GO_POS_5)
 		{
-			targetX = 5232;
+			targetX = TAGGETX_POS2; // chon toa do x cua POS 2 lam target
 		}
 		timewait = 1500;
 		break;
@@ -138,40 +139,40 @@ void Phantom_bat::ChangeState(int newState)
 		attackcurve = false;
 		prevX = x;
 		prevY = y;
-		targetX = 5376;
-		targetY = 208 +BOARD_HEIGHT;
+		targetX = TAGGETX_POS1;
+		targetY = TARGETY_POS1 +BOARD_HEIGHT;
 		break;
 	case STATE_GO_POS_2:
 		attackstraigt = false;
 		attackcurve = false;
 		prevX = x;
 		prevY = y;
-		targetX = 5232;
-		targetY = 144 + BOARD_HEIGHT;
+		targetX = TAGGETX_POS2;
+		targetY = TARGETY_POS2 + BOARD_HEIGHT;
 		break;
 	case STATE_GO_POS_3:
 		attackstraigt = false;
 		attackcurve = false;
 		prevX = x;
 		prevY = y;
-		targetX = 5321;
-		targetY = 112 + BOARD_HEIGHT;
+		targetX = TAGGETX_POS3;
+		targetY = TARGETY_POS3 + BOARD_HEIGHT;
 		break;
 	case STATE_GO_POS_4:
 		attackstraigt = false;
 		attackcurve = false;
 		prevX = x;
 		prevY = y;
-		targetX = 5472;
-		targetY = 112 + BOARD_HEIGHT;
+		targetX = TAGGETX_POS4;
+		targetY = TARGETY_POS4 + BOARD_HEIGHT;
 		break;
 	case STATE_GO_POS_5:
 		attackstraigt = false;
 		attackcurve = false;
 		prevX = x;
 		prevY = y;
-		targetX = 5552;
-		targetY = 144 + BOARD_HEIGHT;
+		targetX = TAGGETX_POS5;
+		targetY = TARGETY_POS5 + BOARD_HEIGHT;
 		break;
 	case STATE_IDLE:
 		attacking = false;
@@ -238,7 +239,7 @@ void Phantom_bat::Update_State()
 			}
 			else if (ran == 1)
 			{
-				if (SIMON->x < 5392)
+				if (SIMON->x >= 5392) // giua khung hinh zone boss
 				{
 					ChangeState(STATE_GO_POS_2);
 				}

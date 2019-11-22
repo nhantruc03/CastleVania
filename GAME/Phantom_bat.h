@@ -10,6 +10,24 @@
 #define STATE_GO_POS_5 6
 #define STATE_BODY_ATTACK_2 7
 #define STATE_SHOOT 8
+
+#define TAGGETX_POS1 5376
+#define TARGETY_POS1 208
+
+#define TAGGETX_POS2 5232
+#define TARGETY_POS2 144
+
+#define TAGGETX_POS3 5321
+#define TARGETY_POS3 112
+
+#define TAGGETX_POS4 5472
+#define TARGETY_POS4 112
+
+#define TAGGETX_POS5 5552
+#define TARGETY_POS5 144
+
+
+
 class Phantom_bat :public Enemy
 {
 public:
