@@ -11,11 +11,11 @@ Camera * Camera::GetInstance()
 
 Camera::Camera(int width, int height)
 {
-	inzone1 = true;
+	/*inzone1 = true;
 	inzone2 = false;
 	inzone3 = false;
 	inzoneBoss = false;
-	movedownstair = false;
+	movedownstair = false;*/
 	camWidht = width;
 	camHeight = height;
 	camPosition = D3DXVECTOR3(0, 0, 0);

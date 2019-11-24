@@ -49,22 +49,48 @@ CSimon::CSimon()
 	usinggoldpotion = false;
 
 	check_auto_move = false;
-	instages = 1;
+	instages = 3;
 	lives = 4;
 	health = 16;
 }
 void CSimon::Respawn()
 {
-	lives -= 1;
-	Camera::GetInstance()->inzone1 = false;
-	Camera::GetInstance()->inzone2 = true;
-	Camera::GetInstance()->inzone3 = false;
-	Camera::GetInstance()->inzoneBoss = false;
-	Camera::GetInstance()->movedownstair = false;
-	Camera::GetInstance()->SetPosition(x, 0);
-	x = 4000;//5200;
-	y = 5;
+	if (instages == 1)
+	{
+		Camera::GetInstance()->inzone1 = true;
+		Camera::GetInstance()->inzone2 = false;
+		Camera::GetInstance()->inzone3 = false;
+		Camera::GetInstance()->inzoneBoss = false;
+		Camera::GetInstance()->movedownstair = false;
+		Camera::GetInstance()->SetPosition(x, 0);
+		x = 30;//5200;
+		y = 5;
+	}
+	else if (instages == 2)
+	{
+		Camera::GetInstance()->inzone1 = false;
+		Camera::GetInstance()->inzone2 = true;
+		Camera::GetInstance()->inzone3 = false;
+		Camera::GetInstance()->inzoneBoss = false;
+		Camera::GetInstance()->movedownstair = false;
+		Camera::GetInstance()->SetPosition(x, 0);
+		x = 3200;//5200;
+		y = 5;
+	}
+	else if (instages == 3)
+	{
+		Camera::GetInstance()->inzone1 = false;
+		Camera::GetInstance()->inzone2 = false;
+		Camera::GetInstance()->inzone3 = true;
+		Camera::GetInstance()->inzoneBoss = false;
+		Camera::GetInstance()->movedownstair = false;
+		Camera::GetInstance()->SetPosition(x, 0);
+		x = 4200;//5200;
+		y = 5;
+	}
 
+
+	lives -= 1;
 	health = 16;
 	isWalkingOnStair = false;
 	isOnStair = false;

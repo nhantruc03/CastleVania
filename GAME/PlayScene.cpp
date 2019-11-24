@@ -55,6 +55,8 @@ PlayScene::PlayScene(int level)
 	cancreatefishman = true;
 	countfishman = 0;
 
+	//door1=door2=NULL;
+
 
 	board = new Board();
 }
@@ -400,7 +402,7 @@ void PlayScene::Update(DWORD dt)
 					{
 						timetocreatebat -= dt;
 					}
-					if (simon->x >= 3072 && simon->y < 352 && simon->x <= 4111 && !(simon->x>3900&&simon->y<128 + BOARD_HEIGHT))
+					if (simon->x >= 3072 && simon->y < 352 + BOARD_HEIGHT && simon->x <= 4111 && !(simon->x>3900&&simon->y<128 + BOARD_HEIGHT))
 					{
 						if (cancreatebat)
 						{
