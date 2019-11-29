@@ -55,21 +55,14 @@ PlayScene::PlayScene(int level)
 	cancreatefishman = true;
 	countfishman = 0;
 
-	//door1=door2=NULL;
-
-
 	board = new Board();
-}
-
-
-PlayScene::~PlayScene()
-{
-
 }
 
 void PlayScene::Update(DWORD dt)
 {
 	board->update(boss,dt);
+
+	// Khi simon update thi tat ca dung lai
 	if (simon->upgrade_time>0)
 	{
 		simon->upgrade_time -= dt;
@@ -152,8 +145,9 @@ void PlayScene::Update(DWORD dt)
 			camera->SetPosition(simon->x, camera->GetPosition().y);
 		}
 
-
+		// kiem tra cac gioi han cua camera
 		camera->Update(level);
+
 		UpdateObjects(dt);
 
 		// update theo tung level cua playscene
@@ -277,419 +271,16 @@ void PlayScene::Update(DWORD dt)
 
 			}
 
-			// XU LY TAO GHOST ////////////////////////////////////
+			// Xu ly tao enemy
+			EnemyHandle(dt);
 
-			// neu xu dung stopwatch thi khong dem thoi gian, khong spawn enemy
-			if (simon->timeusingstopwatch <= 0)
-			{
-				
-				if (timetocreateghost > 0)
-				{
-					timetocreateghost -= dt;
-				}
-				if ((simon->x >= 0.0f && simon->x <= 832.0f) || (simon->x > 2208 && simon->x < 2784)) // nhung khung vi tri de spawn ghost
-				{
-					if (cancreateghost)
-					{
-						if (timetocreateghost <= 0)
-						{
-							if (simon->vx >= 0)
-							{
-								Ghost* ghost = new Ghost(camera->GetPosition().x + camera->camWidht / 2, 287.0f+BOARD_HEIGHT, -1);
-								listenemy.push_back(ghost);
-							}
-							else
-							{
-								Ghost* ghost = new Ghost(camera->GetPosition().x - camera->camWidht / 2, 287.0f + BOARD_HEIGHT, 1);
-								listenemy.push_back(ghost);
-							}
-							countghost++;
-							timetocreateghost = 700;
-							if (countghost == 3)
-							{
-								cancreateghost = false;
-							}
-						}
-					}
-
-				}
-
-				// neu dang di qua cua thi khong spawn
-				if (!isgoingthroughdoor2)
-				{
-					if (timetocreateghost > 0)
-					{
-						timetocreateghost -= dt;
-					}
-					if ((simon->x >= 4096.0f&& simon->x <= 5088.0f))
-					{
-						if (cancreateghost)
-						{
-							if (timetocreateghost <= 0)
-							{
-								if (simon->x < 4480)
-								{
-									int random = rand() % 2;
-									if (random == 0)
-									{
-										Ghost* ghost = new Ghost(camera->GetPosition().x + camera->camWidht / 2, 150 + BOARD_HEIGHT, -1);
-										listenemy.push_back(ghost);
-									}
-									else
-									{
-										if (simon->vx > 0)
-										{
-											Ghost* ghost = new Ghost(camera->GetPosition().x + camera->camWidht / 2, 287.0f + BOARD_HEIGHT, -1);
-											listenemy.push_back(ghost);
-										}
-										else
-										{
-											Ghost* ghost = new Ghost(camera->GetPosition().x - camera->camWidht / 2, 287.0f + BOARD_HEIGHT, 1);
-											listenemy.push_back(ghost);
-										}
-									}
-								}
-								else
-								{
-									if (simon->vx > 0)
-									{
-										Ghost* ghost = new Ghost(camera->GetPosition().x + camera->camWidht / 2, 287.0f + BOARD_HEIGHT, -1);
-										listenemy.push_back(ghost);
-									}
-									else
-									{
-										Ghost* ghost = new Ghost(camera->GetPosition().x - camera->camWidht / 2, 287.0f + BOARD_HEIGHT, 1);
-										listenemy.push_back(ghost);
-									}
-								}
-								countghost++;
-								timetocreateghost = 700;
-								if (countghost == 3)
-								{
-									cancreateghost = false;
-								}
-							}
-						}
-
-					}
-				}
-
-				// XU LY TAO PANTHER ////////////////////////////////////
-
-				if (1216 < simon->x && simon->x < 2240)
-				{
-					// respawn panther
-					if (cancreatepanther)
-					{
-						cancreatepanther = false;
-						grid->respawnpanther();
-					}
-				}
-				else // khi di ra khoi vung spawn panther thi moi co the xet tiep
-				{
-					// khi 1 panther chet thi bien count trong grid -1, co 3 panther, khi ca 3 chet thi moi duoc respawn panther
-					if (grid->countpanther == 0)
-					{
-						cancreatepanther = true;
-					}
-				}
-
-
-				// XU LY TAO BAT ////////////////////////////////////
-				if (!isgoingthroughdoor && !isgoingthroughdoor2)
-				{
-					if (timetocreatebat > 0)
-					{
-						timetocreatebat -= dt;
-					}
-					if (simon->x >= 3072 && simon->y < 352 + BOARD_HEIGHT && simon->x <= 4111 && !(simon->x>3900&&simon->y<128 + BOARD_HEIGHT))
-					{
-						if (cancreatebat)
-						{
-							if (timetocreatebat <= 0)
-							{
-								if (simon->y < 160 + BOARD_HEIGHT)
-								{
-									Bat* bat = new Bat(camera->GetPosition().x + camera->camWidht / 2, 112.0f + BOARD_HEIGHT, -1);
-									listenemy.push_back(bat);
-								}
-								else
-								{
-									int random = rand() % 3;
-									if (random == 0)
-									{
-										Bat* bat = new Bat(camera->GetPosition().x + camera->camWidht / 2, 208.0f + BOARD_HEIGHT, -1);
-										listenemy.push_back(bat);
-									}
-									else if (random == 1)
-									{
-										Bat* bat = new Bat(camera->GetPosition().x + camera->camWidht / 2, 304.0f + BOARD_HEIGHT, -1);
-										listenemy.push_back(bat);
-									}
-									else if (random == 2)
-									{
-										Bat* bat = new Bat(camera->GetPosition().x - camera->camWidht / 2, 304.0f + BOARD_HEIGHT, 1);
-										listenemy.push_back(bat);
-									}
-
-								}
-								countbat++;
-								timetocreatebat = 4000;
-								if (countbat == 2)
-								{
-									cancreatebat = false;
-								}
-							}
-						}
-					}
-				}
-
-				// XU LY TAO FISHMAN ////////////////////////////////////
-				if (timetocreatefishman > 0)
-				{
-					timetocreatefishman -= dt;
-				}
-				if (camera->movedownstair)
-				{
-					if (cancreatefishman && !simon->isOnStair)
-					{
-						if (timetocreatefishman <= 0)
-						{
-							if (simon->x > 3360.0f && simon->x < 3520)
-							{
-								if (countfishman < 2)
-								{
-									Fishman* fishman = new Fishman(3264, 672 + BOARD_HEIGHT, 1);
-									listenemy.push_back(fishman);
-									countfishman++;
-									createeffectsteam(fishman->x, fishman->y);
-
-								}
-								if (countfishman < 2)
-								{
-									Fishman* fishman = new Fishman(3520, 672 + BOARD_HEIGHT, -1);
-									listenemy.push_back(fishman);
-									countfishman++;
-									createeffectsteam(fishman->x, fishman->y);
-								}
-								timetocreatefishman = 3000;
-							}
-							if (simon->vx <= 0 && simon->x < 3260 && simon->x > 3072)
-							{
-								if (countfishman < 2)
-								{
-									Fishman* fishman = new Fishman(3136, 672 + BOARD_HEIGHT, 1);
-									listenemy.push_back(fishman);
-									countfishman++;
-									createeffectsteam(fishman->x, fishman->y);
-
-								}
-								if (countfishman < 2)
-								{
-									Fishman* fishman = new Fishman(3392, 672 + BOARD_HEIGHT, -1);
-									listenemy.push_back(fishman);
-									countfishman++;
-									createeffectsteam(fishman->x, fishman->y);
-								}
-								timetocreatefishman = 3000;
-							}
-							if (simon->x > 3520 && simon->x < 3712)
-							{
-								if (countfishman < 2)
-								{
-									Fishman* fishman = new Fishman(3520, 672 + BOARD_HEIGHT, 1);
-									listenemy.push_back(fishman);
-									countfishman++;
-									createeffectsteam(fishman->x, fishman->y);
-								}
-
-								if (countfishman < 2)
-								{
-									Fishman* fishman = new Fishman(3648, 672 + BOARD_HEIGHT, simon->x < 3648 ? -1 : 1);
-									listenemy.push_back(fishman);
-									countfishman++;
-									createeffectsteam(fishman->x, fishman->y);
-								}
-								timetocreatefishman = 3000;
-							}
-							if (simon->x > 3712)
-							{
-								if (countfishman < 2)
-								{
-									Fishman* fishman = new Fishman(3776, 672 + BOARD_HEIGHT, simon->x < 3776 ? -1 : 1);
-									listenemy.push_back(fishman);
-									countfishman++;
-									createeffectsteam(fishman->x, fishman->y);
-								}
-								if (countfishman < 2)
-								{
-									Fishman* fishman = new Fishman(3904, 672 + BOARD_HEIGHT, simon->x < 3904 ? -1 : 1);
-									listenemy.push_back(fishman);
-									countfishman++;
-									createeffectsteam(fishman->x, fishman->y);
-								}
-								timetocreatefishman = 3000;
-							}
-
-						}
-					}
-
-				}
-			}
-
-			// XU LY TAO BOSS ////////////////////////////////////
-			if (simon->x > 5152 && boss == NULL)
-			{
-				boss = new Phantom_bat();
-				listenemy.push_back(boss);
-			}
-
-			// xu ly di qua cua 1
-			if (camera->inzone1)
-			{
-				if (door1 == NULL)
-				{
-					for (int i = 0; i < objects.size(); i++)
-					{
-						if (dynamic_cast<Door*>(objects[i]) && dynamic_cast<Door*>(objects[i])->type == 0)
-						{
-							door1 = (Door*)objects[i];
-						}
-					}
-				}
-			}
-			
-			if (door1 != NULL)
-			{
-				if (simon->IsContain(door1->GetBoundingBox().left, door1->GetBoundingBox().top, door1->GetBoundingBox().right, door1->GetBoundingBox().bottom) && door1->isclosed())
-				{
-					keyCode.clear();
-					isgoingthroughdoor = true;
-					simon->vx = 0;
-					camera->inzone1 = false;
-
-					simon->check_auto_move = true;
-					if (camera->camPosition.x >= simon->x)
-					{
-						camera->camPosition.x = simon->x;
-						door1->open();
-					}
-
-				}
-				if (isgoingthroughdoor)
-				{
-					if (door1->isopened())
-					{
-						simon->gotoright = true;
-					}
-					if (simon->gotoright)
-					{
-						simon->ChangeState(STATE_WALKING);
-						simon->isReverse = true;
-						simon->vx = 0.05f;
-						if (simon->x - door1->x >= 64)
-						{
-							simon->ChangeState(STATE_STANDING);
-							simon->gotoright = false;
-							door1->close();
-						}
-					}
-					if (door1->isclosed() && simon->check_auto_move == true)
-					{
-						camera->SetPosition(camera->camPosition.x += 2, camera->camPosition.y);
-						if (camera->camPosition.x - camera->camWidht / 2 >= 3072)
-						{
-							camera->inzone2 = true;
-							simon->check_auto_move = false;
-							isgoingthroughdoor = false;
-							simon->instages = 2;
-							door1->isDead = true;
-							door1 = NULL;
-						}
-					}
-				}
-			}
-
-
-			// xu ly di qua cua 2
-			if (camera->inzone2)
-			{
-				if (door2 == NULL)
-				{
-					for (int i = 0; i < objects.size(); i++)
-					{
-						if (dynamic_cast<Door*>(objects[i]) && dynamic_cast<Door*>(objects[i])->type == 1)
-						{
-							door2 = (Door*)objects[i];
-						}
-					}
-				}
-			}
-			if (door2 != NULL)
-			{
-				if (simon->IsContain(door2->GetBoundingBox().left, door2->GetBoundingBox().top, door2->GetBoundingBox().right, door2->GetBoundingBox().bottom) && door2->isclosed())
-				{
-					keyCode.clear();
-					isgoingthroughdoor2 = true;
-					simon->vx = 0;
-					camera->inzone2 = false;
-
-					simon->check_auto_move = true;
-					if (camera->camPosition.x >= simon->x)
-					{
-						camera->camPosition.x = simon->x;
-
-						door2->open();
-					}
-
-				}
-				if (isgoingthroughdoor2)
-				{
-					if (door2->isopened())
-					{
-						simon->gotoright = true;
-					}
-					if (simon->gotoright)
-					{
-						simon->ChangeState(STATE_WALKING);
-						simon->isReverse = true;
-						simon->vx = 0.05f;
-						if (simon->x - door2->x >= 64)
-						{
-							simon->ChangeState(STATE_STANDING);
-							simon->gotoright = false;
-							door2->close();
-						}
-					}
-					if (door2->isclosed() && simon->check_auto_move == true)
-					{
-						camera->SetPosition(camera->camPosition.x += 2, camera->camPosition.y);
-						if (camera->camPosition.x - camera->camWidht / 2 >= 4096)
-						{
-							camera->inzone3 = true;
-							simon->check_auto_move = false;
-							isgoingthroughdoor2 = false;
-							simon->instages = 3;
-							door2->isDead = true;
-							door2 = NULL;
-						}
-					}
-				}
-			}
+			// xu ly di qua cua
+			DoorHandle();
 		}
-
-		
-		
 	}
-
 }
 
-void PlayScene::createeffectsteam(float x, float y)
-{
-	listeffect.push_back(new steam(x, y, 1));
-	listeffect.push_back(new steam(x, y, 2));
-	listeffect.push_back(new steam(x, y, 3));
-}
+
 
 void PlayScene::UpdatePlayer(DWORD dt)
 {
@@ -716,7 +307,19 @@ void PlayScene::UpdateObjects(DWORD dt)
 	// update list objects lay ra tu grid
 	for (CGameObject* o : objects)
 	{
-		o->Update(dt, &objects);
+		if (o->tag == TAG_DOOR && o->type == 0 && camera->inzone2)
+		{
+			o->isDead = true;
+		}
+		else if (o->tag == TAG_DOOR && o->type == 1 && camera->inzone3)
+		{
+			o->isDead = true;
+		}
+		else
+		{
+			o->Update(dt, &objects);
+		}
+		
 	}
 
 
@@ -824,6 +427,403 @@ void PlayScene::UpdateObjects(DWORD dt)
 	}
 }
 
+void PlayScene::EnemyHandle(DWORD dt)
+{
+	// XU LY TAO GHOST ////////////////////////////////////
+
+			// neu xu dung stopwatch thi khong dem thoi gian, khong spawn enemy
+	if (simon->timeusingstopwatch <= 0)
+	{
+		if (timetocreateghost > 0)
+		{
+			timetocreateghost -= dt;
+		}
+		if ((simon->x >= 0.0f && simon->x <= 832.0f) || (simon->x > 2208 && simon->x < 2784)) // nhung khung vi tri de spawn ghost
+		{
+			if (cancreateghost)
+			{
+				if (timetocreateghost <= 0)
+				{
+					if (simon->vx >= 0)
+					{
+						Ghost* ghost = new Ghost(camera->GetPosition().x + camera->camWidht / 2, 287.0f + BOARD_HEIGHT, -1);
+						listenemy.push_back(ghost);
+					}
+					else
+					{
+						Ghost* ghost = new Ghost(camera->GetPosition().x - camera->camWidht / 2, 287.0f + BOARD_HEIGHT, 1);
+						listenemy.push_back(ghost);
+					}
+					countghost++;
+					timetocreateghost = 700;
+					if (countghost == 3)
+					{
+						cancreateghost = false;
+					}
+				}
+			}
+		}
+
+		// neu dang di qua cua thi khong spawn
+		if (!isgoingthroughdoor2)
+		{
+			if (timetocreateghost > 0)
+			{
+				timetocreateghost -= dt;
+			}
+			if ((simon->x >= 4096.0f&& simon->x <= 5088.0f))
+			{
+				if (cancreateghost)
+				{
+					if (timetocreateghost <= 0)
+					{
+						if (simon->x < 4480)
+						{
+							int random = rand() % 2;
+							if (random == 0)
+							{
+								Ghost* ghost = new Ghost(camera->GetPosition().x + camera->camWidht / 2, 150 + BOARD_HEIGHT, -1);
+								listenemy.push_back(ghost);
+							}
+							else
+							{
+								if (simon->vx > 0)
+								{
+									Ghost* ghost = new Ghost(camera->GetPosition().x + camera->camWidht / 2, 287.0f + BOARD_HEIGHT, -1);
+									listenemy.push_back(ghost);
+								}
+								else
+								{
+									Ghost* ghost = new Ghost(camera->GetPosition().x - camera->camWidht / 2, 287.0f + BOARD_HEIGHT, 1);
+									listenemy.push_back(ghost);
+								}
+							}
+						}
+						else
+						{
+							if (simon->vx > 0)
+							{
+								Ghost* ghost = new Ghost(camera->GetPosition().x + camera->camWidht / 2, 287.0f + BOARD_HEIGHT, -1);
+								listenemy.push_back(ghost);
+							}
+							else
+							{
+								Ghost* ghost = new Ghost(camera->GetPosition().x - camera->camWidht / 2, 287.0f + BOARD_HEIGHT, 1);
+								listenemy.push_back(ghost);
+							}
+						}
+						countghost++;
+						timetocreateghost = 700;
+						if (countghost == 3)
+						{
+							cancreateghost = false;
+						}
+					}
+				}
+
+			}
+		}
+
+		// XU LY TAO PANTHER ////////////////////////////////////
+		if (1216 < simon->x && simon->x < 2240)
+		{
+			// respawn panther
+			if (cancreatepanther)
+			{
+				cancreatepanther = false;
+				grid->respawnpanther();
+			}
+		}
+		else // khi di ra khoi vung spawn panther thi moi co the xet tiep
+		{
+			// khi 1 panther chet thi bien count trong grid -1, co 3 panther, khi ca 3 chet thi moi duoc respawn panther
+			if (grid->countpanther == 0)
+			{
+				cancreatepanther = true;
+			}
+		}
+
+		// XU LY TAO BAT ////////////////////////////////////
+		if (!isgoingthroughdoor && !isgoingthroughdoor2)
+		{
+			if (timetocreatebat > 0)
+			{
+				timetocreatebat -= dt;
+			}
+			if (simon->x >= 3072 && simon->y < 352 + BOARD_HEIGHT && simon->x <= 4111 && !(simon->x > 3900 && simon->y < 128 + BOARD_HEIGHT))
+			{
+				if (cancreatebat)
+				{
+					if (timetocreatebat <= 0)
+					{
+						if (simon->y < 160 + BOARD_HEIGHT)
+						{
+							Bat* bat = new Bat(camera->GetPosition().x + camera->camWidht / 2, 112.0f + BOARD_HEIGHT, -1);
+							listenemy.push_back(bat);
+						}
+						else
+						{
+							int random = rand() % 3;
+							if (random == 0)
+							{
+								Bat* bat = new Bat(camera->GetPosition().x + camera->camWidht / 2, 208.0f + BOARD_HEIGHT, -1);
+								listenemy.push_back(bat);
+							}
+							else if (random == 1)
+							{
+								Bat* bat = new Bat(camera->GetPosition().x + camera->camWidht / 2, 304.0f + BOARD_HEIGHT, -1);
+								listenemy.push_back(bat);
+							}
+							else if (random == 2)
+							{
+								Bat* bat = new Bat(camera->GetPosition().x - camera->camWidht / 2, 304.0f + BOARD_HEIGHT, 1);
+								listenemy.push_back(bat);
+							}
+						}
+						countbat++;
+						timetocreatebat = 4000;
+						if (countbat == 2)
+						{
+							cancreatebat = false;
+						}
+					}
+				}
+			}
+		}
+
+		// XU LY TAO FISHMAN ////////////////////////////////////
+		if (timetocreatefishman > 0)
+		{
+			timetocreatefishman -= dt;
+		}
+		if (camera->movedownstair)
+		{
+			if (cancreatefishman && !simon->isOnStair)
+			{
+				if (timetocreatefishman <= 0)
+				{
+					if (simon->x > 3360.0f && simon->x < 3520)
+					{
+						if (countfishman < 2)
+						{
+							Fishman* fishman = new Fishman(3264, 672 + BOARD_HEIGHT, 1);
+							listenemy.push_back(fishman);
+							countfishman++;
+							createeffectsteam(fishman->x, fishman->y);
+						}
+						if (countfishman < 2)
+						{
+							Fishman* fishman = new Fishman(3520, 672 + BOARD_HEIGHT, -1);
+							listenemy.push_back(fishman);
+							countfishman++;
+							createeffectsteam(fishman->x, fishman->y);
+						}
+						timetocreatefishman = 3000;
+					}
+					if (simon->vx <= 0 && simon->x < 3230 && simon->x > 3072)
+					{
+						if (countfishman < 2)
+						{
+							Fishman* fishman = new Fishman(3136, 672 + BOARD_HEIGHT, 1);
+							listenemy.push_back(fishman);
+							countfishman++;
+							createeffectsteam(fishman->x, fishman->y);
+
+						}
+						if (countfishman < 2)
+						{
+							Fishman* fishman = new Fishman(3392, 672 + BOARD_HEIGHT, -1);
+							listenemy.push_back(fishman);
+							countfishman++;
+							createeffectsteam(fishman->x, fishman->y);
+						}
+						timetocreatefishman = 3000;
+					}
+					if (simon->x > 3520 && simon->x < 3712)
+					{
+						if (countfishman < 2)
+						{
+							Fishman* fishman = new Fishman(3520, 672 + BOARD_HEIGHT, 1);
+							listenemy.push_back(fishman);
+							countfishman++;
+							createeffectsteam(fishman->x, fishman->y);
+						}
+
+						if (countfishman < 2)
+						{
+							Fishman* fishman = new Fishman(3648, 672 + BOARD_HEIGHT, simon->x < 3648 ? -1 : 1);
+							listenemy.push_back(fishman);
+							countfishman++;
+							createeffectsteam(fishman->x, fishman->y);
+						}
+						timetocreatefishman = 3000;
+					}
+					if (simon->x > 3712)
+					{
+						if (countfishman < 2)
+						{
+							Fishman* fishman = new Fishman(3776, 672 + BOARD_HEIGHT, simon->x < 3776 ? -1 : 1);
+							listenemy.push_back(fishman);
+							countfishman++;
+							createeffectsteam(fishman->x, fishman->y);
+						}
+						if (countfishman < 2)
+						{
+							Fishman* fishman = new Fishman(3904, 672 + BOARD_HEIGHT, simon->x < 3904 ? -1 : 1);
+							listenemy.push_back(fishman);
+							countfishman++;
+							createeffectsteam(fishman->x, fishman->y);
+						}
+						timetocreatefishman = 3000;
+					}
+
+				}
+			}
+
+		}
+	}
+
+	// XU LY TAO BOSS ////////////////////////////////////
+	if (simon->x > 5152 && boss == NULL)
+	{
+		boss = new Phantom_bat();
+		listenemy.push_back(boss);
+	}	
+}
+
+void PlayScene::DoorHandle()
+{
+	// xu ly di qua cua 1
+	if (camera->inzone1)
+	{
+		if (door1 == NULL)
+		{
+			for (int i = 0; i < objects.size(); i++)
+			{
+				if (dynamic_cast<Door*>(objects[i]) && dynamic_cast<Door*>(objects[i])->type == 0)
+				{
+					door1 = (Door*)objects[i];
+				}
+			}
+		}
+	}
+
+	if (door1 != NULL)
+	{
+		if (simon->IsContain(door1->GetBoundingBox().left, door1->GetBoundingBox().top, door1->GetBoundingBox().right, door1->GetBoundingBox().bottom) && door1->isclosed())
+		{
+			keyCode.clear();
+			isgoingthroughdoor = true;
+			simon->vx = 0;
+			camera->inzone1 = false;
+
+			simon->check_auto_move = true;
+			if (camera->camPosition.x >= simon->x)
+			{
+				camera->camPosition.x = simon->x;
+				door1->open();
+			}
+
+		}
+		if (isgoingthroughdoor)
+		{
+			if (door1->isopened())
+			{
+				simon->gotoright = true;
+			}
+			if (simon->gotoright)
+			{
+				simon->ChangeState(STATE_WALKING);
+				simon->isReverse = true;
+				simon->vx = 0.05f;
+				if (simon->x - door1->x >= 64)
+				{
+					simon->ChangeState(STATE_STANDING);
+					simon->gotoright = false;
+					door1->close();
+				}
+			}
+			if (door1->isclosed() && simon->check_auto_move == true)
+			{
+				camera->SetPosition(camera->camPosition.x += 2, camera->camPosition.y);
+				if (camera->camPosition.x - camera->camWidht / 2 >= 3072)
+				{
+					camera->inzone2 = true;
+					simon->check_auto_move = false;
+					isgoingthroughdoor = false;
+					simon->instages = 2;
+					door1 = NULL;
+				}
+			}
+		}
+	}
+
+	// xu ly di qua cua 2
+	if (camera->inzone2)
+	{
+		if (door2 == NULL)
+		{
+			for (int i = 0; i < objects.size(); i++)
+			{
+				if (dynamic_cast<Door*>(objects[i]) && dynamic_cast<Door*>(objects[i])->type == 1)
+				{
+					door2 = (Door*)objects[i];
+				}
+			}
+		}
+	}
+	if (door2 != NULL)
+	{
+		if (simon->IsContain(door2->GetBoundingBox().left, door2->GetBoundingBox().top, door2->GetBoundingBox().right, door2->GetBoundingBox().bottom) && door2->isclosed())
+		{
+			keyCode.clear();
+			isgoingthroughdoor2 = true;
+			simon->vx = 0;
+			camera->inzone2 = false;
+
+			simon->check_auto_move = true;
+			if (camera->camPosition.x >= simon->x)
+			{
+				camera->camPosition.x = simon->x;
+
+				door2->open();
+			}
+
+		}
+		if (isgoingthroughdoor2)
+		{
+			if (door2->isopened())
+			{
+				simon->gotoright = true;
+			}
+			if (simon->gotoright)
+			{
+				simon->ChangeState(STATE_WALKING);
+				simon->isReverse = true;
+				simon->vx = 0.05f;
+				if (simon->x - door2->x >= 64)
+				{
+					simon->ChangeState(STATE_STANDING);
+					simon->gotoright = false;
+					door2->close();
+				}
+			}
+			if (door2->isclosed() && simon->check_auto_move == true)
+			{
+				camera->SetPosition(camera->camPosition.x += 2, camera->camPosition.y);
+				if (camera->camPosition.x - camera->camWidht / 2 >= 4096)
+				{
+					camera->inzone3 = true;
+					simon->check_auto_move = false;
+					isgoingthroughdoor2 = false;
+					simon->instages = 3;
+					door2 = NULL;
+				}
+			}
+		}
+	}
+}
+
 void PlayScene::LoadResources(int level)
 {
 	CTextures::GetInstance()->LoadResources(level);
@@ -895,11 +895,11 @@ void PlayScene::OnKeyUp(int key)
 void PlayScene::RandomSpawnItem(float x, float y)
 {
 	int rand1 = rand() % 5;
-	if (rand1 <1) // ti le rot ra item khi giet enemy la 20%
+	if (rand1 < 1) // ti le rot ra item khi giet enemy la 20%
 	{
 		int itemid;
 		int rand2 = rand() % 20;
-		if (rand2 <=6)
+		if (rand2 <= 6)
 		{
 			if (SIMON->morningstarlevel < 3)
 			{
@@ -935,7 +935,7 @@ void PlayScene::RandomSpawnItem(float x, float y)
 		}
 		else if (rand2 > 18 && rand2 < 20)
 		{
-			itemid =TYPE_ITEM_DOUBLE_SHOT;
+			itemid = TYPE_ITEM_DOUBLE_SHOT;
 		}
 		Item*item = new Item(itemid);
 		item->SetPosition(x, y);
@@ -947,3 +947,14 @@ void PlayScene::RandomSpawnItem(float x, float y)
 	}
 }
 
+void PlayScene::createeffectsteam(float x, float y)
+{
+	listeffect.push_back(new steam(x, y, 1));
+	listeffect.push_back(new steam(x, y, 2));
+	listeffect.push_back(new steam(x, y, 3));
+}
+
+PlayScene::~PlayScene()
+{
+
+}

@@ -78,4 +78,6 @@ public:
 	void OnKeyDown(int key);
 	void OnKeyUp(int key);
 	void RandomSpawnItem(float x, float y);
+	void EnemyHandle(DWORD dt);
+	void DoorHandle();
 };

@@ -37,7 +37,6 @@ CSimon::CSimon()
 	
 	sitting = false;
 	secondweapon = NULL;
-//	throwing = false;
 	jumping = false;
 	heart = 5;
 	attacking = false;
@@ -47,11 +46,16 @@ CSimon::CSimon()
 	isOnStair = false;
 	goup = gotoleft = gotoright = godown = false;
 	usinggoldpotion = false;
-
+	isReverse = true;
 	check_auto_move = false;
+	isDead = false;
+	checkkillboss = false;
 	instages = 3;
 	lives = 4;
 	health = 16;
+	count_attack_after_kill_boss = 0;
+	globle_time = 300000;
+	ChangeState(STATE_STANDING);
 }
 void CSimon::Respawn()
 {
