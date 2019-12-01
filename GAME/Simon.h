@@ -81,6 +81,10 @@ public:
 	int morningstarlevel;
 
 
+	// about respawn
+	float respawnx;
+	float respawny;
+
 	CAnimation *curAni;
 	
 	CSimon();
@@ -101,6 +105,7 @@ public:
 	void StartUsingHolyCross();
 	void LoadAnimation();
 	void ChangeTexture(int temp);
+	void ResetRespawn(float tempx=30, float tempy=5) { respawnx = tempx; respawny = tempy; }
 
 };
 

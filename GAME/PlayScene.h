@@ -11,6 +11,23 @@
 #include"listeffect_global.h"
 #include"Weapon.h"
 #include"Board.h"
+#include<fstream>
+#include<string>
+#define ZONE_GHOST1 1
+#define ZONE_GHOST2 2
+#define ZONE_GHOST3 3
+#define ZONE_PANTHER 4
+#define ZONE_BAT 5
+#define ZONE_FISHMAN1 6
+#define ZONE_FISHMAN2 7
+#define ZONE_FISHMAN3 8
+#define ZONE_FISHMAN4 9
+#define ZONE_FULLMAP 10
+#define ZONE_STAGE1 11
+#define ZONE_STAGE2 12
+#define ZONE_STAGE3 13
+#define ZONE_BOSS 14
+
 using namespace std;
 class PlayScene : public Scene
 {
@@ -35,7 +52,7 @@ public:
 
 	bool cancreateghost;
 	float timetocreateghost;
-	int countghost;	
+	int countghost;
 
 	bool cancreatepanther;
 	int countpanther;
@@ -57,7 +74,7 @@ public:
 	bool isgoingthroughdoor2;
 	Door* door1;
 	Door* door2;
-	
+
 
 	bool isgoingthroughendrect;
 	invisibleObject* endrectmap1;
@@ -80,4 +97,8 @@ public:
 	void RandomSpawnItem(float x, float y);
 	void EnemyHandle(DWORD dt);
 	void DoorHandle();
+	void getzone(int level);
+
+	void getValue();
+
 };

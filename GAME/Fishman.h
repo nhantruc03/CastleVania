@@ -2,6 +2,7 @@
 #include"Enemy.h"
 #include"Brick.h"
 #include<time.h>
+#define TIMETOATTACK 5000
 class Fishman :public Enemy
 {
 public:

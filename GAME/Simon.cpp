@@ -50,48 +50,59 @@ CSimon::CSimon()
 	check_auto_move = false;
 	isDead = false;
 	checkkillboss = false;
-	instages = 3;
+	instages = 1;
 	lives = 4;
 	health = 16;
 	count_attack_after_kill_boss = 0;
-	globle_time = 300000;
+	globle_time = GLOBAL_TIME;
 	ChangeState(STATE_STANDING);
+
+	respawnx = 4000;
+	respawny = 5;
+
 }
 void CSimon::Respawn()
 {
-	if (instages == 1)
+	//if (instages == 1)
+	//{
+	//	Camera::GetInstance()->inzone1 = true;
+	//	Camera::GetInstance()->inzone2 = false;
+	//	Camera::GetInstance()->inzone3 = false;
+	//	Camera::GetInstance()->inzoneBoss = false;
+	//	Camera::GetInstance()->movedownstair = false;
+	//	Camera::GetInstance()->SetPosition(x, 0);
+	//	x = 30;//5200;
+	//	y = 5;
+	//}
+	//else if (instages == 2)
+	//{
+	//	Camera::GetInstance()->inzone1 = false;
+	//	Camera::GetInstance()->inzone2 = true;
+	//	Camera::GetInstance()->inzone3 = false;
+	//	Camera::GetInstance()->inzoneBoss = false;
+	//	Camera::GetInstance()->movedownstair = false;
+	//	Camera::GetInstance()->SetPosition(x, 0);
+	//	x = 3200;//5200;
+	//	y = 5;
+	//}
+	//else if (instages == 3)
+	//{
+	//	Camera::GetInstance()->inzone1 = false;
+	//	Camera::GetInstance()->inzone2 = false;
+	//	Camera::GetInstance()->inzone3 = true;
+	//	Camera::GetInstance()->inzoneBoss = false;
+	//	Camera::GetInstance()->movedownstair = false;
+	//	Camera::GetInstance()->SetPosition(x, 0);
+	//	x = 4200;//5200;
+	//	y = 5;
+	//}
+	if (Camera::GetInstance()->movedownstair)
 	{
-		Camera::GetInstance()->inzone1 = true;
-		Camera::GetInstance()->inzone2 = false;
-		Camera::GetInstance()->inzone3 = false;
-		Camera::GetInstance()->inzoneBoss = false;
 		Camera::GetInstance()->movedownstair = false;
-		Camera::GetInstance()->SetPosition(x, 0);
-		x = 30;//5200;
-		y = 5;
 	}
-	else if (instages == 2)
-	{
-		Camera::GetInstance()->inzone1 = false;
-		Camera::GetInstance()->inzone2 = true;
-		Camera::GetInstance()->inzone3 = false;
-		Camera::GetInstance()->inzoneBoss = false;
-		Camera::GetInstance()->movedownstair = false;
-		Camera::GetInstance()->SetPosition(x, 0);
-		x = 3200;//5200;
-		y = 5;
-	}
-	else if (instages == 3)
-	{
-		Camera::GetInstance()->inzone1 = false;
-		Camera::GetInstance()->inzone2 = false;
-		Camera::GetInstance()->inzone3 = true;
-		Camera::GetInstance()->inzoneBoss = false;
-		Camera::GetInstance()->movedownstair = false;
-		Camera::GetInstance()->SetPosition(x, 0);
-		x = 4200;//5200;
-		y = 5;
-	}
+	x = respawnx;
+	y = respawny;
+	
 
 
 	lives -= 1;
@@ -113,7 +124,7 @@ void CSimon::Respawn()
 	goup = gotoleft = gotoright = godown = false;
 	checkkillboss = false;
 	count_attack_after_kill_boss = 0;
-	globle_time = 300000;
+	globle_time = GLOBAL_TIME;
 	ChangeState(STATE_STANDING);
 }
 void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
@@ -149,7 +160,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	coEvents.clear();
 
 	CalcPotentialCollisions(coObjects, coEvents);
-	if (GetTickCount() - untouchable_start > UNTOUCHABLE_TIME)
+	if (GetTickCount() - untouchable_start > UNTOUCHABLETIME)
 	{
 		untouchable_start = 0;
 		untouchable = 0;
@@ -235,7 +246,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 						usingholycross = true;
 						break;
 					case TYPE_ITEM_WHIP:
-						upgrade_time = TIME_UPGRADE;
+						upgrade_time = UPGRADE_TIME;
 						morningstarlevel += 1;
 						if (morningstarlevel > 3)
 						{
@@ -388,7 +399,7 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 						usingholycross = true;
 						break;
 					case TYPE_ITEM_WHIP:
-						upgrade_time = TIME_UPGRADE;
+						upgrade_time = UPGRADE_TIME;
 						morningstarlevel += 1;
 						if (morningstarlevel > 3)
 						{
@@ -461,6 +472,10 @@ void CSimon::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 							listeffect.push_back(new steam(x, coObjects->at(i)->GetBoundingBox().top, 2));
 							listeffect.push_back(new steam(x, coObjects->at(i)->GetBoundingBox().top, 3));
 						}
+						break;
+					case  TYPE_INVI_O_RESPAWN:
+						respawnx = coObjects->at(i)->x;
+						respawny = coObjects->at(i)->y;
 						break;
 					}
 					stair_collide = coObjects->at(i)->GetBoundingBox();
@@ -713,7 +728,7 @@ void CSimon::OnKeyDown(int key)
 					if (keyCode[DIK_UP] && secondweapon == 3 && heart >= 5 && !timeusingstopwatch)
 					{
 						heart -= 5;
-						timeusingstopwatch = TIME_USING_STOP_WATCH;
+						timeusingstopwatch = TIME_USE_STOP_WATCH;
 					}
 				}
 			}
@@ -728,7 +743,31 @@ void CSimon::OnKeyDown(int key)
 			}
 			numweaponcanthrow = 2;
 			break;
+		case DIK_R:
+			if (instages == 1)
+			{
+				x = 3200;
+				y = 5;
+				instages = 2;
+				Camera::GetInstance()->inzone1 = false;
+				Camera::GetInstance()->inzone2 = true;
+				Camera::GetInstance()->movedownstair = false;
+				Camera::GetInstance()->inzone3 = false;
+				break;
+			}
+			if (instages == 2)
+			{
+				x = 4200;
+				y = 5;
+				instages = 3;
+				Camera::GetInstance()->inzone1 = false;
+				Camera::GetInstance()->inzone2 = false;
+				Camera::GetInstance()->movedownstair = false;
+				Camera::GetInstance()->inzone3 = true;
+				break;
+			}
 		}
+		
 	}
 }
 
@@ -862,7 +901,7 @@ void CSimon::ChangeState(int newState)
 		}
 		break;
 	case STATE_DEAD:
-		timetorespawn = 5000;
+		timetorespawn = TIME_TO_RESPAWN;
 		untouchable = 0;
 		vx = 0;
 		isDead = true;
@@ -1152,7 +1191,7 @@ void CSimon::Update_State()
 void CSimon::StartUsingHolyCross()
 {
 	timeuseholycross += dt;
-	if (timeuseholycross >= 1000)
+	if (timeuseholycross >= TIME_USE_HOLY_CROSS)
 	{
 		usingholycross = false;
 		D3DCOLOR_BACKGROUND = BACKGROUND_COLOR;

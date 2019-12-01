@@ -11,11 +11,11 @@ Camera * Camera::GetInstance()
 
 Camera::Camera(int width, int height)
 {
-	/*inzone1 = true;
+	inzone1 = true;
 	inzone2 = false;
 	inzone3 = false;
 	inzoneBoss = false;
-	movedownstair = false;*/
+	movedownstair = false;
 	camWidht = width;
 	camHeight = height;
 	camPosition = D3DXVECTOR3(0, 0, 0);
@@ -53,74 +53,80 @@ bool Camera::IsContain(RECT a)
 
 void Camera::Update(int maplevel)
 {
-	if (camPosition.x - camWidht / 2 < 0)
+	if (camPosition.x - camWidht / 2 < ZONE_FULL_MAP_LEFT)
 	{
 		camPosition = D3DXVECTOR3(camWidht / 2, 0, 0);
 	}
 	if (maplevel == 1)
 	{
-		if (camPosition.x + camWidht / 2 > 1552)
+		if (camPosition.x + camWidht / 2 > ZONE_FULL_MAP_RIGHT)
 		{
-			camPosition = D3DXVECTOR3(1552 - camWidht / 2, 0, 0);
+			camPosition = D3DXVECTOR3(ZONE_FULL_MAP_RIGHT - camWidht / 2, 0, 0);
 		}
 	}
 	else
 	{
 		if (inzone1)
 		{
-			if (camPosition.x + camWidht / 2 > 3088)
+			if (camPosition.x + camWidht / 2 > ZONE_STAGE1_RIGHT)
 			{
-				camPosition = D3DXVECTOR3(3088- camWidht / 2, 0, 0);
+				camPosition = D3DXVECTOR3(ZONE_STAGE1_RIGHT - camWidht / 2, 0, 0);
 			}
 		}
 		if (inzone2)
 		{
-			if (camPosition.x - camWidht / 2 < 3072)
+			switch (movedownstair)
 			{
-				camPosition = D3DXVECTOR3(3072 + camWidht / 2, 0, 0);
+			case true:
+				if (camPosition.x - camWidht / 2 < ZONE_STAGE2_LEFT)
+				{
+					camPosition = D3DXVECTOR3(ZONE_STAGE2_LEFT + camWidht / 2, SCREEN_HEIGHT - 6, 0);
+				}
+				if (camPosition.x + camWidht / 2 > ZONE_STAGE2_RIGHT)
+				{
+					camPosition = D3DXVECTOR3(ZONE_STAGE2_RIGHT - camWidht / 2, SCREEN_HEIGHT - 6, 0);
+				}
+				break;
+			case false:
+				if (camPosition.x - camWidht / 2 < ZONE_STAGE2_LEFT)
+				{
+					camPosition = D3DXVECTOR3(ZONE_STAGE2_LEFT + camWidht / 2, 0, 0);
+				}
+				if (camPosition.x + camWidht / 2 > ZONE_STAGE2_RIGHT)
+				{
+					camPosition = D3DXVECTOR3(ZONE_STAGE2_RIGHT - camWidht / 2, 0, 0);
+				}
+				break;
+
 			}
-			if (camPosition.x + camWidht / 2 > 4112)
-			{
-				camPosition= D3DXVECTOR3(4112 - camWidht / 2, 0, 0);
-			}
-		}
-		if (movedownstair)
-		{
-			inzone2 = false;
-			if (camPosition.x - camWidht / 2 < 3072)
-			{
-				camPosition = D3DXVECTOR3(3072+camWidht / 2, SCREEN_HEIGHT-6, 0);
-			}
-			if (camPosition.x + camWidht / 2 > 4112)
-			{
-				camPosition = D3DXVECTOR3(4112 - camWidht / 2, SCREEN_HEIGHT-6, 0);
-			}
+			
 		}
 		if (inzone3)
 		{
-			if (camPosition.x - camWidht / 2 < 4096)
+			if (camPosition.x - camWidht / 2 < ZONE_STAGE3_LEFT)
 			{
-				camPosition = D3DXVECTOR3(4096 + camWidht / 2, 0, 0);
+				camPosition = D3DXVECTOR3(ZONE_STAGE3_LEFT + camWidht / 2, 0, 0);
 			}
-			if (camPosition.x + camWidht / 2 > 5648)
+			if (camPosition.x + camWidht / 2 > ZONE_STAGE3_RIGHT)
 			{
 				inzoneBoss = true;
-				camPosition = D3DXVECTOR3(5648 - camWidht / 2, 0, 0);
+				camPosition = D3DXVECTOR3(ZONE_STAGE3_RIGHT - camWidht / 2, 0, 0);
 			}
 		}
 		if (inzoneBoss)
 		{
 			inzone3 = false;
-			if (camPosition.x - camWidht / 2 < 5136)
+			if (camPosition.x - camWidht / 2 < ZONE_BOSS_LEFT)
 			{
-				camPosition = D3DXVECTOR3(5136 + camWidht / 2, 0, 0);
+				camPosition = D3DXVECTOR3(ZONE_BOSS_LEFT + camWidht / 2, 0, 0);
 			}
-			if (camPosition.x + camWidht / 2 > 5648)
+			if (camPosition.x + camWidht / 2 > ZONE_BOSS_RIGHT)
 			{
 				inzoneBoss = true;
-				camPosition = D3DXVECTOR3(5648 - camWidht / 2, 0, 0);
+				camPosition = D3DXVECTOR3(ZONE_BOSS_RIGHT - camWidht / 2, 0, 0);
 			}
 		}
+		
 	}
 }
 

@@ -92,26 +92,27 @@ void Board::update(CGameObject * boss,float dt)
 
 }
 
+
 void Board::render()
 {
 	sprite->Draw(x, y);
 	if (icon_weapon != NULL)
 	{
-		icon_weapon->Draw(x + 67, y + 10);
+		icon_weapon->Draw(ICON_X, ICON_Y);
 	}
 	if (power != NULL)
 	{
-		power->Draw(x + 190, y + 20);
+		power->Draw(POWER_X, POWER_Y);
 	}
 
-	font->Draw(x - 150, y-20, FillNumber(to_string(SIMON->score), 6));
+	font->Draw(SCORE_X, SCORE_Y, FillNumber(to_string(SIMON->score), 6));
 
-	font->Draw(x+40 , y -20, FillNumber(to_string((int)globle_time/1000), 4));
+	font->Draw(TIME_X, TIME_Y, FillNumber(to_string((int)globle_time/1000), 4));
 
-	font->Draw(x + 210, y -19, FillNumber(to_string(SIMON->instages), 2));
+	font->Draw(STAGE_X, STAGE_Y, FillNumber(to_string(SIMON->instages), 2));
 
-	font->Draw(x +140, y , FillNumber(to_string(SIMON->heart), 2)); // Số lượng tim nhặt dc
-	font->Draw(x + 140, y + 20, FillNumber(to_string(SIMON->lives), 2)); // số mạng sông
+	font->Draw(HEARTH_X, HEARTH_Y, FillNumber(to_string(SIMON->heart), 2)); // Số lượng tim nhặt dc
+	font->Draw(LIVES_X, LIVES_Y, FillNumber(to_string(SIMON->lives), 2)); // số mạng sông
 
 	Health_draw();
 	

@@ -59,7 +59,7 @@ void Phantom_bat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 				else if (ran == 1)
 				{
-					if (SIMON->x >= 5392) // giua khung man hinh zone boss
+					if (SIMON->x >= POSX_ACTIVE_BOSS) // giua khung man hinh zone boss
 					{
 						ChangeState(STATE_GO_POS_2);
 					}

@@ -1,6 +1,8 @@
 #pragma once
 #include"Enemy.h"
 #include"Brick.h"
+#define BAT_VY 0.03f
+#define DISTANCE_TOCHANGEVY 20
 class Bat :public Enemy
 {
 public:

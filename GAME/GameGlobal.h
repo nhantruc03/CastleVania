@@ -86,6 +86,7 @@
 	#define TYPE_INVI_O_GO_DOWN_BASEMENT 100
 	#define TYPE_INVI_O_GO_UP_BASEMENT -100
 	#define TYPE_INVI_O_WATER 3
+	#define TYPE_INVI_O_RESPAWN 4
 
 
 
@@ -137,3 +138,74 @@ extern float globle_time;
 //extern  std::vector<Effect*>listeffect;
 
 extern D3DCOLOR D3DCOLOR_BACKGROUND;
+
+
+extern float ZONE_GHOST_1_LEFT;
+extern float ZONE_GHOST_1_RIGHT;
+extern float ZONE_GHOST_2_LEFT;
+extern float ZONE_GHOST_2_RIGHT;
+extern float ZONE_GHOST_3_LEFT;
+extern float ZONE_GHOST_3_RIGHT;
+extern float ZONE_PANTHER_1_LEFT;
+extern float ZONE_PANTHER_1_RIGHT;
+extern float ZONE_BAT_1_LEFT;
+extern float ZONE_BAT_1_RIGHT;
+
+extern float ZONE_FISHMAN_1_LEFT;
+extern float ZONE_FISHMAN_1_RIGHT;
+
+extern float ZONE_FISHMAN_2_LEFT;
+extern float ZONE_FISHMAN_2_RIGHT;
+extern float ZONE_FISHMAN_3_LEFT;
+extern float ZONE_FISHMAN_3_RIGHT;
+extern float ZONE_FISHMAN_4_LEFT;
+extern float ZONE_FISHMAN_4_RIGHT;
+
+extern float ZONE_FULL_MAP_LEFT;
+extern float ZONE_FULL_MAP_RIGHT;
+extern float ZONE_STAGE1_LEFT;
+extern float ZONE_STAGE1_RIGHT;
+extern float ZONE_STAGE2_LEFT;
+extern float ZONE_STAGE2_RIGHT;
+extern float ZONE_STAGE3_LEFT;
+extern float ZONE_STAGE3_RIGHT;
+
+extern float ZONE_BOSS_LEFT;
+extern float ZONE_BOSS_RIGHT;
+
+extern float GLOBAL_TIME;
+extern float TIME_USE_HOLY_CROSS;
+extern float UPGRADE_TIME;
+extern float TIME_TO_RESPAWN;
+extern float TIME_USE_STOP_WATCH;
+extern float UNTOUCHABLETIME;
+extern float TIMETOSPAWNCRYSTAL;
+
+extern float CRYSTAL_SPAWN_X;
+extern float CRYSTAL_SPAWN_Y;
+
+extern float FISHMAN_POSY;
+extern float FISHMAN1_POSX;
+extern float FISHMAN2_POSX;
+extern float FISHMAN3_POSX;
+extern float FISHMAN4_POSX;
+extern float FISHMAN5_POSX;
+extern float FISHMAN6_POSX;
+extern float FISHMAN7_POSX;
+extern float FISHMAN8_POSX;
+
+extern float GHOST_POSY;
+extern float SPECIAL_GHOST_POSY;
+extern float POSX_TOCREATESPECIALGHOST;
+
+extern float BAT1_POSY;
+extern float BAT2_POSY;
+extern float BAT3_POSY;
+
+extern float POSY_TOCREATEBAT;
+extern float POSY_TONOTCREATEBAT;
+extern float POSX_TONOTCREATEBAT;
+
+extern float DISTANCE_TOACTIVE_PANTHER;
+
+extern float POSX_ACTIVE_BOSS;

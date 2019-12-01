@@ -43,7 +43,7 @@ void Panther::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			vx = 0;
 		}
 
-		if (abs(SIMON->x - this->x) <= 160 && isSleeping)
+		if (abs(SIMON->x - this->x) <= DISTANCE_TOACTIVE_PANTHER && isSleeping)
 		{
 			wakeup();
 		}

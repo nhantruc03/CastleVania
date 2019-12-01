@@ -33,7 +33,7 @@ Fishman::Fishman(float x, float y, int direction)
 	this->height = 62;
 	this->health = 1;
 	isrunning = false;
-	timetoattack = 5000;
+	timetoattack = TIMETOATTACK;
 	attacking = false;
 	canspawnbullet = false;;
 }
@@ -66,7 +66,7 @@ void Fishman::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			animation->SetEndAniFalse();
 			animation->currentFrame = -1;
 			attacking = false;
-			timetoattack = 5000 + (rand() % 3000);
+			timetoattack = TIMETOATTACK + (rand() % 3000);
 			run();
 		}
 

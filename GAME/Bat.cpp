@@ -19,7 +19,7 @@ Bat::Bat(float x, float y, int direction)
 	this->ishit = false;
 	animation = Animations::GetInstance()->Get(tag, 4);
 	this->vx = ENEMY_WALKING_SPEED  * direct;
-	this->vy = 0.03f;
+	this->vy = BAT_VY;
 	this->width = 32;
 	this->height = 32;
 	this->health = 1;
@@ -30,7 +30,7 @@ void Bat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 
 	Enemy::Update(dt, coObjects);
-	if (abs(y - prevY) >= 20)
+	if (abs(y - prevY) >= DISTANCE_TOCHANGEVY)
 	{
 		vy = -vy;
 	}

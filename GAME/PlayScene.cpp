@@ -32,9 +32,13 @@ PlayScene::PlayScene(int level)
 	this->level = level;
 
 	map = Maps::GetInstance()->GetMap(this->level);
-
+	getValue();
 	simon = CSimon::GetInstance();
+	simon->ResetRespawn();
 	simon->Respawn();
+
+	getzone(level);
+	
 
 	camera = Camera::GetInstance();
 
@@ -154,8 +158,8 @@ void PlayScene::Update(DWORD dt)
 		if (level == 1)
 		{
 			// gioi han 2 bien cua map 1
-			if (simon->vx < 0 && simon->x < 16) simon->x= 16;
-			if (simon->vx > 0 && simon->x > 1520)simon->x = 1520;
+			if (simon->vx < 0 && simon->x < ZONE_FULL_MAP_LEFT + 16) simon->x= ZONE_FULL_MAP_LEFT + 16;
+			if (simon->vx > 0 && simon->x > ZONE_FULL_MAP_RIGHT -32 )simon->x = ZONE_FULL_MAP_RIGHT -32;
 
 
 			// xu ly vao cham voi cua vao castle
@@ -216,14 +220,14 @@ void PlayScene::Update(DWORD dt)
 		else // khi level = 2
 		{
 			// gioi han bien trai cua map 2
-			if (simon->vx < 0 && simon->x < 16) simon->x = 16;
+			if (simon->vx < 0 && simon->x < ZONE_FULL_MAP_LEFT+ 16) simon->x = ZONE_FULL_MAP_LEFT+ 16;
 			if (camera->inzone2 || camera->movedownstair)
 			{
-				if (simon->vx < 0 && simon->x < 3088) simon->x = 3088;
+				if (simon->vx < 0 && simon->x < ZONE_STAGE2_LEFT + 16) simon->x = ZONE_STAGE2_LEFT + 16;
 			}
 			if (camera->inzoneBoss)
 			{
-				if (simon->vx < 0 && simon->x < 5152) simon->x = 5152;
+				if (simon->vx < 0 && simon->x < ZONE_BOSS_LEFT + 16) simon->x = ZONE_BOSS_LEFT + 16;
 			}
 
 			// xu ly di len xuong ham
@@ -296,10 +300,10 @@ void PlayScene::UpdateObjects(DWORD dt)
 	{
 		timetospawnCrystal += dt;
 	}
-	if (timetospawnCrystal >= 1000 && checkBossDead)
+	if (timetospawnCrystal >= TIMETOSPAWNCRYSTAL && checkBossDead)
 	{
 		Item* item = new Item(TYPE_ITEM_CRYSTAL);
-		item->SetPosition(5343, 120+BOARD_HEIGHT);
+		item->SetPosition(CRYSTAL_SPAWN_X, CRYSTAL_SPAWN_Y +BOARD_HEIGHT);
 		grid->insert(item);
 		checkBossDead = false;
 	}
@@ -438,7 +442,7 @@ void PlayScene::EnemyHandle(DWORD dt)
 		{
 			timetocreateghost -= dt;
 		}
-		if ((simon->x >= 0.0f && simon->x <= 832.0f) || (simon->x > 2208 && simon->x < 2784)) // nhung khung vi tri de spawn ghost
+		if ((simon->x >= ZONE_GHOST_1_LEFT && simon->x <= ZONE_GHOST_1_RIGHT) || (simon->x > ZONE_GHOST_2_LEFT && simon->x < ZONE_GHOST_2_RIGHT)) // nhung khung vi tri de spawn ghost
 		{
 			if (cancreateghost)
 			{
@@ -446,12 +450,12 @@ void PlayScene::EnemyHandle(DWORD dt)
 				{
 					if (simon->vx >= 0)
 					{
-						Ghost* ghost = new Ghost(camera->GetPosition().x + camera->camWidht / 2, 287.0f + BOARD_HEIGHT, -1);
+						Ghost* ghost = new Ghost(camera->GetPosition().x + camera->camWidht / 2, GHOST_POSY + BOARD_HEIGHT, -1);
 						listenemy.push_back(ghost);
 					}
 					else
 					{
-						Ghost* ghost = new Ghost(camera->GetPosition().x - camera->camWidht / 2, 287.0f + BOARD_HEIGHT, 1);
+						Ghost* ghost = new Ghost(camera->GetPosition().x - camera->camWidht / 2, GHOST_POSY + BOARD_HEIGHT, 1);
 						listenemy.push_back(ghost);
 					}
 					countghost++;
@@ -471,30 +475,30 @@ void PlayScene::EnemyHandle(DWORD dt)
 			{
 				timetocreateghost -= dt;
 			}
-			if ((simon->x >= 4096.0f&& simon->x <= 5088.0f))
+			if ((simon->x >= ZONE_GHOST_3_LEFT && simon->x <= ZONE_GHOST_3_RIGHT))
 			{
 				if (cancreateghost)
 				{
 					if (timetocreateghost <= 0)
 					{
-						if (simon->x < 4480)
+						if (simon->x < POSX_TOCREATESPECIALGHOST)
 						{
 							int random = rand() % 2;
 							if (random == 0)
 							{
-								Ghost* ghost = new Ghost(camera->GetPosition().x + camera->camWidht / 2, 150 + BOARD_HEIGHT, -1);
+								Ghost* ghost = new Ghost(camera->GetPosition().x + camera->camWidht / 2, SPECIAL_GHOST_POSY + BOARD_HEIGHT, -1);
 								listenemy.push_back(ghost);
 							}
 							else
 							{
 								if (simon->vx > 0)
 								{
-									Ghost* ghost = new Ghost(camera->GetPosition().x + camera->camWidht / 2, 287.0f + BOARD_HEIGHT, -1);
+									Ghost* ghost = new Ghost(camera->GetPosition().x + camera->camWidht / 2, GHOST_POSY + BOARD_HEIGHT, -1);
 									listenemy.push_back(ghost);
 								}
 								else
 								{
-									Ghost* ghost = new Ghost(camera->GetPosition().x - camera->camWidht / 2, 287.0f + BOARD_HEIGHT, 1);
+									Ghost* ghost = new Ghost(camera->GetPosition().x - camera->camWidht / 2, GHOST_POSY + BOARD_HEIGHT, 1);
 									listenemy.push_back(ghost);
 								}
 							}
@@ -503,12 +507,12 @@ void PlayScene::EnemyHandle(DWORD dt)
 						{
 							if (simon->vx > 0)
 							{
-								Ghost* ghost = new Ghost(camera->GetPosition().x + camera->camWidht / 2, 287.0f + BOARD_HEIGHT, -1);
+								Ghost* ghost = new Ghost(camera->GetPosition().x + camera->camWidht / 2, GHOST_POSY + BOARD_HEIGHT, -1);
 								listenemy.push_back(ghost);
 							}
 							else
 							{
-								Ghost* ghost = new Ghost(camera->GetPosition().x - camera->camWidht / 2, 287.0f + BOARD_HEIGHT, 1);
+								Ghost* ghost = new Ghost(camera->GetPosition().x - camera->camWidht / 2, GHOST_POSY + BOARD_HEIGHT, 1);
 								listenemy.push_back(ghost);
 							}
 						}
@@ -525,7 +529,7 @@ void PlayScene::EnemyHandle(DWORD dt)
 		}
 
 		// XU LY TAO PANTHER ////////////////////////////////////
-		if (1216 < simon->x && simon->x < 2240)
+		if (ZONE_PANTHER_1_LEFT < simon->x && simon->x < ZONE_PANTHER_1_RIGHT)
 		{
 			// respawn panther
 			if (cancreatepanther)
@@ -550,7 +554,7 @@ void PlayScene::EnemyHandle(DWORD dt)
 			{
 				timetocreatebat -= dt;
 			}
-			if (simon->x >= 3072 && simon->y < 352 + BOARD_HEIGHT && simon->x <= 4111 && !(simon->x > 3900 && simon->y < 128 + BOARD_HEIGHT))
+			if (simon->x >= ZONE_BAT_1_LEFT && simon->y < POSY_TOCREATEBAT + BOARD_HEIGHT && simon->x <= ZONE_BAT_1_RIGHT && !(simon->x > POSX_TONOTCREATEBAT && simon->y < POSY_TONOTCREATEBAT + BOARD_HEIGHT))
 			{
 				if (cancreatebat)
 				{
@@ -558,7 +562,7 @@ void PlayScene::EnemyHandle(DWORD dt)
 					{
 						if (simon->y < 160 + BOARD_HEIGHT)
 						{
-							Bat* bat = new Bat(camera->GetPosition().x + camera->camWidht / 2, 112.0f + BOARD_HEIGHT, -1);
+							Bat* bat = new Bat(camera->GetPosition().x + camera->camWidht / 2, BAT1_POSY + BOARD_HEIGHT, -1);
 							listenemy.push_back(bat);
 						}
 						else
@@ -566,17 +570,17 @@ void PlayScene::EnemyHandle(DWORD dt)
 							int random = rand() % 3;
 							if (random == 0)
 							{
-								Bat* bat = new Bat(camera->GetPosition().x + camera->camWidht / 2, 208.0f + BOARD_HEIGHT, -1);
+								Bat* bat = new Bat(camera->GetPosition().x + camera->camWidht / 2, BAT2_POSY + BOARD_HEIGHT, -1);
 								listenemy.push_back(bat);
 							}
 							else if (random == 1)
 							{
-								Bat* bat = new Bat(camera->GetPosition().x + camera->camWidht / 2, 304.0f + BOARD_HEIGHT, -1);
+								Bat* bat = new Bat(camera->GetPosition().x + camera->camWidht / 2, BAT3_POSY + BOARD_HEIGHT, -1);
 								listenemy.push_back(bat);
 							}
 							else if (random == 2)
 							{
-								Bat* bat = new Bat(camera->GetPosition().x - camera->camWidht / 2, 304.0f + BOARD_HEIGHT, 1);
+								Bat* bat = new Bat(camera->GetPosition().x - camera->camWidht / 2, BAT3_POSY + BOARD_HEIGHT, 1);
 								listenemy.push_back(bat);
 							}
 						}
@@ -602,29 +606,29 @@ void PlayScene::EnemyHandle(DWORD dt)
 			{
 				if (timetocreatefishman <= 0)
 				{
-					if (simon->x > 3360.0f && simon->x < 3520)
+					if (simon->x > ZONE_FISHMAN_1_LEFT && simon->x < ZONE_FISHMAN_1_RIGHT)
 					{
 						if (countfishman < 2)
 						{
-							Fishman* fishman = new Fishman(3264, 672 + BOARD_HEIGHT, 1);
+							Fishman* fishman = new Fishman(FISHMAN1_POSX, FISHMAN_POSY + BOARD_HEIGHT, 1);
 							listenemy.push_back(fishman);
 							countfishman++;
 							createeffectsteam(fishman->x, fishman->y);
 						}
 						if (countfishman < 2)
 						{
-							Fishman* fishman = new Fishman(3520, 672 + BOARD_HEIGHT, -1);
+							Fishman* fishman = new Fishman(FISHMAN2_POSX, FISHMAN_POSY + BOARD_HEIGHT, -1);
 							listenemy.push_back(fishman);
 							countfishman++;
 							createeffectsteam(fishman->x, fishman->y);
 						}
 						timetocreatefishman = 3000;
 					}
-					if (simon->vx <= 0 && simon->x < 3230 && simon->x > 3072)
+					if (simon->vx <= 0 && simon->x < ZONE_FISHMAN_2_RIGHT && simon->x > ZONE_FISHMAN_2_LEFT)
 					{
 						if (countfishman < 2)
 						{
-							Fishman* fishman = new Fishman(3136, 672 + BOARD_HEIGHT, 1);
+							Fishman* fishman = new Fishman(FISHMAN3_POSX, FISHMAN_POSY + BOARD_HEIGHT, 1);
 							listenemy.push_back(fishman);
 							countfishman++;
 							createeffectsteam(fishman->x, fishman->y);
@@ -632,18 +636,18 @@ void PlayScene::EnemyHandle(DWORD dt)
 						}
 						if (countfishman < 2)
 						{
-							Fishman* fishman = new Fishman(3392, 672 + BOARD_HEIGHT, -1);
+							Fishman* fishman = new Fishman(FISHMAN4_POSX, FISHMAN_POSY + BOARD_HEIGHT, -1);
 							listenemy.push_back(fishman);
 							countfishman++;
 							createeffectsteam(fishman->x, fishman->y);
 						}
 						timetocreatefishman = 3000;
 					}
-					if (simon->x > 3520 && simon->x < 3712)
+					if (simon->x > ZONE_FISHMAN_3_LEFT && simon->x < ZONE_FISHMAN_3_RIGHT)
 					{
 						if (countfishman < 2)
 						{
-							Fishman* fishman = new Fishman(3520, 672 + BOARD_HEIGHT, 1);
+							Fishman* fishman = new Fishman(FISHMAN5_POSX, FISHMAN_POSY + BOARD_HEIGHT, 1);
 							listenemy.push_back(fishman);
 							countfishman++;
 							createeffectsteam(fishman->x, fishman->y);
@@ -651,25 +655,25 @@ void PlayScene::EnemyHandle(DWORD dt)
 
 						if (countfishman < 2)
 						{
-							Fishman* fishman = new Fishman(3648, 672 + BOARD_HEIGHT, simon->x < 3648 ? -1 : 1);
+							Fishman* fishman = new Fishman(FISHMAN6_POSX, FISHMAN_POSY + BOARD_HEIGHT, simon->x < FISHMAN6_POSX ? -1 : 1);
 							listenemy.push_back(fishman);
 							countfishman++;
 							createeffectsteam(fishman->x, fishman->y);
 						}
 						timetocreatefishman = 3000;
 					}
-					if (simon->x > 3712)
+					if (simon->x > ZONE_FISHMAN_4_LEFT)
 					{
 						if (countfishman < 2)
 						{
-							Fishman* fishman = new Fishman(3776, 672 + BOARD_HEIGHT, simon->x < 3776 ? -1 : 1);
+							Fishman* fishman = new Fishman(FISHMAN7_POSX, FISHMAN_POSY + BOARD_HEIGHT, simon->x < FISHMAN7_POSX ? -1 : 1);
 							listenemy.push_back(fishman);
 							countfishman++;
 							createeffectsteam(fishman->x, fishman->y);
 						}
 						if (countfishman < 2)
 						{
-							Fishman* fishman = new Fishman(3904, 672 + BOARD_HEIGHT, simon->x < 3904 ? -1 : 1);
+							Fishman* fishman = new Fishman(FISHMAN8_POSX, FISHMAN_POSY + BOARD_HEIGHT, simon->x < FISHMAN8_POSX ? -1 : 1);
 							listenemy.push_back(fishman);
 							countfishman++;
 							createeffectsteam(fishman->x, fishman->y);
@@ -684,7 +688,7 @@ void PlayScene::EnemyHandle(DWORD dt)
 	}
 
 	// XU LY TAO BOSS ////////////////////////////////////
-	if (simon->x > 5152 && boss == NULL)
+	if (simon->x > ZONE_BOSS_LEFT && boss == NULL)
 	{
 		boss = new Phantom_bat();
 		listenemy.push_back(boss);
@@ -746,7 +750,7 @@ void PlayScene::DoorHandle()
 			if (door1->isclosed() && simon->check_auto_move == true)
 			{
 				camera->SetPosition(camera->camPosition.x += 2, camera->camPosition.y);
-				if (camera->camPosition.x - camera->camWidht / 2 >= 3072)
+				if (camera->camPosition.x - camera->camWidht / 2 >= ZONE_STAGE2_LEFT)
 				{
 					camera->inzone2 = true;
 					simon->check_auto_move = false;
@@ -811,7 +815,7 @@ void PlayScene::DoorHandle()
 			if (door2->isclosed() && simon->check_auto_move == true)
 			{
 				camera->SetPosition(camera->camPosition.x += 2, camera->camPosition.y);
-				if (camera->camPosition.x - camera->camWidht / 2 >= 4096)
+				if (camera->camPosition.x - camera->camWidht / 2 >= ZONE_STAGE3_LEFT)
 				{
 					camera->inzone3 = true;
 					simon->check_auto_move = false;
@@ -822,6 +826,211 @@ void PlayScene::DoorHandle()
 			}
 		}
 	}
+}
+
+void PlayScene::getzone(int level)
+{
+	std::ifstream iFile;
+	char fileName[30];
+	sprintf_s(fileName, "Res\\Text\\zone%d.txt", level);
+	iFile.open(fileName);
+	while (!iFile.eof())
+	{
+		int type;
+		int x, y;
+		iFile >> type >> x >> y;
+		switch (type)
+		{
+		case ZONE_GHOST1:
+			ZONE_GHOST_1_LEFT = x;
+			ZONE_GHOST_1_RIGHT = y;
+			break;
+		case ZONE_GHOST2:
+			ZONE_GHOST_2_LEFT = x;
+			ZONE_GHOST_2_RIGHT = y;
+			break;
+		case ZONE_GHOST3:
+			ZONE_GHOST_3_LEFT = x;
+			ZONE_GHOST_3_RIGHT = y;
+			break;
+		case ZONE_PANTHER:
+			ZONE_PANTHER_1_LEFT = x;
+			ZONE_PANTHER_1_RIGHT = y;
+			break;
+		case ZONE_BAT:
+			ZONE_BAT_1_LEFT = x;
+			ZONE_BAT_1_RIGHT = y;
+			break;
+		case ZONE_FISHMAN1:
+			ZONE_FISHMAN_1_LEFT = x;
+			ZONE_FISHMAN_1_RIGHT = y;
+			break;
+		case ZONE_FISHMAN2:
+			ZONE_FISHMAN_2_LEFT = x;
+			ZONE_FISHMAN_2_RIGHT = y;
+			break;
+		case ZONE_FISHMAN3:
+			ZONE_FISHMAN_3_LEFT = x;
+			ZONE_FISHMAN_3_RIGHT = y;
+			break;
+		case ZONE_FISHMAN4:
+			ZONE_FISHMAN_4_LEFT = x;
+			ZONE_FISHMAN_4_RIGHT = y;
+			break;
+		case ZONE_FULLMAP:
+			ZONE_FULL_MAP_LEFT = x;
+			ZONE_FULL_MAP_RIGHT = y;
+			break;
+		case ZONE_STAGE1:
+			ZONE_STAGE1_LEFT = x;
+			ZONE_STAGE1_RIGHT = y;
+			break;
+		case ZONE_STAGE2:
+			ZONE_STAGE2_LEFT = x;
+			ZONE_STAGE2_RIGHT = y;
+			break;
+		case ZONE_STAGE3:
+			ZONE_STAGE3_LEFT = x;
+			ZONE_STAGE3_RIGHT = y;
+			break;
+		case ZONE_BOSS:
+			ZONE_BOSS_LEFT = x;
+			ZONE_BOSS_RIGHT = y;
+			break;
+		}
+	}
+	iFile.close();
+}
+
+void PlayScene::getValue()
+{
+	std::ifstream iFile;
+	char fileName[30];
+	sprintf_s(fileName, "Res\\Text\\value.txt", level);
+	iFile.open(fileName);
+	while (!iFile.eof())
+	{
+		string type;
+		int value;
+		iFile >> type >> value;
+		if (type == "globaltime")
+		{
+			GLOBAL_TIME = value;
+		}
+		else if (type == "timeuseholycross")
+		{
+			TIME_USE_HOLY_CROSS = value;
+		}
+		else if (type == "upgradetime")
+		{
+			UPGRADE_TIME = value;
+		}
+		else if (type == "timetorespawn")
+		{
+			TIME_TO_RESPAWN = value;
+		}
+		else if (type == "timeusestopwatch")
+		{
+			TIME_USE_STOP_WATCH = value;
+		}
+		else if (type == "untouchabletime")
+		{
+			UNTOUCHABLETIME = value;
+		}
+		else if (type == "timetospawncrystal")
+		{
+			TIMETOSPAWNCRYSTAL = value;
+		}
+		else if (type == "crystal_spawn_x")
+		{
+			CRYSTAL_SPAWN_X = value;
+		}
+		else if (type == "crystal_spawn_y")
+		{
+			CRYSTAL_SPAWN_Y = value;
+		}
+		else if (type == "fishman_y")
+		{
+			FISHMAN_POSY = value;
+		}
+		else if (type == "fishman1_x")
+		{
+			FISHMAN1_POSX = value;
+		}
+		else if (type == "fishman2_x")
+		{
+			FISHMAN2_POSX = value;
+		}
+		else if (type == "fishman3_x")
+		{
+			FISHMAN3_POSX = value;
+		}
+		else if (type == "fishman4_x")
+		{
+			FISHMAN4_POSX = value;
+		}
+		else if (type == "fishman5_x")
+		{
+			FISHMAN5_POSX = value;
+		}
+		else if (type == "fishman6_x")
+		{
+			FISHMAN6_POSX = value;
+		}
+		else if (type == "fishman7_x")
+		{
+			FISHMAN7_POSX = value;
+		}
+		else if (type == "fishman8_x")
+		{
+			FISHMAN8_POSX = value;
+		}
+		else if (type == "ghost_y")
+		{
+			GHOST_POSY = value;
+		}
+		else if (type == "special_ghost_y")
+		{
+			SPECIAL_GHOST_POSY = value;
+		}
+		else if (type == "posx_tocreatespecialghost")
+		{
+			POSX_TOCREATESPECIALGHOST = value;
+		}
+		else if (type == "posy_tocreatebat")
+		{
+			POSY_TOCREATEBAT = value;
+		}
+		else if (type == "posy_tonotcreatebat")
+		{
+			POSY_TONOTCREATEBAT = value;
+		}
+		else if (type == "posx_tonocreatebat")
+		{
+			POSX_TONOTCREATEBAT = value;
+		}
+		else if (type == "bat1_y")
+		{
+			BAT1_POSY = value;
+		}
+		else if (type == "bat2_y")
+		{
+			BAT2_POSY = value;
+		}
+		else if (type == "bat3_y")
+		{
+			BAT3_POSY = value;
+		}
+		else if (type == "distance_toactive_panther")
+		{
+			DISTANCE_TOACTIVE_PANTHER = value;
+		}
+		else if (type == "posx_activeboss")
+		{
+			POSX_ACTIVE_BOSS = value;
+		}
+	}
+	iFile.close();
 }
 
 void PlayScene::LoadResources(int level)
@@ -889,7 +1098,6 @@ void PlayScene::OnKeyUp(int key)
 		keyCode[key] = false;
 		simon->OnKeyUp(key);
 	}
-
 }
 
 void PlayScene::RandomSpawnItem(float x, float y)
