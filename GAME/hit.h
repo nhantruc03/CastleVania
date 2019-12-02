@@ -1,4 +1,5 @@
 #include"effect.h"
+#define TIME_TO_SHOW_EFFECT 200
 class hit :public Effect
 {
 
@@ -14,7 +15,7 @@ public:
 		height = 18;
 		isDead = false;
 		effect = Sprites::GetInstance()->Get(tag, type);
-		timetoshoweffect = 200;
+		timetoshoweffect = TIME_TO_SHOW_EFFECT;
 	}
 	void Update(DWORD dt)
 	{

@@ -15,6 +15,8 @@
 #include"Phantom_bat.h"
 PlayScene::PlayScene(int level)
 {
+	getValue();
+	getzone(level);
 	grid = new Grid(level);
 
 	LoadResources(level);
@@ -32,13 +34,11 @@ PlayScene::PlayScene(int level)
 	this->level = level;
 
 	map = Maps::GetInstance()->GetMap(this->level);
-	getValue();
-	simon = CSimon::GetInstance();
-	simon->ResetRespawn();
-	simon->Respawn();
-
-	getzone(level);
 	
+	simon = CSimon::GetInstance();
+	simon->outside = false;
+	simon->ResetRespawn();
+	simon->Respawn();	
 
 	camera = Camera::GetInstance();
 
@@ -155,7 +155,7 @@ void PlayScene::Update(DWORD dt)
 		UpdateObjects(dt);
 
 		// update theo tung level cua playscene
-		if (level == 1)
+		if (simon->outside)
 		{
 			// gioi han 2 bien cua map 1
 			if (simon->vx < 0 && simon->x < ZONE_FULL_MAP_LEFT + 16) simon->x= ZONE_FULL_MAP_LEFT + 16;
@@ -211,6 +211,7 @@ void PlayScene::Update(DWORD dt)
 							simon->gotoleft = simon->gotoright = false;
 							delete endrectmap1;
 							simon->lives += 1;  // khi spawn se bi tru di 1
+							simon->outside = false;
 							SceneManager::GetInstance()->ReplaceScene(new PlayScene(level));
 						}
 					}

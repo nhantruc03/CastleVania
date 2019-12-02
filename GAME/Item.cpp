@@ -8,7 +8,7 @@ Item::Item(int type_id)
 	isDead = false;
 	type = type_id;
 	animation = Animations::GetInstance()->Get(tag, type);
-	vy = 0.2f;
+	vy = ITEM_VY;
 	if (type == TYPE_ITEM_BIG_HEART)
 	{
 		width = 24;
@@ -28,8 +28,8 @@ Item::Item(int type_id)
 	{
 		width = 16;
 		height = 16;
-		vy = 0.05f;
-		vx = 0.1f;
+		vy = ITEM_VY / 4;
+		vx = ITEM_VX;
 	}
 	else if (type == TYPE_ITEM_MONEY_1000)
 	{

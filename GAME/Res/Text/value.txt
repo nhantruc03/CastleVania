@@ -26,3 +26,4 @@ posy_tocreatebat 352
 posy_tonotcreatebat 128
 posx_tonocreatebat 3900
 distance_toactive_panther 160
+posx_activeboss 5386

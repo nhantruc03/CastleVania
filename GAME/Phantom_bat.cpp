@@ -41,7 +41,7 @@ void Phantom_bat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			timewait -= dt;
 		}
-		if (SIMON->x > 5386 && isSleeping)
+		if (SIMON->x > POSX_ACTIVE_BOSS && isSleeping)
 		{
 			isSleeping = false;
 			animation = animations[1];

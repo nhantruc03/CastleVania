@@ -16,6 +16,8 @@ public:
 	int count_attack_after_kill_boss;
 	int heart;
 
+	bool outside;
+
 
 
 

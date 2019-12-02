@@ -56,7 +56,7 @@ CSimon::CSimon()
 	count_attack_after_kill_boss = 0;
 	globle_time = GLOBAL_TIME;
 	ChangeState(STATE_STANDING);
-
+	outside = true;
 	respawnx = 4000;
 	respawny = 5;
 

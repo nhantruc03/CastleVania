@@ -1,6 +1,8 @@
 #pragma once
 #include"GameObject.h"
 #include"Brick.h"
+#define ITEM_VY 0.2f
+#define ITEM_VX 0.1f
 class Item:public CGameObject
 {
 protected:
