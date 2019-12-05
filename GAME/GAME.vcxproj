@@ -37,6 +37,8 @@
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="HoldItemObject.cpp" />
     <ClCompile Include="Holy_water.cpp" />
+    <ClCompile Include="IntroObjects.cpp" />
+    <ClCompile Include="IntroScene.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="listeffect_global.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -79,6 +81,8 @@
     <ClInclude Include="hit.h" />
     <ClInclude Include="HoldItemObject.h" />
     <ClInclude Include="Holy_water.h" />
+    <ClInclude Include="IntroObjects.h" />
+    <ClInclude Include="IntroScene.h" />
     <ClInclude Include="invisibleObject.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="listeffect_global.h" />

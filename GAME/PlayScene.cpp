@@ -32,14 +32,14 @@ PlayScene::PlayScene(int level)
 	isgoingthroughendrect = false;
 
 	this->level = level;
-
+	
 	map = Maps::GetInstance()->GetMap(this->level);
 	
 	simon = CSimon::GetInstance();
-	simon->outside = false;
+	
+	
 	simon->ResetRespawn();
 	simon->Respawn();	
-
 	camera = Camera::GetInstance();
 
 	objects.clear();
@@ -209,9 +209,8 @@ void PlayScene::Update(DWORD dt)
 							simon->check_auto_move = false;
 							level += 1;
 							simon->gotoleft = simon->gotoright = false;
-							delete endrectmap1;
-							simon->lives += 1;  // khi spawn se bi tru di 1
 							simon->outside = false;
+							delete endrectmap1;
 							SceneManager::GetInstance()->ReplaceScene(new PlayScene(level));
 						}
 					}

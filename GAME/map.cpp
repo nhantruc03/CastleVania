@@ -43,6 +43,10 @@ Map::Map(int level)
 void Map::Render()
 {
 	int firstcolumn = camera->GetBound().left / 32;
+	if (firstcolumn < 0)
+	{
+		firstcolumn = 0;
+	}
 	int lastcolumn = camera->GetBound().right / 32;
 	if (lastcolumn+1 <= columns)
 	{

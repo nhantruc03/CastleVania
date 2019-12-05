@@ -2,6 +2,7 @@
 #include "debug.h"
 #include"PlayScene.h"
 #include"Maps.h"
+#include"IntroScene.h"
 CGame * CGame::__instance = NULL;
 
 /*
@@ -283,7 +284,7 @@ CGame::~CGame()
 void CGame::LoadResources()
 {
 	
-	SceneManager::GetInstance()->ReplaceScene(new PlayScene(2));
+	SceneManager::GetInstance()->ReplaceScene(new IntroScene());//new PlayScene(2));
 	
 }
 

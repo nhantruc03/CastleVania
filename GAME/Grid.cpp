@@ -292,7 +292,7 @@ void Grid::respawnpanther()
 			}
 		}
 	}
-	int direction = abs(1106 - SIMON->x) < abs(2240 - SIMON->x) ? -1 : 1; // panther xoay mat vao simon
+	int direction = abs(ZONE_PANTHER_1_LEFT - SIMON->x) < abs(ZONE_PANTHER_1_RIGHT- SIMON->x) ? -1 : 1; // panther xoay mat vao simon
 	for (auto& x : mapPanthers)
 	{
 		Panther* panther = new Panther(x.second->spawnx, x.second->spawny, direction);

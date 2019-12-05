@@ -147,6 +147,12 @@
     <ClCompile Include="Font.cpp">
       <Filter>Game Components</Filter>
     </ClCompile>
+    <ClCompile Include="IntroScene.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="IntroObjects.cpp">
+      <Filter>Game Objects\OthetObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="debug.h">
@@ -286,6 +292,12 @@
     </ClInclude>
     <ClInclude Include="Font.h">
       <Filter>Game Components</Filter>
+    </ClInclude>
+    <ClInclude Include="IntroScene.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="IntroObjects.h">
+      <Filter>Game Objects\OthetObject</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

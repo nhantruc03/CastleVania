@@ -43,8 +43,28 @@ void Sprites::LoadResources(int level)
 		iFile >> tag;
 		iFile >> idtex;
 		texture = CTextures::GetInstance()->Get(idtex);
-		if (tag != TAG_MAP1 && tag != TAG_MAP2 && tag!= TAG_FONT)
+		switch (tag)
 		{
+		case TAG_FONT:
+			int numrow, numcolumn;
+			iFile >> numcolumn >> numrow;
+			for (int i = 0; i < numrow; i++)
+			{
+				for (int j = 0; j < numcolumn; j++)
+				{
+					Add(tag, j * 15, i * 14, (j + 1) * 15, (i + 1) * 14, texture);
+				}
+			}
+			break;
+		case TAG_MAP1:case TAG_MAP2:
+			int numTileset, widthTileset, heightTileset;
+			iFile >> numTileset >> widthTileset >> heightTileset;
+			for (int i = 0; i < numTileset; i++)
+			{
+				Add(tag, i * widthTileset, 0, (i * widthTileset) + widthTileset, heightTileset, texture);
+			}
+			break;
+		default:
 			int numsprites;
 			iFile >> numsprites;
 			for (int i = 0; i < numsprites; i++)
@@ -54,29 +74,8 @@ void Sprites::LoadResources(int level)
 				Add(tag, l, t, r, b, texture);
 
 			}
+			break;
 		}
-		if (tag == TAG_FONT)
-		{
-			int numrow, numcolumn;
-			iFile >> numcolumn >> numrow;
-			for (int i = 0; i < numrow; i++)
-			{
-				for (int j = 0; j < numcolumn; j++)
-				{
-					Add(tag, j * 15, i * 14, (j + 1) * 15, (i + 1) * 14,texture);
-				}
-			}
-		}
-		if(tag==TAG_MAP1||tag==TAG_MAP2)
-		{
-			int numTileset, widthTileset, heightTileset;
-			iFile >> numTileset >> widthTileset >> heightTileset;
-			for (int i = 0; i < numTileset; i++)
-			{
-				Add(tag, i * widthTileset, 0, (i * widthTileset) + widthTileset, heightTileset, texture);
-			}
-		}
-
 	}
 	iFile.close();
 	

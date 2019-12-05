@@ -51,7 +51,7 @@ CSimon::CSimon()
 	isDead = false;
 	checkkillboss = false;
 	instages = 1;
-	lives = 4;
+	lives = 3;
 	health = 16;
 	count_attack_after_kill_boss = 0;
 	globle_time = GLOBAL_TIME;
@@ -63,39 +63,6 @@ CSimon::CSimon()
 }
 void CSimon::Respawn()
 {
-	//if (instages == 1)
-	//{
-	//	Camera::GetInstance()->inzone1 = true;
-	//	Camera::GetInstance()->inzone2 = false;
-	//	Camera::GetInstance()->inzone3 = false;
-	//	Camera::GetInstance()->inzoneBoss = false;
-	//	Camera::GetInstance()->movedownstair = false;
-	//	Camera::GetInstance()->SetPosition(x, 0);
-	//	x = 30;//5200;
-	//	y = 5;
-	//}
-	//else if (instages == 2)
-	//{
-	//	Camera::GetInstance()->inzone1 = false;
-	//	Camera::GetInstance()->inzone2 = true;
-	//	Camera::GetInstance()->inzone3 = false;
-	//	Camera::GetInstance()->inzoneBoss = false;
-	//	Camera::GetInstance()->movedownstair = false;
-	//	Camera::GetInstance()->SetPosition(x, 0);
-	//	x = 3200;//5200;
-	//	y = 5;
-	//}
-	//else if (instages == 3)
-	//{
-	//	Camera::GetInstance()->inzone1 = false;
-	//	Camera::GetInstance()->inzone2 = false;
-	//	Camera::GetInstance()->inzone3 = true;
-	//	Camera::GetInstance()->inzoneBoss = false;
-	//	Camera::GetInstance()->movedownstair = false;
-	//	Camera::GetInstance()->SetPosition(x, 0);
-	//	x = 4200;//5200;
-	//	y = 5;
-	//}
 	if (Camera::GetInstance()->movedownstair)
 	{
 		Camera::GetInstance()->movedownstair = false;
@@ -105,7 +72,6 @@ void CSimon::Respawn()
 	
 
 
-	lives -= 1;
 	health = 16;
 	isWalkingOnStair = false;
 	isOnStair = false;
@@ -904,6 +870,7 @@ void CSimon::ChangeState(int newState)
 		timetorespawn = TIME_TO_RESPAWN;
 		untouchable = 0;
 		vx = 0;
+		lives -= 1;
 		isDead = true;
 		break;
 	}
