@@ -13,7 +13,7 @@ IntroScene::IntroScene()
 	inmainmenu = true;
 	run_time = false;
 	time_delay_changescene;
-	mainmenu_bat = new IntroObjects(180, 300, 0, 0, 0, 3);
+	mainmenu_bat = new IntroObjects(180, 300, 0, 0, TYPE_INTRO_MENUBAT);
 }
 
 
@@ -32,13 +32,13 @@ void IntroScene::Update(DWORD dt)
 		for (CGameObject* a : objects)
 		{
 			a->Update(dt);
-			if (a->type == 2)
+			if (a->type == TEMP_SIMON)
 			{
-				if (a->x <= 0)
+				if (a->x <= LOCATION_TO_FACE_TO_DOOR)
 				{
-					a->x = 0;
+					a->x = LOCATION_TO_FACE_TO_DOOR;
 					a->vx = 0;
-					dynamic_cast<IntroObjects*>(a)->animation = Animations::GetInstance()->Get(TAG_SIMON, 15);
+					dynamic_cast<IntroObjects*>(a)->animation = Animations::GetInstance()->Get(TAG_SIMON, ANI_FACETODOOR);
 					run_time = true;
 				}
 			}
@@ -47,16 +47,16 @@ void IntroScene::Update(DWORD dt)
 	else if (inmainmenu)
 	{
 		dynamic_cast<IntroObjects*>(mainmenu_bat)->animation->Update();
-		if (dynamic_cast<IntroObjects*>(mainmenu_bat)->animation->currentFrame == 14)
+		if (dynamic_cast<IntroObjects*>(mainmenu_bat)->animation->currentFrame==14) // last frame
 		{
-			dynamic_cast<IntroObjects*>(mainmenu_bat)->animation = Animations::GetInstance()->Get(TAG_MAIN_MENU_BAT, 1);
+			dynamic_cast<IntroObjects*>(mainmenu_bat)->animation = Animations::GetInstance()->Get(TAG_MAIN_MENU_BAT, Ani_MAINMENU_BAT_STAND);
 		}
 
 	}
 	if (run_time)
 	{
 		time_delay_changescene += dt;
-		if (time_delay_changescene >= 3000)
+		if (time_delay_changescene >= TIME_DELAY_CHANGE_SCENE)
 		{
 			SceneManager::GetInstance()->ReplaceScene(new PlayScene(1));
 		}
@@ -73,13 +73,13 @@ void IntroScene::LoadResources(int level)
 void IntroScene::Render()
 {
 	
-	background->Draw(0, 235);
+	background->Draw(-11, 235);
 	if (inmainmenu)
 	{
-		if (time_to_show_text >= 400)
+		if (time_to_show_text >= TIME_TO_SHOW_TEXT)
 		{
 			font->Draw(160, 290, "PUSH START KEY");
-			if (time_to_show_text >= 600)
+			if (time_to_show_text >= TIME_TO_HIDE_TEXT)
 			{
 				time_to_show_text = 0;
 			}
@@ -98,14 +98,16 @@ void IntroScene::Render()
 
 void IntroScene::OnKeyDown(int key)
 {
-	if (key != DIK_A)
+	if (inmainmenu)
 	{
-		background = Sprites::GetInstance()->Get(14, 0);
-		inmainmenu = false;
-		objects.push_back(new IntroObjects(300, 146, 0.03f, 0, -1, 0));
-		objects.push_back(new IntroObjects(150,129, 0.01f, 0, -1, 1));
-		objects.push_back(new IntroObjects(0, 200, 0.01f, -0.01f, 1, 1));
-		temp_simon = new IntroObjects(300, 380, 0.07f, 0, -1, 2);
-		objects.push_back(temp_simon);
+		if (key != DIK_A)
+		{
+			background = Sprites::GetInstance()->Get(TAG_BACKGROUND, 1);
+			inmainmenu = false;
+			objects.push_back(new IntroObjects(300, 146, -0.03f, 0, TYPE_INTRO_HELI));
+			objects.push_back(new IntroObjects(150, 129, -0.01f, 0, TYPE_INTRO_BAT));
+			objects.push_back(new IntroObjects(0, 200, 0.01f, -0.01f, TYPE_INTRO_BAT));
+			objects.push_back(new IntroObjects(300, 380, -0.07f, 0, TYPE_INTRO_SIMON));
+		}
 	}
 }

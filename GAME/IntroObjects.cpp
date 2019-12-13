@@ -3,25 +3,25 @@
 
 
 
-IntroObjects::IntroObjects(float x, float y, float vx, float vy, int direct, int type)
+IntroObjects::IntroObjects(float x, float y, float vx, float vy, int type)
 {
 	this->x = x;
 	this->y = y;
-	this->vx = vx * direct;
+	this->vx = vx;
 	this->vy = vy;
 	this->type = type;
 	switch (type)
 	{
-	case 0:
+	case TYPE_INTRO_HELI:
 		animation = Animations::GetInstance()->Get(TAG_INTROHELI, 0);
 		break;
-	case 1:
+	case TYPE_INTRO_BAT:
 		animation = Animations::GetInstance()->Get(TAG_INTROBAT, 0);
 		break;
-	case 2:
-		animation = Animations::GetInstance()->Get(TAG_SIMON, 1);
+	case TYPE_INTRO_SIMON:
+		animation = Animations::GetInstance()->Get(TAG_SIMON, 1); // ani walking
 		break;
-	case 3:
+	case TYPE_INTRO_MENUBAT:
 		animation = Animations::GetInstance()->Get(TAG_MAIN_MENU_BAT, 0);
 		break;
 	}

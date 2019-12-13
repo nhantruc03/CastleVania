@@ -8,7 +8,7 @@ class IntroObjects:public CGameObject
 {
 public:
 	CAnimation* animation;
-	IntroObjects(float x, float y, float vx, float vy, int direct, int type);
+	IntroObjects(float x, float y, float vx, float vy, int type);
 	~IntroObjects();
 
 	virtual void Render();

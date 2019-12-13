@@ -11,6 +11,7 @@
 #include"steam.h"
 #include"invisibleObject.h"
 #include"Board.h"
+#include"PlayScene.h"
 CSimon*CSimon::_instance = NULL;
 CSimon::CSimon()
 {
@@ -710,27 +711,35 @@ void CSimon::OnKeyDown(int key)
 			numweaponcanthrow = 2;
 			break;
 		case DIK_R:
-			if (instages == 1)
+			if (outside)
 			{
-				x = 3200;
-				y = 5;
-				instages = 2;
-				Camera::GetInstance()->inzone1 = false;
-				Camera::GetInstance()->inzone2 = true;
-				Camera::GetInstance()->movedownstair = false;
-				Camera::GetInstance()->inzone3 = false;
-				break;
+				outside = false;
+				SceneManager::GetInstance()->ReplaceScene(new PlayScene(2));
 			}
-			if (instages == 2)
+			else
 			{
-				x = 4200;
-				y = 5;
-				instages = 3;
-				Camera::GetInstance()->inzone1 = false;
-				Camera::GetInstance()->inzone2 = false;
-				Camera::GetInstance()->movedownstair = false;
-				Camera::GetInstance()->inzone3 = true;
-				break;
+				if (instages == 1)
+				{
+					x = 3200;
+					y = 5;
+					instages = 2;
+					Camera::GetInstance()->inzone1 = false;
+					Camera::GetInstance()->inzone2 = true;
+					Camera::GetInstance()->movedownstair = false;
+					Camera::GetInstance()->inzone3 = false;
+					break;
+				}
+				if (instages == 2)
+				{
+					x = 4200;
+					y = 5;
+					instages = 3;
+					Camera::GetInstance()->inzone1 = false;
+					Camera::GetInstance()->inzone2 = false;
+					Camera::GetInstance()->movedownstair = false;
+					Camera::GetInstance()->inzone3 = true;
+					break;
+				}
 			}
 		}
 		
